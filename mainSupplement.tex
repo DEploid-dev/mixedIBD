@@ -1,0 +1,368 @@
+\documentclass{article}
+\usepackage{fullpage,amsmath,url,cases}
+\usepackage{natbib,longtable,graphicx,tikz}
+\usepackage{subfig}
+\usepackage{url}
+%\@ifundefined{showcaptionsetup}{}{%
+%\PassOptionsToPackage{caption=false}{subfig}}
+\graphicspath{{./figures/}}
+\usepackage{xcolor}
+\usepackage{colortbl}
+\definecolor{RubineRed}{RGB}{240, 0, 240}       % RubineRed  Approximate PANTONE RUBINE-RED
+\usepackage{subfig}
+\usepackage{listings}
+\usepackage{color}
+
+%\usepackage[disable]{todonotes}
+\usepackage{todonotes}
+
+\newcounter{todocounter}
+\newcommand{\todonum}[2][]
+{\stepcounter{todocounter}\todo[#1]{\thetodocounter: #2}}
+
+\newcommand{\done}[2][]
+{\todo[color=green!40, #1]{#2}}
+
+\newcommand{\donenum}[2][]
+{\stepcounter{todocounter}\done[#1]{\thetodocounter: #2}}
+
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{frame=tb,
+  language=Java,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=3
+}
+\lstset{language=bash}
+
+
+\setcounter{section}{0}
+
+\title{Supplementary Material}
+\author{Sha Joe Zhu}
+\date{}
+
+
+
+\begin{document}
+\maketitle{}
+\listoftodos
+\clearpage
+\setcounter{page}{1}
+
+\maketitle
+\tableofcontents
+
+\setcounter{section}{0}
+
+\newpage
+\input{supplementReset.tex}
+
+\section{Filtering step}
+
+\section{Deconvoltion IBD methods}
+
+Overall we use mcmc methods.
+
+
+\todo{expand methods}
+
+\subsection{Deconvolving mixed infection}
+\subsubsection{Notations}
+We use the same notations as \citet{Zhu2017} (see Table~\ref{tab:notation}). Our data, $D$, are the allele read counts of sample $j$ at a given site $i$, denoted as $r_{j,i}$ and $a_{j,i}$ for reference (REF) and alternative (ALT) alleles respectively.  These are assigned values of $0$ and $1$ respectively. Here we consider only bi-allelic loci, though future extension to include multi-allelic sites is simple.  The empirical allele frequencies within a sample (WSAF) $p_{j,i}$ and at population level (PLAF) $f_i$ are calculated by $ \frac{a_{j,i}}{a_{j,i} + r_{j,i}}$ and $ \frac{\sum_j a_{j,i}}{\sum_j a_{j,i} + \sum_j r_{j,i}}$ respectively. Since all data in this section refers to the same sample, we drop the subscript $j$ from now on.
+
+\begin{table}[htb]\centering
+\begin{tabular}{c|c}\hline
+$i$              & Marker index\\
+$j$              & Sample index \\
+$r$              & Read count for reference allele \\
+$a$              & Read count for alternative allele \\
+$f$              & Population level allele frequency (PLAF) \\
+$n$              & Number of strains within sample \\
+$l$              & Sequence length \\
+$\mathbf{w}$      & Proportions of strains \\
+%$\mathbf{x}$	& Log titre of strains \\
+$\mathbf{h}_{i}$ & Allelic states of $n$ parasite strains at site $i$ \\
+$h_{k,i}$   & Allelic state of parasite strain $k$ at site $i$\\
+$p$              & Observed within sample allele frequency (WSAF) \\
+$q$              & Unadjusted expected WSAF  \\
+$\pi$            & Adjusted expected WSAF \\
+%$\Xi$            & Reference panel\\
+%$\xi_{k,i}$     & Allelic state of reference panel strain $k$ at site $i$\\
+%$G$              & Scaling factor used for genetic map\\
+$e$              & Probability of read error\\
+$\mathcal{S}$ & IBD configuration \\
+$\mathcal{H}$ & haplotype configuration \\
+\hline
+\end{tabular}
+\caption{Table summarising the notation used in this article.}\label{tab:notation}
+\end{table}
+
+\subsubsection{Model}
+
+We describe the mixed infection problem by considering the number of strains, $n$, the relative abundance of each strain, $\mathbf{w}$, and their allelic states, $\mathbf{h}_{i}$. In addition to \citet{Zhu2017}, we also infer the IBD-configuration $\mathcal{S}_{i}$, which describes the strain relationships at each site $i$. For example, for three strains, the IBD-configuration could be one of the five cases: (1) all strains are IBD; (2) all strains are not IBD; (3)(4)(5) only two strains are IBD. To simplify our problem, we assume independence between each marker, and drop the subscript $i$ from now on. Similar to \citet{Jack2016}, we use a Bayesian approach and define the posterior probabilities of $n$, $\mathbf{w}$, $\mathbf{h}$ and $\mathcal{S}$,  as:
+
+\begin{equation}
+P(n, \mathbf{w}, \mathbf{h}, \mathcal{S}| e, D) \propto L(n, \mathbf{w}, \mathbf{h}, \mathcal{S} | e, D) \times P(n, \mathbf{w}, \mathbf{h}, \mathcal{S}), \label{eqn:post}
+\end{equation}
+where $e$ is the read error rate.
+
+\noindent We assume a prior in which the haplotypes of the $n$ strains are independent of each other and dependent only on the IBD configuration. Let $\mathcal{H}$ be the haplotype configuration that is derived from the IBD configuration $\mathcal{S}$. For example, if $n=3$ and only strains 1 and 2 are IBD, the haplotype configuration $\mathcal{H}$ could be 0,0,0; 0,0,1; 1,1,0 and 1,1,1. Therefore, we can decompose the joint prior as:
+\begin{equation}
+P(n, \mathbf{w}, \mathbf{h}, \mathcal{S}) = P(n) \times P(\mathbf{w}|n) \times P(\mathbf{h} , \mathcal{S}|n),
+\end{equation}
+where
+\begin{equation}
+P(\mathbf{h}, \mathcal{S}|n) = P(\mathcal{S}|n) \times \sum_{\xi \in \mathcal{H}} P(\mathbf{h} | \xi) \times P(\xi|\mathcal{S}).
+\label{eqn:}
+\end{equation}
+
+
+\noindent For details of the likelihood and the prior on the proportions see \citet{Zhu2017} sections 2.2.1 and 2.2.2. We use the following expression for the expected WSAF $q$, as:
+\begin{equation}
+q = \mathbf{w}\cdot\mathbf{h}.\label{eqn:qij_full_sum}
+\end{equation}
+
+        %ll1<- lbeta(e1*c+alt.cts[site], (1-e1)*c+(read.depths[site]-alt.cts[site]));
+        %ll2<- -lbeta(e1*c, (1-e1)*c);
+        %ll<-ll1+ll2;
+        %ln<- exp(ll-max(ll));
+        %ln<-ln/sum(ln);
+        %mn<-sum(ln*p.grid); # Compute the posterior, then normalize by the mean?
+        %vr<-sum(ln*p.grid^2)-mn^2;
+        %llk.apx[site,]<-(mn*(1-mn)/vr-1)*c(mn, 1-mn);
+
+
+\noindent The data, which can be summarised by the reference and alternative allele read counts at each site, is modelled through a beta-binomial distribution given the expected WSAF.  We model the data at distinct segregating sites as independent.  Thus the likelihood function  in Eqn.~\eqref{eqn:post} is only dependent on the haplotypes present and their frequencies through their contribution to $q_{i}$.
+
+%; i.e. $L(n, \mathbf{w}, \mathbf{h}, | \Xi, e, D) = \prod_{i=1}^l L(q_i | \Xi, e, D)$.
+
+To incorporate sequencing error, we modify the expected WSAF such that the allele frequency of `REF' read as `ALT' is $(1 - q_i)e$, and the allele frequency of `ALT' read as `REF' is $q_ie$. Thus, the adjusted expected WSAF becomes:
+
+\begin{equation}
+\pi_i = q_i + (1 - q_i)e - q_ie = q_i + (1 - 2q_i)e.\label{eqn:adj_q}
+\end{equation}
+
+\noindent We model over-dispersion in read counts relative to the Binomial using a Beta-binomial distribution. Specifically, the read counts of `ALT' are identically and independently distributed (i.i.d.) Bernoulli random variables with probability of success $v_i$; i.e. $a_i \sim Binom(a_i + r_i, v_i)$, and $v_i \sim Beta(\alpha, \beta)$, where $E(v_i) = \alpha/(\alpha+\beta) = \pi_{i}$. This is achieved by setting $\alpha = c\cdot \pi_{i} $ and $\beta = c\cdot (1-\pi_{i})$, such that the variance of the WSAF is inversley proportion to $c$.  Combined, we have:
+
+\begin{equation}
+L(q_{i}| e, D) \propto \frac{\Gamma(a_i + c\cdot \pi_{i}) \Gamma(r_i + c\cdot (1-\pi_{i}))}{\Gamma(c\cdot \pi_{i})\Gamma(c\cdot (1-\pi_{i}))}. \label{eqn:llk}
+\end{equation}
+
+
+\subsubsection{Metropolis-Hastings update for proportions}\label{sec:updateP}
+\todo{To keep this? or just mention this is the same as \citet{Zhu2017}}
+We update $\mathbf{w}|n$, through the underlying log titres, $\mathbf{x}|n$. Specifically, we choose $i$ uniformly from $n$ and propose new $x_i'$s from $x_i' = x_i + \delta x$, where $\delta x \sim N(0, \sigma^2/s)$, and $s$ is a scaling factor. The new proposed proportion is therefore $\frac{\exp(x_k')}{\sum_{k=1}^n \exp(x_k')}$. Since the proposal distribution is symmetrical, the Hastings ratio is 1. A new update is accepted with probability
+
+ $$\min\left(1, \frac{P(\mathbf{w}'|n)}{P(\mathbf{w}|n)} \frac{L(\mathbf{w}', \mathbf{h}, {\mathcal S} | e, D)}{L(\mathbf{w}, \mathbf{h}, {\mathcal S} | e, D)}\right).$$
+
+\subsubsection{Gibbs sampling for haplotype and IBD-configuration update}
+
+
+\paragraph{Prior on $\mathcal{S}|n$}
+
+Inbreeding coefficient.
+
+
+To perform inference about the haplotypes present and their proportions we use Markov chain Monte Carlo (MCMC). We use a Metropolis-Hastings algorithm to sample proportions ($\mathbf w$) given $\mathbf h$; and use a Gibbs sampler to update $\mathbf h$ for a given $\mathbf w$, with two types of update: a single haplotype and a pair of haplotypes.
+
+%\begin{itemize}
+  %\item Likelihood
+  %\item MCMC
+%\end{itemize}
+
+Hidden markov model, $\mathcal{S}_{i}$ transition probability $t_{i, i+1}$, and emission probability $P(\mathbf{h} | \xi)$.
+
+
+\subsection{}
+\begin{itemize}
+  \item IBD posterior probability
+
+\end{itemize}
+
+We take the
+
+
+
+\subsection{Implementation details}
+\begin{itemize}
+%We then compute the likelihood as $\frac{x^{\alpha-1}(1-x)^{\beta-1}} {\Beta(\alpha,\beta)}\!$, where
+
+%${\displaystyle \mathrm {B} (\alpha ,\beta )={\frac {\Gamma (\alpha )\Gamma (\beta )}{\Gamma (\alpha +\beta )}}}$
+
+  \item {\bf Likelihood surface} We consider compute the likelihood of a given WSAF as \cite{Zhu2017} Equation~(5), and make the likelihood surface for WSAF. Given the integrated likelihood surface, we compute the likelihood for WSAF = 0 and WSAF = 1. We use these two values as shape parameters of a beta distribution, $\alpha = llk_{0}$ and $\beta = llk_{1}$, instead of computing the likelihood of a given WASF, we integrate the likelihood over the possible span of WSAF.
+
+%ibd state configuration, haplotype state configuration.
+
+\item {\bf MCMC parameters for deconvolution}
+
+  \item {\bf Extract crossover events} We treat genome regions of which IBD posterior probabilities greater than 90\% as IBD blocks. Regions that are not identified by a particular IBD region are crossover event candidates. We identify the candidate region of which two sides belong to different IBD blocks as a crossover event.
+
+\item {\bf MCMC parameters for recombination map and smoothing}
+We burn the first 10\% of the MCMC chain, and draw every 5th sample of the chain. To collect 1000 samples for each SNP interval.
+\end{itemize}
+
+\subsection{Commands}
+
+\linespread{1}
+\begin{lstlisting}
+vcf="PD0165-C.vcf.gz"
+plaf="plaf.1"
+panel="clonalSamples.1.mostDiverse15.txt"
+exclude="exclude.1"
+
+common="-vcf ${vcf} -plaf ${plaf} -exclude ${exclude}"
+mcmcCommon=" -panel ${panel} -k 2 -nSample 250 -rate 8 -burn 0.67 -seed 1"
+
+prefix="PD0165-C-noIBD"
+dEploid ${common} ${mcmcCommon} -o ${prefix}
+~/DEploid/utilities/interpretDEploid.r ${common} -dEprefix ${prefix} -o ${prefix}
+
+prefix="PD0165-C"
+dEploid ${common} ${mcmcCommon} -o ${prefix} -ibd
+~/DEploid/utilities/interpretDEploid.r ${common} -dEprefix ${prefix} -o ${prefix} -ibd
+
+~/pfPvRecombMap/plotIBD.r ${prefix} ${plaf} ${vcf}
+\end{lstlisting}
+
+
+\subsection{Bench mark}
+Against DEploid without using IBD methods.
+
+\subsection{Simulation study}
+
+\newpage
+\input{supplementReset.tex}
+
+\section{Genome fractions of IBD regions}
+
+\subsection{\textcolor{red}{Filtering samples by coverage}}
+
+\begin{figure}[h]
+\centering
+\missingfigure[figwidth=\textwidth]{genome IBD fractions? }
+\caption{}
+\end{figure}
+
+
+
+
+
+
+
+\begin{thebibliography}{}
+
+\bibitem[\protect\citeauthoryear{Browning and Browning}{Browning and
+  Browning}{2007}]{Browning2007}
+Browning, S.~R. and B.~L. Browning (2007)
+\newblock Rapid and accurate haplotype phasing and missing-data inference for
+  whole-genome association studies by use of localised haplotype clustering.
+\newblock {\em Am. J. Hum. Genet.\/}~{\em 81\/}(5), 1084--1097.
+
+\bibitem[\protect\citeauthoryear{Neafsey}{Neafsey}{2012}]{Neafsey2012}
+Neafsey, D. {\em et al}.(2012)
+\newblock The malaria parasite {\it Plasmodium vivax} exhibits greater genetic diversity than {\it Plasmodium falciparum}.
+\newblock {\em Nature Genetics\/}~{\em 44\/}(9), 1046--1052.
+
+\bibitem[\protect\citeauthoryear{Wegmann}{Wegmann}{2011}]{Wegmann2011}
+Wegmann, D. {\em et al}.(2011)
+\newblock Recombination rates in admixed individuals identified by ancestry-based inference.
+\newblock {\em Nature Genetics\/}~{\em 43\/}, 847--894.
+
+\bibitem[\protect\citeauthoryear{Hinch}{Hinch}{2011}]{Hinch2011}
+Hinch, A.G. {\em et al}. (2011))
+\newblock The landscape of recombination in African Americans.
+\newblock {\em Nature\/}~{\em 476}, 170--175.
+
+\bibitem[\protect\citeauthoryear{Henden}{Henden}{2016}]{Henden2016}
+Henden, L. {\em et al}. (2016))
+\newblock Detecting selection signals in {\it Plasmodium falciparum} using identity-by-descent analysis,
+\newblock {\em bioRxiv.\/}, 088039.
+
+
+\bibitem[\protect\citeauthoryear{Mu}{Mu}{2005}]{Mu2005}
+Mu, J. {\em et al}. (2005)
+\newblock Recombination Hotspots and Population Structure in {\it Plasmodium falciparum}.
+\newblock {\em PLOS Biology.\/}~{\em 3}, e335.
+
+
+\bibitem[\protect\citeauthoryear{Lopez}{Lopez}{2012}]{Lopez2012}
+Lopez A. {\em et al}. (2012)
+\newblock Genetic diversity of {\it Plasmodium vivax} and {\it Plasmodium falciparum} in Honduras.
+\newblock {\em Malaria Journal.\/}~{\em 11}, 391.
+
+\bibitem[\protect\citeauthoryear{Jiang}{Jiang}{2011}]{Jiang2011}
+Jiang, H. {\em et al}. (2011)
+\newblock High recombination rates and hotspots in a {\it Plasmodium falciparum} genetic cross.
+\newblock {\em Genome Biology.\/}~{\em 12}, R33.
+
+
+\bibitem[\protect\citeauthoryear{Miles, Iqbal, Vauterin, Pearson, Campino,
+  Theron, Gould, Mead, Drury, O{\textquoteright}Brien, Ruano~Rubio, MacInnis,
+  Mwangi, Samarakoon, Ranford-Cartwright, Ferdig, Hayton, Su, Wellems, Rayner,
+  McVean, and Kwiatkowski}{Miles et~al.}{2016}]{Miles2016}
+Miles, A. {\em et al}. (2015)
+\newblock Indels, structural variation, and recombination drive genomic diversity in {\it Plasmodium falciparum}.
+\newblock {\em Genome Res.\/}~{\em26\/}, 1288--1299.
+
+\bibitem[\protect\citeauthoryear{O'Brien}{O'Brien et~al.}{2016}]{Jack2016}
+O'Brien D,J. {\em et al}. (2016)
+\newblock Inferring Strain Mixture within Clinical {\em Plasmodium falciparum} Isolates from Genomic Sequence Data.
+\newblock {\em PLoS Comput. Biol.\/}~{\em 12\/}(6): e1004824.
+
+\bibitem[\protect\citeauthoryear{O'Brien}{O'Brien et~al.}{2015}]{Jack2016Inbreeding}
+O'Brien D,J. {\em et al}. (2016)
+\newblock Approaches to estimating inbreeding coefficients in clinical isolates of {\it Plasmodium falciparum} from genomic sequence data.
+\newblock {\em Malaria Journal\/}~{\em 15}:473.
+
+
+\bibitem[\protect\citeauthoryear{Pearson, Amato, Auburn, Miotto,
+  Almagro-Garcia, Amaratunga, Suon, Mao, Noviyanti, Trimarsanto, Marfurt,
+  Anstey, William, Boni, Dolecek, Tran, White, Michon, Siba, Tavul, Harrison,
+  Barry, Mueller, Ferreira, Karunaweera, Randrianarivelojosia, Gao, Hubbart,
+  Hart, Jeffery, Drury, Mead, Kekre, Campino, Manske, Cornelius, MacInnis,
+  Rockett, Miles, Rayner, Fairhurst, Nosten, Price, and Kwiatkowski}{Pearson
+  et~al.}{2016}]{Pearson2016}
+Pearson, R.~D. {\em et al}. (2016)
+\newblock {Genomic analysis of local variation and recent evolution in {\it Plasmodium vivax}}.
+\newblock {\em Nat. Genet.\/}~{\em 48}, 959--964.
+
+
+\bibitem[\protect\citeauthoryear{Rutledge}{Rutledge et~al.}{2017}]{Rutledge2017}
+Rutledge. G. G., {\em et al}. (2017)
+\newblock Plasmodium malariae and P. ovale genomes provide insights into malaria parasite evolution
+\newblock {\em Nature.\/}~{\em 542}, 101--104.
+
+
+\bibitem[\protect\citeauthoryear{Pf3k}{Pf3k}{2016}]{Pf3k2016}
+The Pf3k Project: pilot data release 5 (2016)
+\newblock {www.malariagen.net/data/pf3k-5} [accessed 1 June 2016]
+
+
+\bibitem[\protect\citeauthoryear{WHO}{WHO}{2016}]{WHO2016}
+WHO. (2016)
+\newblock {World Malaria Report 2015}.
+\newblock {\em World Health Organization\/}.
+
+\bibitem[\protect\citeauthoryear{Zhu, Garcia, McVean}{Zhu et~al.}{2017}]{Zhu2017}
+Zhu, J. S.\, J. A. Garcia\, G. McVean. (2017)
+\newblock {Deconvoluting multiple infections in {\it Plasmodium falciparum} from high throughput sequencing data}.
+\newblock {\em bioRxiv\/}~{\em \/}099499. doi: https://doi.org/10.1101/099499
+
+\end{thebibliography}
+
+\end{document}
