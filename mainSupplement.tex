@@ -73,6 +73,9 @@
 \input{supplementReset.tex}
 
 \section{Filtering step}
+\subsection{P. f}
+
+\subsection{P. v}
 
 \section{Deconvoltion IBD methods}
 
@@ -244,6 +247,86 @@ dEploid ${common} ${mcmcCommon} -o ${prefix} -ibd
 Against DEploid without using IBD methods.
 
 \subsection{Simulation study}
+
+
+To estimate COI, relative proportions and strain haplotypes we use DEploid [Zhu et al., 2017] on high quality biallelic SNP data (both coding and non-coding variants tagged with PASS at the QUAL column in the VCF file). In order to improve the accuracy of the deconvolution process and improve efficiency, we first split the Pf3k data into groups, based on genetic similarity. We compute genetic distances between two samples following
+
+where l represents an arbitrary locus, L denotes the total number of loci, and  indicates the non-reference within-sample allele frequency for sample s at locus l.  is then given by
+
+where  is the number of read counts supporting the alternative allele in sample s at locus l, and  is the number of read counts supporting the reference allele in sample s at locus l.
+We find that samples from the same geographical region differentiate into clear clusters. We use this initial grouping as the base for defining the reference panels that assist the deconvolution procedure. Our definition of geographical groups is
+Africa
+Malawi, Congo.
+Ghana (Kassena).
+Nigeria, Senegal, Mali.
+The Gambia, Guinea, Ghana (Kintampo).
+Asia
+Cambodia (Pursat), Cambodia (Pailin), Thailand (Sisakhet).
+Vietnam, Laos, Cambodia (Ratanakiri), Cambodia (Preah Vihear).
+Bangladesh, Myanmar, Thailand (Mae Sot), Thailand (Ranong).
+
+
+\section{Deconvolution example with sample PD0577-C}
+
+The following example shows a specific {\textmd DEploid} command to deconvolute the mixed sample {\textmd PD0577-C}:
+\linespread{1}
+\begin{lstlisting}
+dEploid -ref PD0577-C_ref.txt \
+    -alt PD0577-C_alt.txt \
+    -plaf asia-1_PLAF.txt \
+    -exclude asia-1_exclude.txt \
+    -panel asia-1_panel.txt \
+    -o PD0577-C.deconv \
+    -seed 5 \
+    -nSample 250 \
+    -rate 8 \
+    -burn 0.67 \
+    -k 3 \
+    -exportPostProb
+\end{lstlisting}
+\linespread{1.5}
+where ``{\tt -ref PD0577-C\_ref.txt}'' and ``{\tt -alt PD0577-C\_alt.txt}'' define the input text files \footnote{The Pf3k data was deconvoluted using DEploid version v0.1-beta. Recent versions can take VCF files as input as well.} that record the reference and alternative read counts respectively; ``{\tt -plaf asia-1\_PLAF.txt}'' contains the population allele frequencies calculated from total read counts. Note that we use option ``{\tt -exclude asia-1\_exclude.txt}'' to skip deconvoluting monomophic sites; ``{\tt -panel asia-1\_panel.txt}'' specifies a text file including haplotypes of samples listed in Table~\ref{tab:panelSamples}; options ``{\tt -nSample}'', ``{\tt -rate}'' and ``{\tt -burn}'' specify the total number of MCMC samples to take, the sampling rate and the burning rate of the MCMC chain respectively. For detailed documentation, please see \url{http://deploid.readthedocs.io/en/latest/input.html}.
+
+\linespread{1}
+\begin{lstlisting}
+dEploid -ref PD0577-C_ref.txt \
+    -alt PD0577-C_alt.txt \
+    -plaf asia-1_PLAF.txt \
+    -exclude asia-1_exclude.txt \
+    -panel asia-1_panel.txt \
+    -o PD0577-C.deconv \
+    -painting PD0577-C.deconv.hap
+\end{lstlisting}
+\linespread{1.5}
+
+
+
+We use a utility {\tt R} script to plot and interpret the output produced by DEploid. The following command is used to generate Figures~\ref{fig:PD0577} (a) -- (e).
+\linespread{1}
+\begin{lstlisting}
+R --slave "--args
+    -ref PD0577-C_ref.txt
+    -alt PD0577-C_alt.txt
+    -plaf asia-1_PLAF.txt
+    -exclude asia-1_exclude.txt
+    -o PD0577-C.deconv
+    -dEprefix PD0577-C.deconv" < ~/DEploid/utilities/interpretDEploid.r
+\end{lstlisting}
+\linespread{1.5}
+where flags ``{\tt -ref}'', ``{\tt -alt}'', ``{\tt -plaf}'' and ``{\tt -exclude}'' are used in the same manner as in the previous example.
+
+
+\begin{figure}[ht]
+\centering
+\caption{Sample {\textmd PD0577-C} deconvolution with Reference Panel Asia-1. (a) Diagnostic panels from the \texttt{DEploid} output. The top three panels are used as data exploration of sample {\textmd PD0577-C}. From left to right, it shows: 1. Alternative read counts vs reference read counts. 2. Histogram of the allele frequencies within sample.
+3. Allele frequencies at the population level (PLAF) vs allele frequencies within the sample (WSAF): red dots show observed WSAF, which is calculated by read counts; blue does show the expected WSAF. The next three plots from left to right show: 1. MCMC samples for the strain proportions, with the fraction of each color indicating the proportion of a different strain at each MCMC sample. The three colored blocks suggest that there are three strains within sample {\textmd PD0577-C}, with proportions approximately 1/4, 1/4 and 1/2.
+2. Expected WSAF vs observed WSAF. We use the correlation between the observed and expected WSAF as a sanity check for our model. A low correlation suggests poor fitting.
+3. Log likelihood of the MCMC chain. This figure is used to indicate whether the MCMC has converged. The colored dots mark the likelihoods of the model when specific MCMC steps are used: updating the strain porportions, painting a single haplotype and painting a pair of haplotypes are marked in green red and blue respectively. (b) Expected WSAF (blue) and observed WSAF (red) across the genome. This figure highlights the genome diversity within the mixed sample across the genome. (c) (d) and (e) show the posterior painting probabilities for the deconvoluted strains when using the Reference Panel Asia-1. Each panel represents the posterior probability of a chromosome. Chromosomes 1 -- 14 are ordered from left to right, then top to bottom.
+}\label{fig:PD0577}
+\end{figure}
+
+
+
 
 \newpage
 \input{supplementReset.tex}
