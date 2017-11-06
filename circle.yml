@@ -1,0 +1,13 @@
+## Customize checkout
+checkout:
+  post:
+
+## Customize dependencies
+dependencies:
+  pre:
+  override:
+
+test:
+  override:
+    - make main.pdf -n
+    - make mainSupplement.pdf -n
