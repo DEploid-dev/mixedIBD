@@ -6,21 +6,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% referencing %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \usepackage{natbib}
 \usepackage{hyperref}
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% figure and table %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\usepackage{graphicx}
-\graphicspath{{./figures/}}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% layout %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\usepackage{setspace}
-\linespread{1.5}
-\usepackage{fullpage}
-\usepackage{authblk}
-
-
 \usepackage{xcolor}
-\usepackage{hyperref}
 \hypersetup{
     colorlinks,
     %linkcolor={red!50!black},
@@ -29,10 +15,25 @@
     urlcolor={blue!80!black}
 }
 
-
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% figure and table %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{graphicx}
+\graphicspath{{./figures/}}
 \usepackage{subfig}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% layout %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{setspace}
+\linespread{1.5}
+\usepackage{fullpage}
+\usepackage{authblk}
+
+%\usepackage{fancyhdr}
+\providecommand{\keywords}[1]{\textbf{\textit{Key words:}} #1}
+
+%\newcommand\@shorttitle{}
+% define \theshorttitle to what is given
+%\newcommand\shorttitle[1]{\renewcommand\@shorttitle{#1}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% todo %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \usepackage[colorinlistoftodos]{todonotes}
 %\usepackage[disable]{todonotes}
 
@@ -55,10 +56,19 @@
 \begin{document}
 
 \title{The rate and structure of mixed infections in global populations of {\it Plasmodium} malaria}
+%\shorttitle{Global malaria mixed infection}
+\newcommand\shorttitle{Global malaria mixed infection}
+%\shorttitle
 \date{}
 
-\author{(LIST OF NAMES! NOT RIGHT ORDER)\\
-Sha Joe Zhu\,$^{\text{ 1,\textcolor{black}{2}}}$, Jacob Almagro-Garcia\,$^{\text{ 1,\textcolor{black}{2},3,4}}$, Jason, Richard ... Dominic and Gil McVean\,$^{\text{ 1,\textcolor{black}{2}}}$}
+\author{(LIST OF NAMES! NOT RIGHT ORDER)}
+\author[1,2]{Sha Joe Zhu}
+\author[1,2,3,4]{Jacob Almagro-Garcia}
+\author[2]{Jason}
+\author[1,3,4]{Richard}
+\author[1,2,3,4]{Dominic}
+\author[1,2]{Gil Mcvean}
+%\,$^{\text{ 1,\textcolor{black}{2}}}$, Jacob Almagro-Garcia\,$^{\text{ 1,\textcolor{black}{2},3,4}}$, Jason, Richard ... Dominic and Gil McVean\,$^{\text{1,2}}$}
 
 \affil[1]{Wellcome Trust Centre for Human Genetics, University of Oxford, Oxford, UK}
 \affil[2]{Big Data Institute, Li Ka Shing Centre for Health Information and Discovery, University of Oxford, Oxford, UK}
@@ -72,37 +82,63 @@ Sha Joe Zhu\,$^{\text{ 1,\textcolor{black}{2}}}$, Jacob Almagro-Garcia\,$^{\text
 \listoftodos
 {}
 
-\todo{Afflictions}
+\todo{author list, Afflictions}
 
-\todo{running title}
 
-\todo{keywords}
+
 
 \begin{abstract}
-  \todo{abstract}
 The extent to which individuals infected with malaria pathogens of the genus {\it Plasmodium} carry multiple, genetically distinct strains both reflects local epidemiological processes and can influence the nature and severity of disease.  Large-scale genome sequencing projects of malaria pathogens have the potential to provide high resolution information about the rate and structure of mixed infections, but current analytical approaches often fail to fully capture the diversity and relatedness structure of strains present.  Here, we introduce an enhanced method for deconvolution of mixed infections that identifies the number of strains and patterns of identity by descent between them.  We apply the approach to 2512 samples of {\it P. falciparum} from 14 countries and 228 samples of {\it P. vivax} from across 13 countries.
 % read.table("pf3k_release_5_metadata.txt", header=T, sep = "\t", stringsAsFactors=F)$country %>% unique
 % see ftp://ngs.sanger.ac.uk/production/malaria/pvgv/May2016_release/README
 Rates of mixed infection vary from XX\% to XX\%, with up to XX\% of individuals carrying at least three strains in XXX.  In between XX\% and XX\% of cases we find evidence for sibling strains, likely arising from a single bite by a multiply-infected mosquito.  The proportion of mixed infections with sibling strains is remarkably constant across species and populations.  Our findings suggest that the rate and relatedness structure of mixed infections will be valuable metrics in characterising malaria epidemiology and mapping changes over space and time.
 \end{abstract}
 
+\keywords{Malaria, genome, epidemiology, IBD}
+
+
 \section{Introduction}
 \narrative{1. Why mixed infection is relevant to biology and epidemiology.}
 
 Humans with {\it Plasmodium} malaria often have mixed infections, i.e. they carry a mixture of genetically different parasites of the same species.  Sometimes this is the result of multiple mosquito bites, particularly in geographical locations with high levels of malaria transmission.  On other occasions it is the result of a single mosquito transmitting a genetic mixture of parasites from one person to another.  This is of considerable biological interest because the parasites undergo sexual recombination within the mosquito, i.e. transmission of mixed infections enables new genetic forms to be generated by sexual recombination within the parasite population.
 
-Genetic analysis of mixed infections is therefore a central problem in {\it Plasmodium} population biology.  It is also a practical problem, because mixed infections make it difficult to analyse genome variation within a sample. Current approaches are largely based on genotyping multiple loci (e.g. SNPs) to identify heterozygous genotypes and to measure their allelic proportions, from which it is possible to estimate the complexity of infection (COI) and a coefficient of inbreeding (Fws) within a sample \citep{Manske2012}, [Auburn et al., 2012]\todo{Jacob: reference}, \citep{Galinsky2015}.  Such metrics are useful for comparing levels of mixed infection between different locations, and for investigating correlation with transmission intensity and other epidemiological variables, but they do not capture the underlying genetic architecture of an individual mixed infection.
+Genetic analysis of mixed infections is therefore a central problem in {\it Plasmodium} population biology.  It is also a practical problem, because mixed infections make it difficult to analyse genome variation within a sample. Current approaches are largely based on genotyping multiple loci (e.g. SNPs) to identify heterozygous genotypes and to measure their allelic proportions, from which it is possible to estimate the complexity of infection (COI) and a coefficient of inbreeding (Fws) within a sample \citep{Manske2012}, [Auburn et al., 2012]\todo{Jacob: reference for Auburn}, \citep{Galinsky2015}.  Such metrics are useful for comparing levels of mixed infection between different locations, and for investigating correlation with transmission intensity and other epidemiological variables, but they do not capture the underlying genetic architecture of an individual mixed infection.
 
 \narrative{2. Prior art – what have others found about rates of mixed infection?}
 
 The presence of multiple strains of {\it P. falciparum} makes fine scale analysis of genetic variation challenging, since genetic differences between strains of this haploid organism will appear as heterozygous loci. Such mixed calls confound methods that exploit haplotype data to detect, among other phenomena, the occurrence of natural selection or recent demographic events \citep{Harris2013, Lawson2012, Mathieson2014, Sabeti2002}.
 
-\narrative{Studies about mixed infection}
-Richard's paper on vivax
+Because of the difficulty of analysing samples with mixed infection, most studies of P. falciparum have focused on samples harbouring a single dominant strain \todo{citation}.
+
+Previous studies uses within-sample F statistic Fws \citep{Manske2012, Pearson2016} to measure inbreeding within isolates. Previous studies on IBD, \citep{Henden2016, Wong2017, Schaffner188078}
+
+
+\citep{Pearson2016} \citet{Nair2014}
+Along the sequences,
+
+To obtain a more detailed picture of the genetic structure of mixed
+infections, we analyzed long runs of homozygosity (RoH) in hetero-
+zygous samples (Fig. 3b and Supplementary Fig. 5). These RoH are
+analogous to the long blocks of haplotype sharing that have been
+
+observed by single-cell genome sequencing of meiotic sibling para-
+sites isolated from the same infected individual
+
+We observed substantial RoH in 25 of 43 samples with
+two dominant clones, covering <40\% of the genome in 9 samples,
+40–60\% of the genome in 11 samples and >60\% of the genome in 5
+samples. A few samples with >2 dominant clones also displayed RoH,
+
+suggesting that these infections were dominated by a group of closely
+related parasites. These data demonstrate the potential usefulness of
+deep sequencing data as an epidemiological tool to differentiate mixed
+infections that are due to separate mosquito bites from those that are
+due to sibling parasites inoculated by the same mosquito 6,16,24,25,27
+
+
 
 \narrative{3. Previous work on DEploid – method for deconvolution of mixed infections, using a reference panel.}
 
-Because of the difficulty of analysing samples with mixed infection, most studies of P. falciparum have focused on samples harbouring a single dominant strain \todo{citation}.
 
 In light of these difficulties, researchers usually focus on clonal infections or resort to heuristic methods for resolving heterozygous genotypes. The former approach discards valuable information regarding genetic diversity and relatedness, whereas the latter tends to create chimeric haplotypes that are not suitable for analysis, unless mixed calls are very sparse.
 
@@ -115,7 +151,6 @@ In comparison to the problem of phasing haplotypes within diploid organisms, dec
 
 \narrative{5. Here we develop an enhanced version that models IBD patterns and incorporates into strategy (first estimate IBD and no. strains, then use reference panel version).}
 
-Previous studies on IBD, \citep{Henden2016, Wong2017, Schaffner188078}
 
 
 \narrative{6. Apply to 2 large data sets.}
@@ -163,7 +198,22 @@ Background of two dataset, different filtering step was applied.
 
 \narrative{2. Summary of findings within Pf and Pv. Figure 3: Rates of co-infection by geography and species.}
 
+\begin{figure}[h]
+\centering
+\missingfigure[figwidth=\textwidth]{Rates of co-infection by geography and species.}
+\caption{}
+\end{figure}
+
+
+
 \narrative{3. Summary of findings about relatedness within mixed infections.  Figure 4.  Relatedness structure histogram showing peaks at 0.25, 0.5, etc. and relationship between mixed infection rate and sib-strain.}
+
+\begin{figure}
+  \centering{}
+  \includegraphics[width=0.8\textwidth]{IBD_fraction_hist.pdf}
+  \caption{Schematic approach. Black box indicates when DEploid is used. Purple box indicates output.}\label{fig:scheme}
+\end{figure}
+
 
 \narrative{4. Simulation results to analyse the relationship between prevalence, mixed infection rate and sib-strain rate.  Figure 5 summarising simulations.}
 
@@ -246,45 +296,35 @@ Jiang, H. {\em et al}. (2011)
 \newblock High recombination rates and hotspots in a {\it Plasmodium falciparum} genetic cross.
 \newblock {\em Genome Biology.\/}~{\em 12}, R33.
 
-\bibitem[\protect\citeauthoryear{Manske, Miotto, Campino, Auburn,
-  Almagro-Garcia, Maslen, O'Brien, Djimde, Doumbo, Zongo, Ouedraogo, Michon,
-  Mueller, Siba, Nzila, Borrmann, Kiara, Marsh, Jiang, Su, Amaratunga,
-  Fairhurst, Socheat, Nosten, Imwong, White, Sanders, Anastasi, Alcock, Drury,
-  Oyola, Quail, Turner, Ruano-Rubio, Jyothi, Amenga-Etego, Hubbart, Jeffreys,
-  Rowlands, Sutherland, Roper, Mangano, Modiano, Tan, Ferdig, Amambua-Ngwa,
-  Conway, Takala-Harrison, Plowe, Rayner, Rockett, Clark, Newbold, Berriman,
-  MacInnis, and Kwiatkowski}{Manske et~al.}{2012}]{Manske2012}
+\bibitem[\protect\citeauthoryear{Manske et~al.}{Manske et~al.}{2012}]{Manske2012}
 Manske, M. {\em et al}. (2012)
 \newblock Analysis of plasmodium falciparum diversity in natural infections by
   deep sequencing.
 \newblock {\em Nature\/}~{\em 487\/}(7407), 375--379.
 
-\bibitem[\protect\citeauthoryear{Miles, Iqbal, Vauterin, Pearson, Campino,
-  Theron, Gould, Mead, Drury, O{\textquoteright}Brien, Ruano~Rubio, MacInnis,
-  Mwangi, Samarakoon, Ranford-Cartwright, Ferdig, Hayton, Su, Wellems, Rayner,
-  McVean, and Kwiatkowski}{Miles et~al.}{2016}]{Miles2016}
+\bibitem[\protect\citeauthoryear{Miles et~al.}{Miles et~al.}{2016}]{Miles2016}
 Miles, A. {\em et al}. (2015)
 \newblock Indels, structural variation, and recombination drive genomic diversity in {\it Plasmodium falciparum}.
 \newblock {\em Genome Res.\/}~{\em26\/}, 1288--1299.
 
-\bibitem[\protect\citeauthoryear{O'Brien}{O'Brien et~al.}{2016}]{Jack2016}
+\bibitem[\protect\citeauthoryear{Nair et~al.}{Nair et~al.}{2014}]{Nair2014}
+Nair, S. {\em et al}. (2014)
+\newblock Single-cell genomics for dissection of complex malaria infections
+\newblock {\em Genome research.\/}~{\em 24}, 1028--1038.
+
+
+\bibitem[\protect\citeauthoryear{O'Brien et~al.}{O'Brien et~al.}{2016}]{Jack2016}
 O'Brien D,J. {\em et al}. (2016)
 \newblock Inferring Strain Mixture within Clinical {\em Plasmodium falciparum} Isolates from Genomic Sequence Data.
 \newblock {\em PLoS Comput. Biol.\/}~{\em 12\/}(6): e1004824.
 
-\bibitem[\protect\citeauthoryear{O'Brien}{O'Brien et~al.}{2015}]{Jack2016Inbreeding}
+\bibitem[\protect\citeauthoryear{O'Brien et~al.}{O'Brien et~al.}{2015}]{Jack2016Inbreeding}
 O'Brien D,J. {\em et al}. (2016)
 \newblock Approaches to estimating inbreeding coefficients in clinical isolates of {\it Plasmodium falciparum} from genomic sequence data.
 \newblock {\em Malaria Journal\/}~{\em 15}:473.
 
 
-\bibitem[\protect\citeauthoryear{Pearson, Amato, Auburn, Miotto,
-  Almagro-Garcia, Amaratunga, Suon, Mao, Noviyanti, Trimarsanto, Marfurt,
-  Anstey, William, Boni, Dolecek, Tran, White, Michon, Siba, Tavul, Harrison,
-  Barry, Mueller, Ferreira, Karunaweera, Randrianarivelojosia, Gao, Hubbart,
-  Hart, Jeffery, Drury, Mead, Kekre, Campino, Manske, Cornelius, MacInnis,
-  Rockett, Miles, Rayner, Fairhurst, Nosten, Price, and Kwiatkowski}{Pearson
-  et~al.}{2016}]{Pearson2016}
+\bibitem[\protect\citeauthoryear{Pearson et~al.}{Pearson et~al.}{2016}]{Pearson2016}
 Pearson, R.~D. {\em et al}. (2016)
 \newblock {Genomic analysis of local variation and recent evolution in {\it Plasmodium vivax}}.
 \newblock {\em Nat. Genet.\/}~{\em 48}, 959--964.
@@ -318,7 +358,7 @@ Wong W., {\em et al}. (2017)
 
 
 \bibitem[\protect\citeauthoryear{Zhu, Garcia, McVean}{Zhu et~al.}{2017}]{Zhu2017}
-Zhu, J. S.\, J. A. Garcia\, G. McVean. (2017)
+Zhu, J. S., {\em et al} (2017)
 \newblock {Deconvoluting multiple infections in {\it Plasmodium falciparum} from high throughput sequencing data}.
 \newblock {\em Bioinformatics\/}~{\em \/}btx530. doi: https://doi.org/10.1093/bioinformatics/btx530
 
