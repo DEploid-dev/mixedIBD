@@ -110,31 +110,13 @@ Genetic analysis of mixed infections is therefore a central problem in {\it Plas
 \narrative{2. Prior art – what have others found about rates of mixed infection?}
 %The presence of multiple strains of {\it Plasmodium} makes fine scale analysis of genetic variation challenging, since genetic differences between strains of this haploid organism will appear as heterozygous loci. Such mixed calls confound methods that exploit haplotype data to detect, among other phenomena, the occurrence of natural selection or recent demographic events \citep{Harris2013, Lawson2012, Mathieson2014, Sabeti2002}.
 
+\citet{Galinsky2015, Jack2016, Chang2017} have attempted to address the multiple infection problem by inferring the number and proportions of strains from allele frequencies within samples. However, since they do not infer haplotypes, these approaches have limited applicability. To obtain a more detailed {\it P. vivax} genetic structure, \citep{Pearson2016} uses long runs of homozygosity (RoH) in mixed samples to measure long blocks of haplotype sharing within the same host \citet{Nair2014}. It was found that 58\% of the mixed infections shown long stretch of RoH, which implied that these infections were dominated by a group of closely related parasites.
 
-Previous studies uses within-sample F statistic Fws \citep{Manske2012, Pearson2016} to measure inbreeding within isolates. Previous studies on IBD, \citep{Henden2016, Wong2017, Schaffner188078}
+%Previous studies uses within-sample F statistic Fws \citep{Manske2012, Pearson2016} to measure inbreeding within isolates. Previous studies on IBD, \citep{Henden2016, Wong2017, Schaffner188078}
 
 
-\citep{Pearson2016} \citet{Nair2014}
-Along the sequences,
-
-To obtain a more detailed picture of the genetic structure of mixed
-infections, we analyzed long runs of homozygosity (RoH) in hetero-
-zygous samples (Fig. 3b and Supplementary Fig. 5). These RoH are
-analogous to the long blocks of haplotype sharing that have been
-
-observed by single-cell genome sequencing of meiotic sibling para-
-sites isolated from the same infected individual
-
-We observed substantial RoH in 25 of 43 samples with
-two dominant clones, covering <40\% of the genome in 9 samples,
-40–60\% of the genome in 11 samples and >60\% of the genome in 5
-samples. A few samples with >2 dominant clones also displayed RoH,
-
-suggesting that these infections were dominated by a group of closely
-related parasites. These data demonstrate the potential usefulness of
-deep sequencing data as an epidemiological tool to differentiate mixed
-infections that are due to separate mosquito bites from those that are
-due to sibling parasites inoculated by the same mosquito 6,16,24,25,27
+ 
+%These data demonstrate the potential usefulness of deep sequencing data as an epidemiological tool to differentiate mixed infections that are due to separate mosquito bites from those that are due to sibling parasites inoculated by the same mosquito 6,16,24,25,27
 
 
 
@@ -171,7 +153,7 @@ We use a Hidden Markov frame work to formalize our new method.
 \begin{figure}
   \centering{}
   \includegraphics[width=0.8\textwidth]{scheme.png}
-  \caption{Schematic approach. Black box indicates when DEploid is used. Purple box indicates output.}\label{fig:scheme}
+  \caption{Schematic approach. Black boxes indicate the key deconvolution steps when our program DEploid is used. Boxes in blue and purple represent the input and output respectively at each step.}\label{fig:scheme}
 \end{figure}
 
 We benchmark our new method with DEploid implementation described by \citep{Zhu2017}
@@ -254,32 +236,15 @@ Browning, S.~R. and B.~L. Browning (2007)
 \newblock THE REAL McCOIL: A method for the concurrent estimation of the complexity of infection and SNP allele frequency for malaria parasites.
 \newblock {\em PLoS Comput. Biol.\/}~{\em 13\/}(1), e1005348.}
 
-
-\bibitem[\protect\citeauthoryear{Neafsey}{Neafsey}{2012}]{Neafsey2012}
-Neafsey, D. {\em et al}.(2012)
-\newblock The malaria parasite {\it Plasmodium vivax} exhibits greater genetic diversity than {\it Plasmodium falciparum}.
-\newblock {\em Nature Genetics\/}~{\em 44\/}(9), 1046--1052.
-
-\bibitem[\protect\citeauthoryear{Wegmann}{Wegmann}{2011}]{Wegmann2011}
-Wegmann, D. {\em et al}.(2011)
-\newblock Recombination rates in admixed individuals identified by ancestry-based inference.
-\newblock {\em Nature Genetics\/}~{\em 43\/}, 847--894.
+\bibitem[\protect\citeauthoryear{Collins}{Collins}{2012}]{Collins2012}
+Collins, W.E. (2012). 
+\newblock {\it Plasmodium knowlesi}: A malaria parasite of monkeys and humans. 
+\newblock {\em Annual Review of Entomology}~{\em 57\/}, 107--21. 
 
 \bibitem[\protect\citeauthoryear{Galinsky et~al.}{Galinsky et~al.}{2015}]{Galinsky2015}
 Galinsky, K. {\em et al}. (2015)
 \newblock COIL: a methodology for evaluating malarial complexity of infection using likelihood from single nucleotide polymorphism data.
 \newblock {\em Malar. J.\/}~{\em14\/}(4), 1--9.
-
-\bibitem[\protect\citeauthoryear{Mueller et~al.}{Mueller et~al.}{2007}]{Mueller2007}
-Mueller I. {\em et al}. (2007)
-\newblock {\it Plasmodium malariae} and {\it Plasmodium ovale} -- the ``bashful'' malaria parasites.
-\newblock {\em Trends in Parasitology}~{\em 23\/} (6), 278--283. 
-
-\bibitem[\protect\citeauthoryear{Collins}{Collins}{2012}]{Collins2012}
-Collins WE (2012). 
-\newblock {\it Plasmodium knowlesi}: A malaria parasite of monkeys and humans. 
-\newblock {\em Annual Review of Entomology}~{\em 57\/}, 107--21. 
-
 
 \bibitem[\protect\citeauthoryear{Hinch}{Hinch}{2011}]{Hinch2011}
 Hinch, A.G. {\em et al}. (2011))
@@ -291,22 +256,15 @@ Henden, L. {\em et al}. (2016))
 \newblock Detecting selection signals in {\it Plasmodium falciparum} using identity-by-descent analysis,
 \newblock {\em bioRxiv.\/}, 088039.
 
-
-\bibitem[\protect\citeauthoryear{Mu}{Mu}{2005}]{Mu2005}
-Mu, J. {\em et al}. (2005)
-\newblock Recombination Hotspots and Population Structure in {\it Plasmodium falciparum}.
-\newblock {\em PLOS Biology.\/}~{\em 3}, e335.
-
+\bibitem[\protect\citeauthoryear{Jiang}{Jiang}{2011}]{Jiang2011}
+Jiang, H. {\em et al}. (2011)
+\newblock High recombination rates and hotspots in a {\it Plasmodium falciparum} genetic cross.
+\newblock {\em Genome Biology.\/}~{\em 12}, R33.
 
 \bibitem[\protect\citeauthoryear{Lopez}{Lopez}{2012}]{Lopez2012}
 Lopez A. {\em et al}. (2012)
 \newblock Genetic diversity of {\it Plasmodium vivax} and {\it Plasmodium falciparum} in Honduras.
 \newblock {\em Malaria Journal.\/}~{\em 11}, 391.
-
-\bibitem[\protect\citeauthoryear{Jiang}{Jiang}{2011}]{Jiang2011}
-Jiang, H. {\em et al}. (2011)
-\newblock High recombination rates and hotspots in a {\it Plasmodium falciparum} genetic cross.
-\newblock {\em Genome Biology.\/}~{\em 12}, R33.
 
 \bibitem[\protect\citeauthoryear{Manske et~al.}{Manske et~al.}{2012}]{Manske2012}
 Manske, M. {\em et al}. (2012)
@@ -319,11 +277,25 @@ Miles, A. {\em et al}. (2015)
 \newblock Indels, structural variation, and recombination drive genomic diversity in {\it Plasmodium falciparum}.
 \newblock {\em Genome Res.\/}~{\em26\/}, 1288--1299.
 
+\bibitem[\protect\citeauthoryear{Mu}{Mu}{2005}]{Mu2005}
+Mu, J. {\em et al}. (2005)
+\newblock Recombination Hotspots and Population Structure in {\it Plasmodium falciparum}.
+\newblock {\em PLOS Biology.\/}~{\em 3}, e335.
+
+\bibitem[\protect\citeauthoryear{Mueller et~al.}{Mueller et~al.}{2007}]{Mueller2007}
+Mueller, I. {\em et al}. (2007)
+\newblock {\it Plasmodium malariae} and {\it Plasmodium ovale} -- the ``bashful'' malaria parasites.
+\newblock {\em Trends in Parasitology}~{\em 23\/} (6), 278--283. 
+
 \bibitem[\protect\citeauthoryear{Nair et~al.}{Nair et~al.}{2014}]{Nair2014}
 Nair, S. {\em et al}. (2014)
 \newblock Single-cell genomics for dissection of complex malaria infections
 \newblock {\em Genome research.\/}~{\em 24}, 1028--1038.
 
+\bibitem[\protect\citeauthoryear{Neafsey}{Neafsey}{2012}]{Neafsey2012}
+Neafsey, D. {\em et al}.(2012)
+\newblock The malaria parasite {\it Plasmodium vivax} exhibits greater genetic diversity than {\it Plasmodium falciparum}.
+\newblock {\em Nature Genetics\/}~{\em 44\/}(9), 1046--1052.
 
 \bibitem[\protect\citeauthoryear{O'Brien et~al.}{O'Brien et~al.}{2016}]{Jack2016}
 O'Brien D,J. {\em et al}. (2016)
@@ -358,6 +330,11 @@ Schaffner, Stephen F. {\em et al.} (2017)
 \newblock {hmmIBD: software to infer pairwise identity by descent between haploid genotypes},
 \newblock {\em bioRxiv}, doi:10.1101/188078.
 
+\bibitem[\protect\citeauthoryear{Wegmann}{Wegmann}{2011}]{Wegmann2011}
+Wegmann, D. {\em et al}.(2011)
+\newblock Recombination rates in admixed individuals identified by ancestry-based inference.
+\newblock {\em Nature Genetics\/}~{\em 43\/}, 847--894.
+
 \bibitem[\protect\citeauthoryear{WHO}{WHO}{2016}]{WHO2016}
 WHO. (2016)
 \newblock {World Malaria Report 2015}.
@@ -367,7 +344,6 @@ WHO. (2016)
 Wong W., {\em et al}. (2017)
 \newblock Genetic relatedness analysis reveals the cotransmission of genetically related {\it Plasmodium falciparum} parasites in Thiès, Senegal.
 \newblock {\em Genome Medicine.\/}~{\em 9}:5. doi:10.1186/s13073-017-0398-0.
-
 
 \bibitem[\protect\citeauthoryear{Zhu, Garcia, McVean}{Zhu et~al.}{2017}]{Zhu2017}
 Zhu, J. S., {\em et al} (2017)
