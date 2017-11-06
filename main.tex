@@ -112,8 +112,17 @@ Genetic analysis of mixed infections is therefore a central problem in {\it Plas
 
 \citet{Galinsky2015, Jack2016, Chang2017} have attempted to address the multiple infection problem by inferring the number and proportions of strains from allele frequencies within samples. However, since they do not infer haplotypes, these approaches have limited applicability. To obtain a more detailed {\it P. vivax} genetic structure, \citep{Pearson2016} uses long runs of homozygosity (RoH) in mixed samples to measure long blocks of haplotype sharing within the same host \citet{Nair2014}. It was found that 58\% of the mixed infections shown long stretch of RoH, which implied that these infections were dominated by a group of closely related parasites.
 
-%Previous studies uses within-sample F statistic Fws \citep{Manske2012, Pearson2016} to measure inbreeding within isolates. Previous studies on IBD, \citep{Henden2016, Wong2017, Schaffner188078}
+%Previous studies uses within-sample F statistic Fws \citep{Manske2012, Pearson2016} to measure inbreeding within isolates.
+IBD methods
+Previous studies on IBD, \citep{Henden2016, Wong2017, Schaffner188078}
 
+chanellenges, 
+
+1. pairwise.
+
+2. no proportion information used
+
+3. IBD, non-IBD regions.
 
  
 %These data demonstrate the potential usefulness of deep sequencing data as an epidemiological tool to differentiate mixed infections that are due to separate mosquito bites from those that are due to sibling parasites inoculated by the same mosquito 6,16,24,25,27
@@ -159,6 +168,10 @@ We use a Hidden Markov frame work to formalize our new method.
 We benchmark our new method with DEploid implementation described by \citep{Zhu2017}
 
 \narrative{2. Joint estimation of IBD, strains and proportions.  Details in SOM.  Figure 1b.  Example deconvolution in real data showing IBD transitions.}
+
+The lab strain mixture reflects an artificial situation that is unlikely in the field. To assess the performance of DEploid in realistic settings, we created in silico mixtures from 212 clonal samples of Asian origin with two proportions (25/75\% and 45/55\%) for 8071 sites from Chromosome 14. A further 20 randomly chosen samples were used for the reference panel. To simulate data, we used empirical read depths and drew read counts for the two alleles from the binomial proportions given by Equation (4). DEploid correctly recovered the number of strains and proportions. As expected, we observed more switches and genotype errors in 45/55\% mixtures than 25/75\% mixtures, with means of 24.3 and 0.57 for switch errors, and 0.013 and 0.0042 for per-site genotype errors (combining isolated and strain drop-out errors) respectively (Fig. 4). In summary, because field samples are likely to contain haplotypes much more closely related to each other than the artificial lab strain mixtures, we consequently expect high genotype accuracy and, at least for samples with unbalanced mixtures, very low switch error rates.
+
+
 
 \narrative{3. Validation through empirical data analysis and simulation.  Figure 2 showing simulation results.  Supplementary Figure 1 showing effective k under DEploid with and without IBD.}
 \begin{figure}
