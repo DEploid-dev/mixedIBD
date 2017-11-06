@@ -16,6 +16,7 @@
 \usepackage{setspace}
 \linespread{1.5}
 \usepackage{fullpage}
+\usepackage{authblk}
 
 
 \usepackage{xcolor}
@@ -55,6 +56,17 @@
 
 \title{The rate and structure of mixed infections in global populations of {\it Plasmodium} malaria}
 \date{}
+
+\author{(LIST OF NAMES! NOT RIGHT ORDER)\\
+Sha Joe Zhu\,$^{\text{ 1,\textcolor{black}{2}}}$, Jacob Almagro-Garcia\,$^{\text{ 1,\textcolor{black}{2},3,4}}$, Jason, Richard ... Dominic and Gil McVean\,$^{\text{ 1,\textcolor{black}{2}}}$}
+
+\affil[1]{Wellcome Trust Centre for Human Genetics, University of Oxford, Oxford, UK}
+\affil[2]{Big Data Institute, Li Ka Shing Centre for Health Information and Discovery, University of Oxford, Oxford, UK}
+\affil[3]{Medical Research Council (MRC) Centre for Genomics and Global Health, University of Oxford, Oxford, UK}
+\affil[4]{Wellcome Trust Sanger Institute, Hinxton, UK}
+%\donenum[inline]{updated affiliation}
+%}
+
 \maketitle
 {}
 \listoftodos
@@ -68,7 +80,10 @@
 
 \begin{abstract}
   \todo{abstract}
-The extent to which individuals infected with malaria pathogens of the genus {\it Plasmodium} carry multiple, genetically distinct strains both reflects local epidemiological processes and can influence the nature and severity of disease.  Large-scale genome sequencing projects of malaria pathogens have the potential to provide high resolution information about the rate and structure of mixed infections, but current analytical approaches often fail to fully capture the diversity and relatedness structure of strains present.  Here, we introduce an enhanced method for deconvolution of mixed infections that identifies the number of strains and patterns of identity by descent between them.  We apply the approach to XXX samples of {\it P. falciparum} from XXX populations and XXX samples of {\it P. vivax} from across XXX populations.  Rates of mixed infection vary from XX\% to XX\%, with up to XX\% of individuals carrying at least three strains in XXX.  In between XX\% and XX\% of cases we find evidence for sibling strains, likely arising from a single bite by a multiply-infected mosquito.  The proportion of mixed infections with sibling strains is remarkably constant across species and populations.  Our findings suggest that the rate and relatedness structure of mixed infections will be valuable metrics in characterising malaria epidemiology and mapping changes over space and time.
+The extent to which individuals infected with malaria pathogens of the genus {\it Plasmodium} carry multiple, genetically distinct strains both reflects local epidemiological processes and can influence the nature and severity of disease.  Large-scale genome sequencing projects of malaria pathogens have the potential to provide high resolution information about the rate and structure of mixed infections, but current analytical approaches often fail to fully capture the diversity and relatedness structure of strains present.  Here, we introduce an enhanced method for deconvolution of mixed infections that identifies the number of strains and patterns of identity by descent between them.  We apply the approach to 2512 samples of {\it P. falciparum} from 14 countries and 228 samples of {\it P. vivax} from across 13 countries.
+% read.table("pf3k_release_5_metadata.txt", header=T, sep = "\t", stringsAsFactors=F)$country %>% unique
+% see ftp://ngs.sanger.ac.uk/production/malaria/pvgv/May2016_release/README
+Rates of mixed infection vary from XX\% to XX\%, with up to XX\% of individuals carrying at least three strains in XXX.  In between XX\% and XX\% of cases we find evidence for sibling strains, likely arising from a single bite by a multiply-infected mosquito.  The proportion of mixed infections with sibling strains is remarkably constant across species and populations.  Our findings suggest that the rate and relatedness structure of mixed infections will be valuable metrics in characterising malaria epidemiology and mapping changes over space and time.
 \end{abstract}
 
 \section{Introduction}
