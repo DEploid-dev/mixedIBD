@@ -111,22 +111,10 @@ Genetic analysis of mixed infections is therefore a central problem in {\it Plas
 \citet{Galinsky2015, Jack2016, Chang2017} have attempted to address the multiple infection problem by inferring the number and proportions of strains from allele frequencies within samples. However, since they do not infer haplotypes, these approaches have limited applicability. To obtain a more detailed {\it P. vivax} genetic structure, \citet{Pearson2016} uses long runs of homozygosity (RoH) in mixed samples to measure long blocks of haplotype sharing within the same host \citet{Nair2014}. It was found that 58\% of the mixed infections shown long stretch of RoH, which implied that these infections were dominated by a group of closely related parasites. Recent works \citep{Henden2016, Wong2017, Schaffner2017} extended the haplotype sharing approach with the identity by descent (IBD) methods. These works used hidden markov model framework to model transitions between pairwise IBD and non-IBD genomic regions. Both isoRelate \citet{Henden2016} and hmmIBD \citet{Schaffner2017} examined the {\it P. falciparum} chloroquine resistance transporter gene, {\it Pfcrt} on chromosome 7, and presented evidence that the resistance mutation emerged and spread into Africa from South-East Asia. However both methods only worked with transitions between IBD, non-IBD regions of at most two strains; and completely ignored the scenarios that mixtures are complex and unequal. hmmIBD is constrained to only work with clonal samples; isoRelate makes strong assumptions that all mixed infection are with two strains with equal proportions.
 
 \narrative{3. Previous work on DEploid – method for deconvolution of mixed infections, using a reference panel.}
-Our recent work on program DEploid enables researchers to deconvolve the strains of a multiple infection taking into account of unknown number of strains present and their relative proportions.
-
-%In light of these difficulties, researchers usually focus on clonal infections or resort to heuristic methods for resolving heterozygous genotypes. The former approach discards valuable information regarding genetic diversity and relatedness, whereas the latter tends to create chimeric haplotypes that are not suitable for analysis, unless mixed calls are very sparse.
-
-%In comparison to the problem of phasing haplotypes within diploid organisms, deconvolving the strains of a multiple infection differs because of uncertainty in the number of strains present and their relative proportions. Consequently, existing tools for phasing diploid organisms, such as BEAGLE \citep{Browning2007}, IMPUTE2 \citep{Howie2009} and SHAPEIT \citep{Delaneau2012, Oconnell2014}, are not appropriate.
-
-\narrative{4. However, we observed that in cases with inbreeding we sometimes failed to separate related strains.}
-
-
-
-\narrative{5. Here we develop an enhanced version that models IBD patterns and incorporates into strategy (first estimate IBD and no. strains, then use reference panel version).}
-
-
+Our recent work on the program DEploid \citep{Zhu2017} enables researchers to deconvolve the strains of a multiple infection taking into account of unknown number of strains present and their relative proportions. This method uses within-sample allele frequency imbalance to learn the relative abundance of each strain and tunes the haplotype with a given reference panel. Both simulation studies and deconvolving {\it in vitro} mixtures show robust inference result for mixtures of unrelated strains. However, we observed that in cases with inbreeding we sometimes failed to separate related strains.  Here we develop an enhanced version that models IBD patterns and incorporates into strategy (first estimate IBD and no. strains, then use reference panel version).
 
 \narrative{6. Apply to 2 large data sets.}
-We apply our new method to two large data sets of {\it Plasmodium} families \citep{Pearson2016, Pf3k2016}.
+We apply our new method to two large data sets of {\it Plasmodium} families \citep{Pearson2016, Pf3k2016}. \textcolor{red}{findings!}
 
 \narrative{7. Findings relevant to efforts to use genomic data to develop genomic predictors of epidemiological parameters.}
 
