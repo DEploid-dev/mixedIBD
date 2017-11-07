@@ -34,8 +34,8 @@
 %\newcommand\shorttitle[1]{\renewcommand\@shorttitle{#1}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% todo %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\usepackage[colorinlistoftodos]{todonotes}
-%\usepackage[disable]{todonotes}
+%\usepackage[colorinlistoftodos]{todonotes}
+\usepackage[disable]{todonotes}
 
 \newcounter{todocounter}
 \newcommand{\todonum}[2][]
@@ -111,31 +111,45 @@ Genetic analysis of mixed infections is therefore a central problem in {\it Plas
 \citet{Galinsky2015, Jack2016, Chang2017} have attempted to address the multiple infection problem by inferring the number and proportions of strains from allele frequencies within samples. However, since they do not infer haplotypes, these approaches have limited applicability. To obtain a more detailed {\it P. vivax} genetic structure, \citet{Pearson2016} uses long runs of homozygosity (RoH) in mixed samples to measure long blocks of haplotype sharing within the same host \citet{Nair2014}. It was found that 58\% of the mixed infections shown long stretch of RoH, which implied that these infections were dominated by a group of closely related parasites. Recent works \citep{Henden2016, Wong2017, Schaffner2017} extended the haplotype sharing approach with the identity by descent (IBD) methods. These works used hidden markov model framework to model transitions between pairwise IBD and non-IBD genomic regions. Both isoRelate \citet{Henden2016} and hmmIBD \citet{Schaffner2017} examined the {\it P. falciparum} chloroquine resistance transporter gene, {\it Pfcrt} on chromosome 7, and presented evidence that the resistance mutation emerged and spread into Africa from South-East Asia. However both methods only worked with transitions between IBD, non-IBD regions of at most two strains; and completely ignored the scenarios that mixtures are complex and unequal. hmmIBD is constrained to only work with clonal samples; isoRelate makes strong assumptions that all mixed infection are with two strains with equal proportions.
 
 \narrative{3. Previous work on DEploid – method for deconvolution of mixed infections, using a reference panel.}
-Our recent work on the program DEploid \citep{Zhu2017} enables researchers to deconvolve the strains of a multiple infection taking into account of unknown number of strains present and their relative proportions. This method uses within-sample allele frequency imbalance to learn the relative abundance of each strain and tunes the haplotype with a given reference panel. Both simulation studies and deconvolving {\it in vitro} mixtures show robust inference result for mixtures of unrelated strains. However, we observed that in cases with inbreeding we sometimes failed to separate related strains.  Here we develop an enhanced version that models IBD patterns and incorporates into strategy (first estimate IBD and no. strains, then use reference panel version).
+Our recent work on the program DEploid \citep{Zhu2017} enables researchers to deconvolve the strains of a multiple infection taking into account of unknown number of strains present and their relative proportions. This method uses within-sample allele frequency imbalance to learn the relative abundance of each strain and tunes the haplotype with a given reference panel. Both simulation studies and deconvolving {\it in vitro} mixtures show robust inference result for mixtures of unrelated strains. However, we observe that when deconvolving mixed field samples, in cases with inbreeding we sometimes failed to separate related strains. Here we develop an enhanced version that models IBD patterns and incorporates into strategy. In the new version of DEploid, we first use inferred IBD genomic regions to help identify the number of strains and proportion inference, then apply a reference panel to tune the inferred haplotypes.
 
 \narrative{6. Apply to 2 large data sets.}
-We apply our new method to two large data sets of {\it Plasmodium} families \citep{Pearson2016, Pf3k2016}. \textcolor{red}{findings!}
+We apply our new method to two large data sets of {\it Plasmodium} families \citep{Pearson2016, Pf3k2016}. \todo{findings}
 
 \narrative{7. Findings relevant to efforts to use genomic data to develop genomic predictors of epidemiological parameters.}
 
-
+\textcolor{red}{
+Key findings
+\begin{enumerate}
+    \item 
+    \item
+\end{enumerate}
+}
 
 \section{Method outline and validation}
-
+\subsection{Method overview}
 \narrative{1. Overview of approach.  Figure 1a, schematic of approach.}
+
+
+
 1. IBD infer proprortions.
 Low coverage, allele frequency imbalance
 
 We use a Hidden Markov frame work to formalize our new method.
-\begin{figure}
-  \centering{}
-  \includegraphics[width=0.8\textwidth]{scheme.png}
-  \caption{Schematic approach. Black boxes indicate the key deconvolution steps when our program DEploid is used. Boxes in blue and purple represent the input and output respectively at each step.}\label{fig:scheme}
+\begin{figure}[ht]
+  \centering
+  \subfloat[][]{\includegraphics[width=0.8\textwidth]{scheme.png}}
+  %\subfloat[][]{\missingfigure[figwidth=\textwidth]{ring figure}}
+  \caption{IBD enchanced DEploid pipepline and results. (a) Schematic approach. Black boxes indicate the key deconvolution steps when our program DEploid is used. Boxes in blue and purple represent the input and output respectively at each step.}\label{fig:scheme}
+
 \end{figure}
 
 We benchmark our new method with DEploid implementation described by \citep{Zhu2017}
 
 \narrative{2. Joint estimation of IBD, strains and proportions.  Details in SOM.  Figure 1b.  Example deconvolution in real data showing IBD transitions.}
+
+
+\subsection{Method validation}
 
 The lab strain mixture reflects an artificial situation that is unlikely in the field. To assess the performance of DEploid in realistic settings, we created in silico mixtures from 212 clonal samples of Asian origin with two proportions (25/75\% and 45/55\%) for 8071 sites from Chromosome 14. A further 20 randomly chosen samples were used for the reference panel. To simulate data, we used empirical read depths and drew read counts for the two alleles from the binomial proportions given by Equation (4). DEploid correctly recovered the number of strains and proportions. As expected, we observed more switches and genotype errors in 45/55\% mixtures than 25/75\% mixtures, with means of 24.3 and 0.57 for switch errors, and 0.013 and 0.0042 for per-site genotype errors (combining isolated and strain drop-out errors) respectively (Fig. 4). In summary, because field samples are likely to contain haplotypes much more closely related to each other than the artificial lab strain mixtures, we consequently expect high genotype accuracy and, at least for samples with unbalanced mixtures, very low switch error rates.
 
