@@ -121,28 +121,33 @@ We apply our new method to two large data sets of {\it Plasmodium} families \cit
 \textcolor{red}{
 Key findings
 \begin{enumerate}
-    \item
-    \item
+    \item falciprium and vivax
+    \item effective k
+    \item IBD regions (within host relatedness)
+    \item outbreeding? (between host relatedness)
 \end{enumerate}
 }
 
 \section{Method outline and validation}
 \subsection{Method overview}
 \narrative{1. Overview of approach.  Figure 1a, schematic of approach.}
+In the previous version of DEploid, we used a Markov chain Monte Carlo (MCMC) approach, and alternated MCMC updates between updating strain proportions when fixing the strain haplotypes and tuning strain haplotypes when fixing strain proportions. In the new version, we continue to use MCMC approach, but modify the method process into a two steps process (Figure~\ref{fig:scheme}(a)):
 
 
+. We learn the relative abundance of each strain by exploiting signatures of within-sample allele frequency imbalance, using a Metropolis-Hastings algorithm, which samples proportions ( ww ) given haplotypes ( hh ). While updating  ww , we rely on ‘painting’ strain haplotypes with a reference panel to recover individual haplotype structure. Our Gibbs sampler updates  hh  for a given  ww  by adjusting either a single sequence or a pair of haplotypes (to speed up convergence). We iterate through these MCMC steps in a random order. Details can be found in the Supplementary Material.
 
-1. IBD infer proprortions.
-Low coverage, allele frequency imbalance
+IBD
+
+%1. IBD infer proprortions.
+%Low coverage, allele frequency imbalance
 
 We use a Hidden Markov frame work to formalize our new method.
-\begin{figure}[ht]
+\begin{figure}[htp]
   \centering
-  \subfloat[][]{\includegraphics[width=0.8\textwidth]{scheme.png}}
+  \subfloat[][]{\includegraphics[width=0.7\textwidth]{scheme.png}}
   \\
-  \subfloat[][]{\includegraphics[width=0.8\textwidth]{{myring.ring}.png}}
-  \caption{IBD enchanced DEploid pipepline and results. (a) Schematic approach. Black boxes indicate the key deconvolution steps when our program DEploid is used. Boxes in blue and purple represent the input and output respectively at each step.}\label{fig:scheme}
-
+  \subfloat[][]{\includegraphics[width=0.6\textwidth]{{myring.ring}.png}}
+  \caption{IBD enchanced DEploid pipepline and results. (a) Schematic approach. Black boxes indicate the key deconvolution steps when our program DEploid is used. Boxes in blue and purple represent the input and output respectively at each step. (b) Highlights of the genome diversity within the mixed sample across the genome. This deconvolution example of field sample PD0577-C suggest that there are three related strains within this isolate, with proportions of 22/52/26\%. The outer ring show expected WSAF (blue) and observed WSAF (red) across the genome. This inner ring marks the IBD regions of the three strains: green colored segments mark the regions where all three strains are IBD; yellow, orange and dark orange segments identify the regions where pair of strains are IBD.}\label{fig:scheme}
 \end{figure}
 
 We benchmark our new method with DEploid implementation described by \citep{Zhu2017}
@@ -152,12 +157,15 @@ We benchmark our new method with DEploid implementation described by \citep{Zhu2
 
 \subsection{Method validation}
 
+Similar to \citep{Zhu2017}, we validate our method using the same set of {\it in vitro} mixtures created by \citep{Wendler2015} to simulate mixed infections. DNA was extracted from four laboratory parasite lines: 3D7, Dd2, HB3 and 7G8, experimentally mixed in different proportions (see Fig. 1), and submitted to the MalariaGEN pipeline (MalariaGEN, 2008) for Illumina sequencing and genotyping (Manske et al., 2012).
+{\it in vitro} sample test.
+
 The lab strain mixture reflects an artificial situation that is unlikely in the field. To assess the performance of DEploid in realistic settings, we created in silico mixtures from 212 clonal samples of Asian origin with two proportions (25/75\% and 45/55\%) for 8071 sites from Chromosome 14. A further 20 randomly chosen samples were used for the reference panel. To simulate data, we used empirical read depths and drew read counts for the two alleles from the binomial proportions given by Equation (4). DEploid correctly recovered the number of strains and proportions. As expected, we observed more switches and genotype errors in 45/55\% mixtures than 25/75\% mixtures, with means of 24.3 and 0.57 for switch errors, and 0.013 and 0.0042 for per-site genotype errors (combining isolated and strain drop-out errors) respectively (Fig. 4). In summary, because field samples are likely to contain haplotypes much more closely related to each other than the artificial lab strain mixtures, we consequently expect high genotype accuracy and, at least for samples with unbalanced mixtures, very low switch error rates.
 
 
 
 \narrative{3. Validation through empirical data analysis and simulation.  Figure 2 showing simulation results.  Supplementary Figure 1 showing effective k under DEploid with and without IBD.}
-\begin{figure}
+\begin{figure}[htp]
   \centering{}
   \subfloat[][]{
   \includegraphics[width = 0.45\textwidth]{diagnositicPlot_of_effK_final.pdf}
@@ -180,7 +188,7 @@ Background of two dataset, different filtering step was applied.
 
 \narrative{2. Summary of findings within Pf and Pv. Figure 3: Rates of co-infection by geography and species.}
 
-\begin{figure}[ht]
+\begin{figure}[htp]
 \centering
 \includegraphics[width=0.8\textwidth]{pf_mixed_strutures_old.pdf}
 \caption{}
@@ -190,7 +198,7 @@ Background of two dataset, different filtering step was applied.
 
 \narrative{3. Summary of findings about relatedness within mixed infections.  Figure 4.  Relatedness structure histogram showing peaks at 0.25, 0.5, etc. and relationship between mixed infection rate and sib-strain.}
 
-\begin{figure}[ht]
+\begin{figure}[htp]
   \centering{}
   \includegraphics[width=0.8\textwidth]{IBD_fraction_hist.pdf}
   \caption{Schematic approach. Black box indicates when DEploid is used. Purple box indicates output.}\label{fig:IBD_frac_hist}
