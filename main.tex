@@ -131,7 +131,7 @@ Key findings
 \section{Method outline and validation}
 \subsection{Method overview}
 \narrative{1. Overview of approach.  Figure 1a, schematic of approach.}
-\begin{figure}[htp]
+\begin{figure}[ht]
   \centering
   \subfloat[][]{\includegraphics[width=0.7\textwidth]{scheme.png}}
   \caption{Schematic approach. Black boxes indicate the key deconvolution steps when our program DEploid is used. Boxes in blue and purple represent the input and output respectively at each step.}\label{fig:scheme:a}
@@ -139,9 +139,9 @@ Key findings
 
 For convenience, we use LD-only-DEploid to refer to the previous version of DEploid, and IBD-LD-DEploid for the current implementation in the rest of the paper. LD stands for linkage-disequilibrium, which implies that we include haplotype linkage information when a reference panel is given.
 
-Both LD-only-DEploid and IBD-LD-DEploid use a Markov chain Monte Carlo (MCMC) method, and aim to infer more strains than it actually presents: We starti the MCMC chain with a fixed number of strains. At the point of reporting, we discard strains with a proportion less than a fixed threshold, typically 0.01. LD-only-DEploid alternates MCMC updates between updating strain proportions when fixing the strain haplotypes and tuning strain haplotypes when fixing strain proportions. LD-only-DEploid infers the proportion and haplotypes at the same time.  However, IBD-LD-DEploid breaks the inference into two stage: use the IBD method to infer the proportions without a reference panel; then we fix the proportion, and tune the haplotype with the given reference panel (Figure~\ref{fig:scheme:a}(a)). As the final output, it returns the number of strains, strain proportions and haplotypes, as well as posterior probabilities of the within host IBD configuration (Figure~\ref{fig:scheme:b}(b)).
+Both LD-only-DEploid and IBD-LD-DEploid use a Markov chain Monte Carlo (MCMC) method, and aim to infer more strains than it actually presents: We start the MCMC chain with a fixed number of strains. At the point of reporting, we discard strains with a proportion less than a fixed threshold, typically 0.01. LD-only-DEploid alternates MCMC updates between updating strain proportions when fixing the strain haplotypes and tuning strain haplotypes when fixing strain proportions. LD-only-DEploid infers the proportion and haplotypes at the same time.  However, IBD-LD-DEploid breaks the inference into two stage: use the IBD method to infer the proportions without a reference panel; then we fix the proportion, and tune the haplotype with the given reference panel (Figure~\ref{fig:scheme:a}(a)). As the final output, it returns the number of strains, strain proportions and haplotypes, as well as posterior probabilities of the within host IBD configuration (Figure~\ref{fig:scheme:b}(b)).
 
-\begin{figure}[htp]
+\begin{figure}[ht]
   \centering{}
   \ContinuedFloat
   \subfloat[][]{\includegraphics[width=0.6\textwidth]{{myring.ring}.png}}
@@ -150,22 +150,10 @@ Both LD-only-DEploid and IBD-LD-DEploid use a Markov chain Monte Carlo (MCMC) me
 
 \narrative{2. Joint estimation of IBD, strains and proportions.  Details in SOM.  Figure 1b.  Example deconvolution in real data showing IBD transitions.}
 
-
 \subsection{Method validation}
-Similar to \citep{Zhu2017}, we validate IBD-LD-DEploid using the same set of {\it in vitro} mixtures created by \citep{Wendler2015} to simulate mixed infections. This dataset includes 27 samples of which DNA extracted from four laboratory parasite lines: 3D7, Dd2, HB3 and 7G8, and mixed with different proportions (mixing proportions are available in supplementary material Fig.\todo{figure id}). To assess the performance
+Similar to \citep{Zhu2017}, we validated IBD-LD-DEploid using the same set of {\it in vitro} mixtures created by \citep{Wendler2015} to simulate mixed infections. This dataset includes 27 samples of which DNA extracted from four laboratory parasite lines: 3D7, Dd2, HB3 and 7G8, and mixed with different proportions (mixing proportions are available in supplementary material Fig.\todo{figure id}). To assess the performance, we experimented with different number of fitted strains (3 or 4). We repeated our experiment using the perfect reference panel for the lab mixtures, and found that apart from one experiment of 3 strains mixing with equal proportions, the rest of 26 experiment showed consistent results with the previous version. The new method struggled to converge to the correct solution for a specific set of mixing (see supplementary material), which were unlikely in the field.
 
-
-
-We repeated our experiment using the reference panel V, 3D7, HB3, 7G8 and Dd2 strains (the perfect reference panel for the lab mixtures);
-
-We also assessed
-sensitivity of estimates to the number of fitted strains (3 or 4), and compared effective strains inference result against the previous version. Apart from one experiment of 3 strains mixing with equal proportions, the rest of 26 experiment show consistent results with the previous version. The new method struggle to converge to the correct solution for a specific set of mixing (see supplementary material), which are unlikely in the field.
-
-To test the performance of IBD-LD-DEploid in a more realistic setting, we created in silico mixtures from 212 clonal samples of Asian origin with two proportions (25/75\% and 45/55\%) for 8071 sites from Chromosome 14. A further 20 randomly chosen samples were used for the reference panel. We
-
-
-To simulate data, we used empirical read depths and drew read counts for the two alleles from the binomial proportions.
-
+To test the performance of IBD-LD-DEploid in a more realistic setting, we created {\it in silico} mixtures from 212 clonal samples of Asian origin with two proportions (25/75\% and 45/55\%) for 8071 sites from Chromosome 14. A further 20 randomly chosen samples were used for the reference panel. In order to mimic different level of relatedness between the two strains, we set the first 25/50/75\% of the second haplotype the same as the first haplotype. To simulate data, we used empirical read depths and drew read counts for the two alleles from the binomial proportions.
 
 DEploid correctly recovered the number of strains and proportions. As expected, we observed more switches and genotype errors in 45/55\% mixtures than 25/75\% mixtures, with means of 24.3 and 0.57 for switch errors, and 0.013 and 0.0042 for per-site genotype errors (combining isolated and strain drop-out errors) respectively (Fig. 4). In summary, because field samples are likely to contain haplotypes much more closely related to each other than the artificial lab strain mixtures, we consequently expect high genotype accuracy and, at least for samples with unbalanced mixtures, very low switch error rates.
 
