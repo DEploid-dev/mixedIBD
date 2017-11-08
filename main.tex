@@ -136,19 +136,10 @@ Key findings
   \subfloat[][]{\includegraphics[width=0.7\textwidth]{scheme.png}}
   \caption{Schematic approach. Black boxes indicate the key deconvolution steps when our program DEploid is used. Boxes in blue and purple represent the input and output respectively at each step.}\label{fig:scheme:a}
 \end{figure}
+
 For convenience, we use LD-only-DEploid to refer to the previous version of DEploid, and IBD-LD-DEploid for the current implementation in the rest of the paper. LD stands for linkage-disequilibrium, which implies that we include haplotype linkage information when a reference panel is given.
 
-Both LD-only-DEploid and IBD-LD-DEploid use a Markov chain Monte Carlo (MCMC) method. The former alternates MCMC updates between updating strain proportions when fixing the strain haplotypes and tuning strain haplotypes when fixing strain proportions. LD-only-DEploid infers the proportion and haplotypes at the same time.  However, IBD-LD-DEploid breaks the inference into two stage: use the IBD method to infer the proportions without a reference panel; then fix the proportion to, and tune the haplotype with the given reference panel (Figure~\ref{fig:scheme:a}(a)).
-
-
-
-
-IBD
-
-%1. IBD infer proprortions.
-%Low coverage, allele frequency imbalance
-
-We use a Hidden Markov frame work to formalize our new method.
+Both LD-only-DEploid and IBD-LD-DEploid use a Markov chain Monte Carlo (MCMC) method, and aim to infer more strains than it actually presents: We starti the MCMC chain with a fixed number of strains. At the point of reporting, we discard strains with a proportion less than a fixed threshold, typically 0.01. LD-only-DEploid alternates MCMC updates between updating strain proportions when fixing the strain haplotypes and tuning strain haplotypes when fixing strain proportions. LD-only-DEploid infers the proportion and haplotypes at the same time.  However, IBD-LD-DEploid breaks the inference into two stage: use the IBD method to infer the proportions without a reference panel; then we fix the proportion, and tune the haplotype with the given reference panel (Figure~\ref{fig:scheme:a}(a)). As the final output, it returns the number of strains, strain proportions and haplotypes, as well as posterior probabilities of the within host IBD configuration (Figure~\ref{fig:scheme:b}(b)).
 
 \begin{figure}[htp]
   \centering{}
@@ -157,21 +148,18 @@ We use a Hidden Markov frame work to formalize our new method.
   \caption{Highlights of the genome diversity within the mixed sample across the genome. This deconvolution example of field sample PD0577-C suggest that there are three related strains within this isolate, with proportions of 22/52/26\%. The outer ring show expected WSAF (blue) and observed WSAF (red) across the genome. This inner ring marks the IBD regions of the three strains: green colored segments mark the regions where all three strains are IBD; yellow, orange and dark orange segments identify the regions where pair of strains are IBD.}\label{fig:scheme:b}
 \end{figure}
 
-We benchmark our new method with DEploid implementation described by \citep{Zhu2017}
-
 \narrative{2. Joint estimation of IBD, strains and proportions.  Details in SOM.  Figure 1b.  Example deconvolution in real data showing IBD transitions.}
 
 
 \subsection{Method validation}
-In the rest of the paper, we will use LD-only-DEploid to refer to the previous version of DEploid, and IBD-LD-DEploid to refer to the current impelemtation.
+Similar to \citep{Zhu2017}, we validate IBD-LD-DEploid using the same set of {\it in vitro} mixtures created by \citep{Wendler2015} to simulate mixed infections. This dataset includes 27 samples of which DNA extracted from four laboratory parasite lines: 3D7, Dd2, HB3 and 7G8, and mixed with different proportions (mixing proportions are available in supplementary material Fig.\todo{figure id}). To assess the performance
 
-Similar to \citep{Zhu2017}, we validate IBD-LD-DEploid using the same set of {\it in vitro} mixtures created by \citep{Wendler2015} to simulate mixed infections, which included 27 samples of which DNA extracted from four laboratory parasite lines: 3D7, Dd2, HB3 and 7G8, and mixed with different proportions (see supplementary material Fig.\todo{figure id}).
 
-For details of this experiment please refer to the supplementary material.
 
 We repeated our experiment using the reference panel V, 3D7, HB3, 7G8 and Dd2 strains (the perfect reference panel for the lab mixtures);
 
-We also assessed sensitivity of estimates to the number of fitted strains (3 or 4), and compared effective strains inference result against the previous version. Apart from one experiment of 3 strains mixing with equal proportions, the rest of 26 experiment show consistent results with the previous version. The new method struggle to converge to the correct solution for a specific set of mixing (see supplementary material), which are unlikely in the field.
+We also assessed
+sensitivity of estimates to the number of fitted strains (3 or 4), and compared effective strains inference result against the previous version. Apart from one experiment of 3 strains mixing with equal proportions, the rest of 26 experiment show consistent results with the previous version. The new method struggle to converge to the correct solution for a specific set of mixing (see supplementary material), which are unlikely in the field.
 
 To test the performance of IBD-LD-DEploid in a more realistic setting, we created in silico mixtures from 212 clonal samples of Asian origin with two proportions (25/75\% and 45/55\%) for 8071 sites from Chromosome 14. A further 20 randomly chosen samples were used for the reference panel. We
 
