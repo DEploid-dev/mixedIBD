@@ -13,6 +13,7 @@
 \usepackage{listings}
 \usepackage{color}
 
+\usepackage{hyperref}
 %\usepackage[disable]{todonotes}
 \usepackage{todonotes}
 
@@ -50,8 +51,6 @@
 \lstset{language=bash}
 
 
-\setcounter{section}{0}
-
 \title{Supplementary Material}
 \author{Sha Joe Zhu}
 \date{}
@@ -77,6 +76,8 @@
 
 \subsection{P. v}
 
+\newpage
+\input{supplementReset.tex}
 \section{Deconvoltion IBD methods}
 
 Overall we use mcmc methods.
@@ -245,8 +246,30 @@ dEploid ${common} ${mcmcCommon} -o ${prefix} -ibd
 
 \subsection{Bench mark}
 Against DEploid without using IBD methods.
+\begin{figure}[htp]
+  \centering{}
+  \subfloat[][]{
+  \includegraphics[width = 0.6=5\textwidth]{eff_k_both.pdf}
+  }
+  \caption{Simulation results}
+\end{figure}
+\begin{figure}
+  \ContinuedFloat
+  \centering
+  \subfloat[][]{
+  \includegraphics[width = 0.85\textwidth]{eff_k_vs_llk.pdf}
+  }
+  \caption{Simulation results}
+\end{figure}
 
-
+\begin{figure}
+  \ContinuedFloat
+  \centering
+  \subfloat[][]{
+  \includegraphics[width = 0.8\textwidth]{DEploid_IBD_haps_compare.pdf}
+  }
+  \caption{Simulation results}
+\end{figure}
 
 
 \subsection{Simulation study}
@@ -268,6 +291,8 @@ Cambodia (Pursat), Cambodia (Pailin), Thailand (Sisakhet).
 Vietnam, Laos, Cambodia (Ratanakiri), Cambodia (Preah Vihear).
 Bangladesh, Myanmar, Thailand (Mae Sot), Thailand (Ranong).
 
+\newpage
+\input{supplementReset.tex}
 
 \section{Deconvolution example with sample PD0577-C}
 
