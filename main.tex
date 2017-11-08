@@ -131,10 +131,17 @@ Key findings
 \section{Method outline and validation}
 \subsection{Method overview}
 \narrative{1. Overview of approach.  Figure 1a, schematic of approach.}
-In the previous version of DEploid, we used a Markov chain Monte Carlo (MCMC) approach, and alternated MCMC updates between updating strain proportions when fixing the strain haplotypes and tuning strain haplotypes when fixing strain proportions. In the new version, we continue to use MCMC approach, but modify the method process into a two steps process (Figure~\ref{fig:scheme}(a)):
+\begin{figure}[htp]
+  \centering
+  \subfloat[][]{\includegraphics[width=0.7\textwidth]{scheme.png}}
+  \caption{Schematic approach. Black boxes indicate the key deconvolution steps when our program DEploid is used. Boxes in blue and purple represent the input and output respectively at each step.}\label{fig:scheme:a}
+\end{figure}
+For convenience, we use LD-only-DEploid to refer to the previous version of DEploid, and IBD-LD-DEploid for the current implementation in the rest of the paper. LD stands for linkage-disequilibrium, which implies that we include haplotype linkage information when a reference panel is given.
+
+Both LD-only-DEploid and IBD-LD-DEploid use a Markov chain Monte Carlo (MCMC) method. The former alternates MCMC updates between updating strain proportions when fixing the strain haplotypes and tuning strain haplotypes when fixing strain proportions. LD-only-DEploid infers the proportion and haplotypes at the same time.  However, IBD-LD-DEploid breaks the inference into two stage: use the IBD method to infer the proportions without a reference panel; then fix the proportion to, and tune the haplotype with the given reference panel (Figure~\ref{fig:scheme:a}(a)).
 
 
-. We learn the relative abundance of each strain by exploiting signatures of within-sample allele frequency imbalance, using a Metropolis-Hastings algorithm, which samples proportions ( ww ) given haplotypes ( hh ). While updating  ww , we rely on ‘painting’ strain haplotypes with a reference panel to recover individual haplotype structure. Our Gibbs sampler updates  hh  for a given  ww  by adjusting either a single sequence or a pair of haplotypes (to speed up convergence). We iterate through these MCMC steps in a random order. Details can be found in the Supplementary Material.
+
 
 IBD
 
@@ -142,12 +149,12 @@ IBD
 %Low coverage, allele frequency imbalance
 
 We use a Hidden Markov frame work to formalize our new method.
+
 \begin{figure}[htp]
-  \centering
-  \subfloat[][]{\includegraphics[width=0.7\textwidth]{scheme.png}}
-  \\
+  \centering{}
+  \ContinuedFloat
   \subfloat[][]{\includegraphics[width=0.6\textwidth]{{myring.ring}.png}}
-  \caption{IBD enchanced DEploid pipepline and results. (a) Schematic approach. Black boxes indicate the key deconvolution steps when our program DEploid is used. Boxes in blue and purple represent the input and output respectively at each step. (b) Highlights of the genome diversity within the mixed sample across the genome. This deconvolution example of field sample PD0577-C suggest that there are three related strains within this isolate, with proportions of 22/52/26\%. The outer ring show expected WSAF (blue) and observed WSAF (red) across the genome. This inner ring marks the IBD regions of the three strains: green colored segments mark the regions where all three strains are IBD; yellow, orange and dark orange segments identify the regions where pair of strains are IBD.}\label{fig:scheme}
+  \caption{Highlights of the genome diversity within the mixed sample across the genome. This deconvolution example of field sample PD0577-C suggest that there are three related strains within this isolate, with proportions of 22/52/26\%. The outer ring show expected WSAF (blue) and observed WSAF (red) across the genome. This inner ring marks the IBD regions of the three strains: green colored segments mark the regions where all three strains are IBD; yellow, orange and dark orange segments identify the regions where pair of strains are IBD.}\label{fig:scheme:b}
 \end{figure}
 
 We benchmark our new method with DEploid implementation described by \citep{Zhu2017}
@@ -158,7 +165,7 @@ We benchmark our new method with DEploid implementation described by \citep{Zhu2
 \subsection{Method validation}
 In the rest of the paper, we will use LD-only-DEploid to refer to the previous version of DEploid, and IBD-LD-DEploid to refer to the current impelemtation.
 
-Similar to \citep{Zhu2017}, we validate IBD-LD-DEploid using the same set of {\it in vitro} mixtures created by \citep{Wendler2015} to simulate mixed infections, which included 27 samples of which DNA extracted from four laboratory parasite lines: 3D7, Dd2, HB3 and 7G8, and mixed with different proportions (see supplementary material Fig.\todo{figure id}). 
+Similar to \citep{Zhu2017}, we validate IBD-LD-DEploid using the same set of {\it in vitro} mixtures created by \citep{Wendler2015} to simulate mixed infections, which included 27 samples of which DNA extracted from four laboratory parasite lines: 3D7, Dd2, HB3 and 7G8, and mixed with different proportions (see supplementary material Fig.\todo{figure id}).
 
 For details of this experiment please refer to the supplementary material.
 
@@ -166,10 +173,10 @@ We repeated our experiment using the reference panel V, 3D7, HB3, 7G8 and Dd2 st
 
 We also assessed sensitivity of estimates to the number of fitted strains (3 or 4), and compared effective strains inference result against the previous version. Apart from one experiment of 3 strains mixing with equal proportions, the rest of 26 experiment show consistent results with the previous version. The new method struggle to converge to the correct solution for a specific set of mixing (see supplementary material), which are unlikely in the field.
 
-To test the performance of IBD-LD-DEploid in a more realistic setting, we created in silico mixtures from 212 clonal samples of Asian origin with two proportions (25/75\% and 45/55\%) for 8071 sites from Chromosome 14. A further 20 randomly chosen samples were used for the reference panel. We 
+To test the performance of IBD-LD-DEploid in a more realistic setting, we created in silico mixtures from 212 clonal samples of Asian origin with two proportions (25/75\% and 45/55\%) for 8071 sites from Chromosome 14. A further 20 randomly chosen samples were used for the reference panel. We
 
 
-To simulate data, we used empirical read depths and drew read counts for the two alleles from the binomial proportions. 
+To simulate data, we used empirical read depths and drew read counts for the two alleles from the binomial proportions.
 
 
 DEploid correctly recovered the number of strains and proportions. As expected, we observed more switches and genotype errors in 45/55\% mixtures than 25/75\% mixtures, with means of 24.3 and 0.57 for switch errors, and 0.013 and 0.0042 for per-site genotype errors (combining isolated and strain drop-out errors) respectively (Fig. 4). In summary, because field samples are likely to contain haplotypes much more closely related to each other than the artificial lab strain mixtures, we consequently expect high genotype accuracy and, at least for samples with unbalanced mixtures, very low switch error rates.
@@ -287,8 +294,7 @@ Lopez A. {\em et al}. (2012)
 
 \bibitem[\protect\citeauthoryear{Manske et~al.}{Manske et~al.}{2012}]{Manske2012}
 Manske, M. {\em et al}. (2012)
-\newblock Analysis of plasmodium falciparum diversity in natural infections by
-  deep sequencing.
+\newblock Analysis of plasmodium falciparum diversity in natural infections by deep sequencing.
 \newblock {\em Nature\/}~{\em 487\/}(7407), 375--379.
 
 \bibitem[\protect\citeauthoryear{Miles et~al.}{Miles et~al.}{2016}]{Miles2016}
@@ -326,23 +332,19 @@ O'Brien D. J. {\em et al}. (2016)
 \newblock Approaches to estimating inbreeding coefficients in clinical isolates of {\it Plasmodium falciparum} from genomic sequence data.
 \newblock {\em Malaria Journal\/}~{\em 15}:473.
 
-
 \bibitem[\protect\citeauthoryear{Pearson et~al.}{Pearson et~al.}{2016}]{Pearson2016}
 Pearson, R. D. {\em et al}. (2016)
 \newblock {Genomic analysis of local variation and recent evolution in {\it Plasmodium vivax}}.
 \newblock {\em Nat. Genet.\/}~{\em 48}, 959--964.
-
 
 \bibitem[\protect\citeauthoryear{Rutledge}{Rutledge et~al.}{2017}]{Rutledge2017}
 Rutledge. G. G., {\em et al}. (2017)
 \newblock {\it Plasmodium} malariae and P. ovale genomes provide insights into malaria parasite evolution
 \newblock {\em Nature.\/}~{\em 542}, 101--104.
 
-
 \bibitem[\protect\citeauthoryear{Pf3k}{Pf3k}{2016}]{Pf3k2016}
 The Pf3k Project: pilot data release 5 (2016)
 \newblock {www.malariagen.net/data/pf3k-5} [accessed 1 June 2016]
-
 
 \bibitem[\protect\citeauthoryear{Schaffner}{Schaffner}{2017}]{Schaffner2017}
 Schaffner, S. F. {\em et al.} (2017)
