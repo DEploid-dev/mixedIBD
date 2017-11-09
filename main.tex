@@ -155,6 +155,8 @@ Similar to \citep{Zhu2017}, we validated IBD-LD-DEploid using the same set of {\
 
 To test the performance of IBD-LD-DEploid in a more realistic setting, we created {\it in silico} mixtures from 212 clonal samples of Asian origin with two proportions (25/75\% and 45/55\%) for 8071 sites from Chromosome 14. A further 20 randomly chosen samples were used for the reference panel. In order to compare the performance of the two methods at different level of relatedness between the two strains within the host, we set the first 25/50/75\% of the second haplotype the same as the first haplotype to mimic scenarios of low, moderate and high relatedness. To simulate data, we used empirical read depths and drew read counts for the two alleles from the binomial proportions.
 
+% Expected effective k = 1.6 and 1.98.
+To evaluate accuracy of estimates we used the effective number of strains, calculated as $1/\sum w_{i}^{2}$, which reflects the number and proportions of strains present. We found that for samples with strains of low or moderate relatedness. Both LD-only-DEploid and IBD-LD-DEploid correctly recover the effective number of strains. However, for samples with closely related strains, LD-only-DEploid tends to underestimate the effective number of strains when sequence coverages are low.
 %DEploid correctly recovered the number of strains and proportions. As expected, we observed more switches and genotype errors in 45/55\% mixtures than 25/75\% mixtures, with means of 24.3 and 0.57 for switch errors, and 0.013 and 0.0042 for per-site genotype errors (combining isolated and strain drop-out errors) respectively (Fig. 4). In summary, because field samples are likely to contain haplotypes much more closely related to each other than the artificial lab strain mixtures, we consequently expect high genotype accuracy and, at least for samples with unbalanced mixtures, very low switch error rates.
 
 
@@ -171,7 +173,8 @@ To test the performance of IBD-LD-DEploid in a more realistic setting, we create
   \subfloat[][]{
   \includegraphics[width = 0.8\textwidth]{IBDHapError.pdf}
   }
-  \caption{Simulation results}
+  \caption{Simulation results. (a)Comparison of effective number of strains between LD-only-DEploid and IBD-LD-DEploid. (b)Expected and inferred percentage of IBD regions for IBD-LD-DEploid. (c) Histograms of switch error and genotype error across 76 simulated Pf3k samples for IBD-LD-DEploid. In all figures, we excluded eight cases out of the 100 experiments where simulated haplotypes were over 99\% identical and 16 cases where average coverage was below 20.
+}
 \end{figure}
 
 
