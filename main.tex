@@ -129,7 +129,29 @@ Key findings
 }
 
 \section{Method outline and validation}
-\subsection{Method overview}
+The following sections provide details on the statistical model used for inference and its implementation, with additional detail being provided in the Supplementary Material.
+
+\subsection{Hidden Markov model for IBD configuration}
+Suppose there are $k$ parasite strains within one host, which implies that there exists $2^{k}$ number of genotypes at any given position along the genome. Consequently, this  forms $2^{k}$ allele frequency bands when combining the genotypes with their relative abundance. We refer these bands or patterns as within-sample allele frequency imbalance (WSAFI), which are visually obvious when $k$ is small (below 4 for instance) and strains are very distanced from each other (see Figure~\ref{fig:wsafi} left). Methods described in \citet{Jack2016} and \citet{Zhu2017} rely on WSAFI to separate the strains. However, when strains are related to each other, or strains proportions are similar to each other, these bands are less obvious, which makes deconvolution harder. By including genomic position information, WSAFI can be more easily identified along the genome. In this section, we will brief introduce the methods, but first let's introduce some notations.
+
+
+\begin{figure}[ht]
+\centering
+  \includegraphics[width=0.7\textwidth]{wsaf_bands.png}
+  \label{fig:wsafi}
+\end{figure}
+
+We use a hidden markov frame work to identify our problem.
+
+haplotype configuration, and IBD configuration, are lattern variables, we observe allele counts.
+
+Assuming we have the correct number of strains and their proportions. We can maximise the
+
+we later found that
+
+maximise the likelihood at the correct allele frequency within samples.
+
+\subsection{Combining with DEploid}
 \narrative{1. Overview of approach.  Figure 1a, schematic of approach.}
 \begin{figure}[ht]
   \centering
@@ -158,7 +180,7 @@ To test the performance of IBD-LD-DEploid in a more realistic setting, we create
 % Expected effective k = 1.6 and 1.98.
 To evaluate accuracy of estimates we used the effective number of strains, calculated as $1/\sum w_{i}^{2}$, which reflects the number and proportions of strains present. We found that for samples with strains of low or moderate relatedness. Both LD-only-DEploid and IBD-LD-DEploid correctly recover the effective number of strains. However, for samples with closely related strains, LD-only-DEploid tends to underestimate the effective number of strains when sequence coverages are low.
 
-Our simulation show that IBD-LD-DEploid correctly recover the percentage of IBD regions of the mixed genomes. As expected, IBD-LD-DEploid show similar diagnostics for switches and genotype errors: more switches and genotype errors in 45/55\% mixtures than 25/75\% mixtures. Moreover, we observe lower error rates in 45/55\% mixtures when the two strains are more related, which is expected because the deconvolution of distinct haplotypes length reduces. For field samples, we expect high genotype accuracy and low switch error rates, for samples with unbalanced mixtures and closely related strains.
+Our simulation show that IBD-LD-DEploid correctly recover the percentage of IBD regions of the mixed genomes (Figure~\ref{fig:benchmark}). As expected, IBD-LD-DEploid show similar diagnostics for switches and genotype errors: more switches and genotype errors in 45/55\% mixtures than 25/75\% mixtures. Moreover, we observe lower error rates in 45/55\% mixtures when the two strains are more related, which is expected because the deconvolution of distinct haplotypes length reduces. For field samples, we expect high genotype accuracy and low switch error rates, for samples with unbalanced mixtures and closely related strains.
 
 
 \narrative{3. Validation through empirical data analysis and simulation.  Figure 2 showing simulation results.  Supplementary Figure 1 showing effective k under DEploid with and without IBD.}
@@ -174,45 +196,51 @@ Our simulation show that IBD-LD-DEploid correctly recover the percentage of IBD 
   \includegraphics[width = 0.8\textwidth]{IBDHapError.pdf}
   }
   \caption{Simulation results. (a)Comparison of effective number of strains between LD-only-DEploid and IBD-LD-DEploid. (b)Expected and inferred percentage of IBD regions for IBD-LD-DEploid. (c) Histograms of switch error and genotype error across 76 simulated Pf3k samples for IBD-LD-DEploid. In all figures, we excluded eight cases out of the 100 experiments where simulated haplotypes were over 99\% identical and 16 cases where average coverage was below 20.
-}
+}\label{fig:benchmark}
 \end{figure}
 
 
-\section{Application to Pf and Pv data}
+\section{Application to {\it P. falciprium} and {\it P. vivax} data}
+\textcolor{red}{High quality biallelic SNP data, P.f requires more filtering ...}
+
 \narrative{1. Data source and preparation (i.e. cleaning).  Supplementary Figure 2 on importance of strong variant filtering.}
 
-Background of two dataset, different filtering step was applied.
-
-
-To estimate COI, relative proportions and strain haplotypes we use DEploid [Zhu et al., 2017] on high quality biallelic SNP data (both coding and non-coding variants tagged with PASS at the QUAL column in the VCF file). In order to improve the accuracy of the deconvolution process and improve efficiency, we first split the  data into groups, based on genetic similarity. We compute genetic distances between two samples following:
+To estimate relative proportions and strain haplotypes we use IBD-LD-DEploid on high quality biallelic SNP data (both coding and non-coding variants tagged with PASS at the QUAL column in the VCF file) of the Pf3k \citep{Pf3k2016} and P. vivax Genome Variation dataset\citep{Pearson2016}. In order to improve the accuracy of the deconvolution process and improve efficiency, we first split the  data into groups, based on genetic similarity. We compute genetic distances between two samples following:
 \begin{equation}
-d(x, y) = p_{x} * (1-p_{y}) + p_{x} * (1-p_{y})
+d(x, y) = \sum_{l}^{L}WSAF_{x,l} * (1-WSAF_{y,l}) + WSAF_{x,l} * (1-WSAF_{y,l})
 \end{equation}
+where $l$ represents an arbitrary locus, $L$ denotes the total number of loci, and $WSAF_{s,l}$ indicates the non-reference within-sample allele frequency for sample $s$ at locus $l$. $WSAF_{s,l}$ is then given by $WSAF_{s,l} = \frac{a_{s,l}}{r_{s,l}+a_{s,l}}$ where $a_{s,l}$ is the number of read counts supporting the alternative allele in sample $s$ at locus $l$, and $r_{s,l}$ is the number of read counts supporting the reference allele in sample $s$ at locus $l$.
 
-where l represents an arbitrary locus, L denotes the total number of loci, and  indicates the non-reference within-sample allele frequency for sample s at locus l.  is then given by
-
-where  is the number of read counts supporting the alternative allele in sample s at locus l, and  is the number of read counts supporting the reference allele in sample s at locus l.
 We find that samples from the same geographical region differentiate into clear clusters. We use this initial grouping as the base for defining the reference panels that assist the deconvolution procedure. Our definition of geographical groups is
-Africa
-Malawi, Congo.
-Ghana (Kassena).
-Nigeria, Senegal, Mali.
-The Gambia, Guinea, Ghana (Kintampo).
-Asia
-Cambodia (Pursat), Cambodia (Pailin), Thailand (Sisakhet).
-Vietnam, Laos, Cambodia (Ratanakiri), Cambodia (Preah Vihear).
-Bangladesh, Myanmar, Thailand (Mae Sot), Thailand (Ranong).
+\begin{itemize}
+\item Africa
+\begin{itemize}
+  \item Malawi, Congo.
+  \item Ghana (Kassena).
+  \item Nigeria, Senegal, Mali.
+  \item The Gambia, Guinea, Ghana (Kintampo).
+\end{itemize}
+\item Asia
+\begin{itemize}
+  \item Cambodia (Pursat), Cambodia (Pailin), Thailand (Sisakhet).
+  \item Vietnam, Laos, Cambodia (Ratanakiri), Cambodia (Preah Vihear).
+  \item Bangladesh, Myanmar, Thailand (Mae Sot), Thailand (Ranong).
+\end{itemize}
+\end{itemize}
+
+For the {\it P. vivax} data, we have
+\begin{itemize}
+  \item{} Thailand
+  \item{} Indonesia, Malaysia, Papua New Guinea
+  \item{} Cambodia, Vietnam, Laos
+  \item the rest samples: Myanmar, China, Madagascar, Sri Lanka, Brazil and India.
+\end{itemize}
 
 
-For the {\it P. vivax} data,
 
 \narrative{2. Summary of findings within Pf and Pv. Figure 3: Rates of co-infection by geography and species.}
 
-\begin{figure}[htp]
-\centering
-\includegraphics[width=0.8\textwidth]{pf_mixed_strutures_old.pdf}
-\caption{}
-\end{figure}
+
 
 
 
@@ -220,7 +248,7 @@ For the {\it P. vivax} data,
 
 \begin{figure}[htp]
   \centering{}
-  \includegraphics[width=0.8\textwidth]{IBD_fraction_hist.pdf}
+  \includegraphics[width=0.8\textwidth]{ibdDistribution.png}
   \caption{Schematic approach. Black box indicates when DEploid is used. Purple box indicates output.}\label{fig:IBD_frac_hist}
 \end{figure}
 
@@ -229,6 +257,11 @@ For the {\it P. vivax} data,
 
 \section{Discussion}
 
+\begin{figure}[htp]
+\centering
+\includegraphics[width=0.8\textwidth]{prevelance.png}
+\caption{}
+\end{figure}
 
 \narrative{1. Recap of main findings.}
 
@@ -274,12 +307,12 @@ Galinsky, K. {\em et al}. (2015)
 \newblock {\em Malar. J.\/}~{\em14\/}(4), 1--9.
 
 \bibitem[\protect\citeauthoryear{Hinch}{Hinch}{2011}]{Hinch2011}
-Hinch, A. G. {\em et al}. (2011))
+Hinch, A. G. {\em et al}. (2011)
 \newblock The landscape of recombination in African Americans.
 \newblock {\em Nature\/}~{\em 476}, 170--175.
 
 \bibitem[\protect\citeauthoryear{Henden}{Henden}{2016}]{Henden2016}
-Henden, L. {\em et al}. (2016))
+Henden, L. {\em et al}. (2016)
 \newblock Detecting selection signals in {\it Plasmodium falciparum} using identity-by-descent analysis,
 \newblock {\em bioRxiv.\/}, 088039.
 
