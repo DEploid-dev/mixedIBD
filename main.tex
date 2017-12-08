@@ -34,8 +34,8 @@
 %\newcommand\shorttitle[1]{\renewcommand\@shorttitle{#1}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% todo %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%\usepackage[colorinlistoftodos]{todonotes}
-\usepackage[disable]{todonotes}
+\usepackage[colorinlistoftodos]{todonotes}
+%\usepackage[disable]{todonotes}
 
 \newcounter{todocounter}
 \newcommand{\todonum}[2][]
@@ -93,7 +93,7 @@ The extent to which individuals infected with malaria pathogens of the genus {\i
 % read.table("pf3k_release_5_metadata.txt", header=T, sep = "\t", stringsAsFactors=F)$country %>% unique
 % see ftp://ngs.sanger.ac.uk/production/malaria/pvgv/May2016_release/README
 %%%%%%%%%%%%%%%%%%%
-Rates of mixed infection vary from XX\% to XX\%, with up to XX\% of individuals carrying at least three strains in XXX.  In between XX\% and XX\% of cases we find evidence for sibling strains, likely arising from a single bite by a multiply-infected mosquito.  The proportion of mixed infections with sibling strains is remarkably constant across species and populations.  Our findings suggest that the rate and relatedness structure of mixed infections will be valuable metrics in characterising malaria epidemiology and mapping changes over space and time.
+Rates of mixed infection vary from \textcolor{red}{XX\%} to \textcolor{red}{XX\%}, with up to \textcolor{red}{XX\%} of individuals carrying at least three strains in \textcolor{red}{XXX}.  In between \textcolor{red}{XX\%} and \textcolor{red}{XX\%} of cases we find evidence for sibling strains, likely arising from a single bite by a multiply-infected mosquito.  The proportion of mixed infections with sibling strains is remarkably constant across species and populations.  Our findings suggest that the rate and relatedness structure of mixed infections will be valuable metrics in characterising malaria epidemiology and mapping changes over space and time.
 \end{abstract}
 
 \keywords{Malaria, genome, epidemiology, IBD}
@@ -114,32 +114,23 @@ Genetic analysis of mixed infections is therefore a central problem in {\it Plas
 Our recent work on the program DEploid \citep{Zhu2017} enables researchers to deconvolve strains of a multiple infection taking into account of unknown number of strains present and their relative proportions. This method uses within-sample allele frequency imbalance to learn the relative abundance of each strain and tunes the haplotype with a given reference panel. Both simulation studies and deconvolving {\it in vitro} mixtures show robust inference result for mixtures of unrelated strains. However, we observe that when deconvolving mixed field samples, in cases with inbreeding we sometimes fail to separate related strains. Here we develop an enhanced version that models IBD patterns and incorporates into strategy. In the new version of DEploid, we first use inferred IBD genomic regions to help identify the number of strains and proportion inference, then apply a reference panel to tune the inferred haplotypes.
 
 \narrative{6. Apply to 2 large data sets.}
-We apply our new method to two large data sets of {\it Plasmodium} families \citep{Pearson2016, Pf3k2016}. \todo{findings}
-
 \narrative{7. Findings relevant to efforts to use genomic data to develop genomic predictors of epidemiological parameters.}
+We apply our new method to two large data sets of {\it Plasmodium} families \citep{Pearson2016, Pf3k2016}. We use a metric effective k to measure the number of "effective" strains within a malaria-infected patient. We use IBD fractions to measure parasite relatedness within host. {\it We find for both {\it P. falciprium} and {\it P. vivax}, the effective $k$ and IBD fractions show similar distributions in Asia. These metric correlate with {\it P. falciprium} prevalence in Africa. It therefore enables us to build statistical models to infer the spread of malaria and develop genomic predictors of epidemiological parameters.  }
 
-\textcolor{red}{
-Key findings
-\begin{enumerate}
-    \item falciprium and vivax
-    \item effective k, use effective k instead of COI coefficient
-    \item IBD regions (within host relatedness)
-    \item outbreeding? (between host relatedness)
-\end{enumerate}
-}
 
 \section{Method outline and validation}
 The following sections provide details on the statistical model used for inference and its implementation, with additional detail being provided in the Supplementary Material.
 
 \subsection{Hidden Markov model for IBD configuration}
-Suppose there are $k$ parasite strains within one host, which implies that there exists $2^{k}$ number of genotypes at any given position along the genome. Consequently, this  forms $2^{k}$ allele frequency bands when combining the genotypes with their relative abundance. We refer these bands or patterns as within-sample allele frequency imbalance (WSAFI), which are visually obvious when $k$ is small (below 4 for instance) and strains are very distanced from each other (see Figure~\ref{fig:wsafi} left). Methods described in \citet{Jack2016} and \citet{Zhu2017} rely on WSAFI to separate the strains. However, when strains are related to each other, or strains proportions are similar to each other, these bands are less obvious, which makes deconvolution harder. By including genomic position information, WSAFI can be more easily identified along the genome. In this section, we will brief introduce the methods, but first let's introduce some notations.
+Suppose there are $k$ parasite strains within one host, which implies that there exists $2^{k}$ number of genotypes at any given position along the genome. Consequently, this  forms $2^{k}$ allele frequency bands when combining the genotypes with their relative abundance. We refer these bands or patterns as within-sample allele frequency imbalance, which are visually obvious when $k$ is small (below 4 for instance) and strains are vastly distanced from each other (see Figure~\ref{fig:scheme:b} outer ring). Methods described in \citet{Jack2016} and \citet{Zhu2017} rely on allele frequency imbalance to separate the strains. However, when strains are related to each other, or strain proportions are symmetrical, these bands are less obvious, which makes deconvolution harder. By including genomic position information, such imbalance can be easily identified along the sequence. In this section, we will brief introduce the methods, but first let's introduce some notations.
 
 
-\begin{figure}[ht]
-\centering
-  \includegraphics[width=0.7\textwidth]{wsaf_bands.png}
-  \label{fig:wsafi}
-\end{figure}
+%\begin{figure}[ht]
+%\centering
+  %\includegraphics[width=0.7\textwidth]{wsaf_bands.png}
+  %\caption{}
+  %\label{fig:wsafi}
+%\end{figure}
 
 We use a hidden markov frame work to identify our problem.
 
@@ -240,6 +231,11 @@ For the {\it P. vivax} data, we have
 
 \narrative{2. Summary of findings within Pf and Pv. Figure 3: Rates of co-infection by geography and species.}
 
+\begin{figure}[htp]
+  \centering{}
+  \includegraphics[width=0.8\textwidth]{effectiveK_IBD.png}
+  \caption{Schematic approach. Black box indicates when DEploid is used. Purple box indicates output.}\label{fig:IBD_frac_hist}
+\end{figure}
 
 
 
@@ -250,6 +246,19 @@ For the {\it P. vivax} data, we have
   \centering{}
   \includegraphics[width=0.8\textwidth]{ibdDistribution.png}
   \caption{Schematic approach. Black box indicates when DEploid is used. Purple box indicates output.}\label{fig:IBD_frac_hist}
+\end{figure}
+
+
+\begin{figure}[htp]
+  \centering{}
+  \subfloat[][]{
+  \includegraphics[width = 0.8\textwidth]{GambiaIBD.png}
+  }\\
+  \subfloat[][]{
+  \includegraphics[width = 0.8\textwidth]{GambiaIBD_correlation.png}
+  }\\
+  \caption{Simulation results. (a)Comparison of effective number of strains between LD-only-DEploid and IBD-LD-DEploid. (b)Expected and inferred percentage of IBD regions for IBD-LD-DEploid. (c) Histograms of switch error and genotype error across 76 simulated Pf3k samples for IBD-LD-DEploid. In all figures, we excluded eight cases out of the 100 experiments where simulated haplotypes were over 99\% identical and 16 cases where average coverage was below 20.
+}\label{fig:benchmark}
 \end{figure}
 
 
