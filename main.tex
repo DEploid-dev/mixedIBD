@@ -229,12 +229,6 @@ For the {\it P. vivax} data, we have
 
 \narrative{2. Summary of findings within Pf and Pv. Figure 3: Rates of co-infection by geography and species.}
 
-\begin{figure}[htp]
-  \centering{}
-  \includegraphics[width=0.8\textwidth]{effectiveK_IBD.png}
-  \caption{Schematic approach. Black box indicates when DEploid is used. Purple box indicates output.}\label{fig:IBD_frac_hist}
-\end{figure}
-
 
 
 
@@ -242,7 +236,15 @@ For the {\it P. vivax} data, we have
 
 \begin{figure}[htp]
   \centering{}
-  \includegraphics[width=0.8\textwidth]{ibdDistribution.png}
+  \subfloat[][]{
+  \includegraphics[width = 0.8\textwidth]{ibd_frac_hist.png}
+  }\\
+  \subfloat[][]{
+    \includegraphics[width=0.8\textwidth]{ibdDistribution_africa.png}
+  }\\
+  \subfloat[][]{
+    \includegraphics[width=0.8\textwidth]{ibdDistribution_asia.png}
+  }\\
   \caption{Schematic approach. Black box indicates when DEploid is used. Purple box indicates output.}\label{fig:IBD_frac_hist}
 \end{figure}
 
@@ -255,6 +257,7 @@ For the {\it P. vivax} data, we have
   \subfloat[][]{
   \includegraphics[width = 0.8\textwidth]{GambiaIBD_correlation.png}
   }\\
+
   \caption{Simulation results. (a)Comparison of effective number of strains between LD-only-DEploid and IBD-LD-DEploid. (b)Expected and inferred percentage of IBD regions for IBD-LD-DEploid. (c) Histograms of switch error and genotype error across 76 simulated Pf3k samples for IBD-LD-DEploid. In all figures, we excluded eight cases out of the 100 experiments where simulated haplotypes were over 99\% identical and 16 cases where average coverage was below 20.
 }\label{fig:benchmark}
 \end{figure}
