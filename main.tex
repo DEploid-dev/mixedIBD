@@ -145,7 +145,7 @@ maximise the likelihood at the correct allele frequency within samples.
   \subfloat[][]{\includegraphics[width=0.6\textwidth]{{myring.ring}.png}}
   \\
   \subfloat[][]{\includegraphics[width=0.7\textwidth]{scheme.png}}
-  \caption{(a)Highlights of the genome diversity within the mixed sample across the genome. This deconvolution example of field sample PD0577-C suggest that there are three related strains within this isolate, with proportions of 22/52/26\%. The outer ring show expected WSAF (blue) and observed WSAF (red) across the genome. This inner ring marks the IBD regions of the three strains: green colored segments mark the regions where all three strains are IBD; yellow, orange and dark orange segments identify the regions where pair of strains are IBD. (b) Schematic approach. Black boxes indicate the key deconvolution steps when our program DEploid is used. Boxes in blue and purple represent the input and output respectively at each step.}\label{fig:scheme}
+  \caption{(a) Highlights of the genome diversity within the mixed sample across the genome. This deconvolution example of field sample PD0577-C suggest that there are three related strains within this isolate, with proportions of 22/52/26\%. The outer ring show expected WSAF (blue) and observed WSAF (red) across the genome. This inner ring marks the IBD regions of the three strains: green colored segments mark the regions where all three strains are IBD; yellow, orange and dark orange segments identify the regions where pair of strains are IBD. (b) Schematic approach. Black boxes indicate the key deconvolution steps when our program DEploid is used. Boxes in blue and purple represent the input and output respectively at each step.}\label{fig:scheme}
 \end{figure}
 
 
@@ -230,14 +230,17 @@ For the {\it P. vivax} data, we have
 \begin{figure}[htp]
   \centering{}
   \subfloat[][]{
+    \includegraphics[width=0.8\textwidth]{beeswarm_effect_k.png}
+  }\\
+  \subfloat[][]{
   \includegraphics[width = 0.8\textwidth]{ibd_frac_hist.png}
   }\\
   \subfloat[][]{
-    \includegraphics[width=0.8\textwidth]{ibdDistribution_africa.png}
+    \includegraphics[width=0.8\textwidth]{ibdDistribution.png}
   }\\
-  \subfloat[][]{
-    \includegraphics[width=0.8\textwidth]{ibdDistribution_asia.png}
-  }\\
+  %\subfloat[][]{
+    %\includegraphics[width=0.8\textwidth]{ibdDistribution_asia.png}
+  %}\\
   \caption{Schematic approach. Black box indicates when DEploid is used. Purple box indicates output.}\label{fig:IBD_frac_hist}
 \end{figure}
 
@@ -248,42 +251,40 @@ For the {\it P. vivax} data, we have
   \includegraphics[width = 0.8\textwidth]{GambiaIBD.png}
   }\\
   \subfloat[][]{
-  \includegraphics[width = 0.8\textwidth]{GambiaIBD_correlation.png}
+  \includegraphics[width = 0.7\textwidth]{GambiaIBD_correlation.png}
   }\\
-
-  \caption{
-}\label{fig:gambia}
+  \caption{(a) IBD fractions across genome of Gambia samples. Red purple and green colors indicate the fraction of the genomes are IBD. (b) Pairwise correlations of IBD fractions between mixed Gambia samples.}\label{fig:gambia}
 \end{figure}
 
 We are able to identify mixed infection from a single mosquito bite or 2 mosquito bites.
 
 We computed pairwise correlation between the IBD-fraction across genome. One would expect samples with the same IBD profile will have high correlation. We found these samples in Vietnam(3 samples), Bangladesh(2 samples), and the Gambia(4 samples). In particular, the Gambia samples are very interesting. Two pairs, PA0068-C and PA0069-C, PA0021-C and PA0027-C show very strong correlations between the IBD-fraction across the genome (see the correlation heatmap).
 
-These samples are mixtures of two, with proportions of
-==> PA0021-C_newFilter_seed1_IBD.log <==
-  0.747591    3.23594e-09      0.252409    3.42703e-09
+%These samples are mixtures of two, with proportions of
+%==> PA0021-C_newFilter_seed1_IBD.log <==
+  %0.747591    3.23594e-09      0.252409    3.42703e-09
 
-==> PA0027-C_newFilter_seed1_IBD.log <==
-  0.860842    2.3895e-09      0.139158    2.52997e-09
+%==> PA0027-C_newFilter_seed1_IBD.log <==
+  %0.860842    2.3895e-09      0.139158    2.52997e-09
 
-==> PA0068-C_newFilter_seed1_IBD.log <==
-  0.783381     0.0387533    4.0773e-05      0.177825
+%==> PA0068-C_newFilter_seed1_IBD.log <==
+  %0.783381     0.0387533    4.0773e-05      0.177825
 
-==> PA0069-C_newFilter_seed1_IBD.log <==
-  0.665359    4.58131e-09      0.334641    4.92958e-09
+%==> PA0069-C_newFilter_seed1_IBD.log <==
+  %0.665359    4.58131e-09      0.334641    4.92958e-09
 
-On average, two unrelated strains differ at 8000 places, and I found
-#> sum(PA0021.haps$h1 != PA0027.haps$h3)
-#[1] 380
-#> sum(PA0021.haps$h3 != PA0027.haps$h1)
-#[1] 119
+%On average, two unrelated strains differ at 8000 places, and I found
+%#> sum(PA0021.haps$h1 != PA0027.haps$h3)
+%#[1] 380
+%#> sum(PA0021.haps$h3 != PA0027.haps$h1)
+%#[1] 119
 
-#> sum(PA0068.haps$h1 != PA0068.haps$h4)
-#[1] 820
-#> sum(PA0068.haps$h1 != PA0069.haps$h1)
-#[1] 368
-#> sum(PA0068.haps$h4 != PA0069.haps$h3)
-#[1] 438
+%#> sum(PA0068.haps$h1 != PA0068.haps$h4)
+%#[1] 820
+%#> sum(PA0068.haps$h1 != PA0069.haps$h1)
+%#[1] 368
+%#> sum(PA0068.haps$h4 != PA0069.haps$h3)
+%#[1] 438
 
 My conclusion is that PA0021-C and PA0027-C are both infections caused by two mosquito carrying single strain of parasite, but the infection time is different, or one is been treated, because the dominate strain in PA0021-C is the minor strain of PA0027-C, and vice versa.
 
@@ -297,7 +298,7 @@ In the other example,  PA0068-C vs PA0069-C, the dominate strains are the same, 
 \begin{figure}[htp]
 \centering
 \includegraphics[width=0.8\textwidth]{prevelance.png}
-\caption{}
+\caption{\textcolor{red}{update with vivax}}
 \end{figure}
 
 \narrative{1. Recap of main findings.}
