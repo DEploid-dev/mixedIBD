@@ -188,8 +188,8 @@ Our simulation show that IBD-LD-DEploid correctly recover the percentage of IBD 
 }\label{fig:benchmark}
 \end{figure}
 
-
-\section{Application to {\it P. falciprium} and {\it P. vivax} data}
+\section{Results}
+\subsection{Application to {\it P. falciprium} and {\it P. vivax} data}
 
 \narrative{1. Data source and preparation (i.e. cleaning).  Supplementary Figure 2 on importance of strong variant filtering.}
 
@@ -224,7 +224,6 @@ For the {\it P. vivax} data, we have
 
 
 
-
 \narrative{3. Summary of findings about relatedness within mixed infections.  Figure 4.  Relatedness structure histogram showing peaks at 0.25, 0.5, etc. and relationship between mixed infection rate and sib-strain.}
 
 \begin{figure}[htp]
@@ -236,26 +235,32 @@ For the {\it P. vivax} data, we have
   \includegraphics[width = 0.8\textwidth]{ibd_frac_hist.png}
   }\\
   \subfloat[][]{
-    \includegraphics[width=0.8\textwidth]{ibdDistribution.png}
+    \includegraphics[width=0.7\textwidth]{ibdDistribution.png}
   }\\
   %\subfloat[][]{
     %\includegraphics[width=0.8\textwidth]{ibdDistribution_asia.png}
   %}\\
-  \caption{Schematic approach. Black box indicates when DEploid is used. Purple box indicates output.}\label{fig:IBD_frac_hist}
+  \caption{Schematic approach. Black box indicates when DEploid is used. Purple box indicates output.}
+  \label{fig:IBD_frac_hist}
 \end{figure}
 
 
+
+
+
+
+
+\subsection{Monitoring malaria epidemic from the IBD configuration}
 \begin{figure}[htp]
   \centering{}
   \subfloat[][]{
   \includegraphics[width = 0.8\textwidth]{GambiaIBD.png}
   }\\
   \subfloat[][]{
-  \includegraphics[width = 0.7\textwidth]{GambiaIBD_correlation.png}
+  \includegraphics[width = 0.65\textwidth]{GambiaIBD_correlation.png}
   }\\
-  \caption{(a) IBD fractions across genome of Gambia samples. Red purple and green colors indicate the fraction of the genomes are IBD. (b) Pairwise correlations of IBD fractions between mixed Gambia samples.}\label{fig:gambia}
+  \caption{(a) IBD fractions across genome of Gambia samples. Red purple and green colors indicate the fraction of the genomes are IBD. (b) Pairwise correlations of IBD fractions between mixed Gambia samples. The two yellow squares highlight two pairs of samples: PA0068-C and PA0069-C, PA0021-C and PA0027-C that share similar IBD configurations.}\label{fig:gambia}
 \end{figure}
-
 We are able to identify mixed infection from a single mosquito bite or 2 mosquito bites.
 
 We computed pairwise correlation between the IBD-fraction across genome. One would expect samples with the same IBD profile will have high correlation. We found these samples in Vietnam(3 samples), Bangladesh(2 samples), and the Gambia(4 samples). In particular, the Gambia samples are very interesting. Two pairs, PA0068-C and PA0069-C, PA0021-C and PA0027-C show very strong correlations between the IBD-fraction across the genome (see the correlation heatmap).
@@ -291,15 +296,21 @@ My conclusion is that PA0021-C and PA0027-C are both infections caused by two mo
 In the other example,  PA0068-C vs PA0069-C, the dominate strains are the same, and for the second dominate strains. These strains share large IBD, which can only happen when two people were bitten by the same mosquito, which is carrying two strains that have recombined within the mosquito. Interestingly, we observe the third strain in PA0068-C, which could mean that recombination is already happening again. Or we just don't observe it in PA0069-C.
 
 
+\subsection{Malaria prevalence prediction}
+
+Independence between effective k and IBD fraction.
+
 \narrative{4. Simulation results to analyse the relationship between prevalence, mixed infection rate and sib-strain rate.  Figure 5 summarising simulations.}
 
-\section{Discussion}
 
 \begin{figure}[htp]
 \centering
 \includegraphics[width=0.8\textwidth]{prevelance.png}
-\caption{\textcolor{red}{update with vivax}}
+\caption{Black dots show African samples for modelling, red dots are the predicted values\textcolor{red}{update with vivax}}
 \end{figure}
+
+
+\section{Discussion}
 
 \narrative{1. Recap of main findings.}
 
