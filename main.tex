@@ -190,7 +190,6 @@ Our simulation show that IBD-LD-DEploid correctly recover the percentage of IBD 
 
 
 \section{Application to {\it P. falciprium} and {\it P. vivax} data}
-\textcolor{red}{High quality biallelic SNP data, P.f requires more filtering ...}
 
 \narrative{1. Data source and preparation (i.e. cleaning).  Supplementary Figure 2 on importance of strong variant filtering.}
 
@@ -202,19 +201,13 @@ where $l$ represents an arbitrary locus, $L$ denotes the total number of loci, a
 
 We find that samples from the same geographical region differentiate into clear clusters. We use this initial grouping as the base for defining the reference panels that assist the deconvolution procedure. Our definition of geographical groups is
 \begin{itemize}
-\item Africa
-\begin{itemize}
   \item Malawi, Congo.
   \item Ghana (Kassena).
   \item Nigeria, Senegal, Mali.
   \item The Gambia, Guinea, Ghana (Kintampo).
-\end{itemize}
-\item Asia
-\begin{itemize}
   \item Cambodia (Pursat), Cambodia (Pailin), Thailand (Sisakhet).
   \item Vietnam, Laos, Cambodia (Ratanakiri), Cambodia (Preah Vihear).
   \item Bangladesh, Myanmar, Thailand (Mae Sot), Thailand (Ranong).
-\end{itemize}
 \end{itemize}
 
 For the {\it P. vivax} data, we have
@@ -258,9 +251,43 @@ For the {\it P. vivax} data, we have
   \includegraphics[width = 0.8\textwidth]{GambiaIBD_correlation.png}
   }\\
 
-  \caption{Simulation results. (a)Comparison of effective number of strains between LD-only-DEploid and IBD-LD-DEploid. (b)Expected and inferred percentage of IBD regions for IBD-LD-DEploid. (c) Histograms of switch error and genotype error across 76 simulated Pf3k samples for IBD-LD-DEploid. In all figures, we excluded eight cases out of the 100 experiments where simulated haplotypes were over 99\% identical and 16 cases where average coverage was below 20.
-}\label{fig:benchmark}
+  \caption{
+}\label{fig:gambia}
 \end{figure}
+
+We are able to identify mixed infection from a single mosquito bite or 2 mosquito bites.
+
+We computed pairwise correlation between the IBD-fraction across genome. One would expect samples with the same IBD profile will have high correlation. We found these samples in Vietnam(3 samples), Bangladesh(2 samples), and the Gambia(4 samples). In particular, the Gambia samples are very interesting. Two pairs, PA0068-C and PA0069-C, PA0021-C and PA0027-C show very strong correlations between the IBD-fraction across the genome (see the correlation heatmap).
+
+These samples are mixtures of two, with proportions of
+==> PA0021-C_newFilter_seed1_IBD.log <==
+  0.747591    3.23594e-09      0.252409    3.42703e-09
+
+==> PA0027-C_newFilter_seed1_IBD.log <==
+  0.860842    2.3895e-09      0.139158    2.52997e-09
+
+==> PA0068-C_newFilter_seed1_IBD.log <==
+  0.783381     0.0387533    4.0773e-05      0.177825
+
+==> PA0069-C_newFilter_seed1_IBD.log <==
+  0.665359    4.58131e-09      0.334641    4.92958e-09
+
+On average, two unrelated strains differ at 8000 places, and I found
+#> sum(PA0021.haps$h1 != PA0027.haps$h3)
+#[1] 380
+#> sum(PA0021.haps$h3 != PA0027.haps$h1)
+#[1] 119
+
+#> sum(PA0068.haps$h1 != PA0068.haps$h4)
+#[1] 820
+#> sum(PA0068.haps$h1 != PA0069.haps$h1)
+#[1] 368
+#> sum(PA0068.haps$h4 != PA0069.haps$h3)
+#[1] 438
+
+My conclusion is that PA0021-C and PA0027-C are both infections caused by two mosquito carrying single strain of parasite, but the infection time is different, or one is been treated, because the dominate strain in PA0021-C is the minor strain of PA0027-C, and vice versa.
+
+In the other example,  PA0068-C vs PA0069-C, the dominate strains are the same, and for the second dominate strains. These strains share large IBD, which can only happen when two people were bitten by the same mosquito, which is carrying two strains that have recombined within the mosquito. Interestingly, we observe the third strain in PA0068-C, which could mean that recombination is already happening again. Or we just don't observe it in PA0069-C.
 
 
 \narrative{4. Simulation results to analyse the relationship between prevalence, mixed infection rate and sib-strain rate.  Figure 5 summarising simulations.}
