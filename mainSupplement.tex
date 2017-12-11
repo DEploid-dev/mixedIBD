@@ -113,8 +113,8 @@ $\pi$            & Adjusted expected WSAF \\
 %$\xi_{k,i}$     & Allelic state of reference panel strain $k$ at site $i$\\
 %$G$              & Scaling factor used for genetic map\\
 $e$              & Probability of read error\\
-$\mathcal{S}$ & IBD configuration \\
-$\mathcal{H}$ & haplotype configuration \\
+$\mathcal{S}$ & IBD state \\
+$\mathcal{H}$ & haplotype state \\
 \hline
 \end{tabular}
 \caption{Table summarising the notation used in this article.}\label{tab:notation}
@@ -122,14 +122,14 @@ $\mathcal{H}$ & haplotype configuration \\
 
 \subsubsection{Model}
 
-We describe the mixed infection problem by considering the number of strains, $n$, the relative abundance of each strain, $\mathbf{w}$, and their allelic states, $\mathbf{h}_{i}$. In addition to \citet{Zhu2017}, we also infer the IBD-configuration $\mathcal{S}_{i}$, which describes the strain relationships at each site $i$. For example, for three strains, the IBD-configuration could be one of the five cases: (1) all strains are IBD; (2) all strains are not IBD; (3)(4)(5) only two strains are IBD. To simplify our problem, we assume independence between each marker, and drop the subscript $i$ from now on. Similar to \citet{Jack2016}, we use a Bayesian approach and define the posterior probabilities of $n$, $\mathbf{w}$, $\mathbf{h}$ and $\mathcal{S}$,  as:
+We describe the mixed infection problem by considering the number of strains, $n$, the relative abundance of each strain, $\mathbf{w}$, and their allelic states, $\mathbf{h}_{i}$. In addition to \citet{Zhu2017}, we also infer the IBD-state $\mathcal{S}_{i}$, which describes the strain relationships at each site $i$. For example, for three strains, the IBD-state could be one of the five cases: (1) all strains are IBD; (2) all strains are not IBD; (3)(4)(5) only two strains are IBD. To simplify our problem, we assume independence between each marker, and drop the subscript $i$ from now on. Similar to \citet{Jack2016}, we use a Bayesian approach and define the posterior probabilities of $n$, $\mathbf{w}$, $\mathbf{h}$ and $\mathcal{S}$,  as:
 
 \begin{equation}
 P(n, \mathbf{w}, \mathbf{h}, \mathcal{S}| e, D) \propto L(n, \mathbf{w}, \mathbf{h}, \mathcal{S} | e, D) \times P(n, \mathbf{w}, \mathbf{h}, \mathcal{S}), \label{eqn:post}
 \end{equation}
 where $e$ is the read error rate.
 
-\noindent We assume a prior in which the haplotypes of the $n$ strains are independent of each other and dependent only on the IBD configuration. Let $\mathcal{H}$ be the haplotype configuration that is derived from the IBD configuration $\mathcal{S}$. For example, if $n=3$ and only strains 1 and 2 are IBD, the haplotype configuration $\mathcal{H}$ could be 0,0,0; 0,0,1; 1,1,0 and 1,1,1. Therefore, we can decompose the joint prior as:
+\noindent We assume a prior in which the haplotypes of the $n$ strains are independent of each other and dependent only on the IBD state. Let $\mathcal{H}$ be the haplotype state that is derived from the IBD state $\mathcal{S}$. We assume uniform prior on $\mathcal{H}|\mathcal{S}$. For example, if $n=3$ and only strains 1 and 2 are IBD, the haplotype states $\mathcal{H}$ could be $\{0,0,0\}$; $\{0,0,1\}$; $\{1,1,0\}$ and $\{1,1,1\}$. Therefore, we can decompose the joint prior as:
 \begin{equation}
 P(n, \mathbf{w}, \mathbf{h}, \mathcal{S}) = P(n) \times P(\mathbf{w}|n) \times P(\mathbf{h} , \mathcal{S}|n),
 \end{equation}
@@ -172,28 +172,28 @@ L(q_{i}| e, D) \propto \frac{\Gamma(a_i + c\cdot \pi_{i}) \Gamma(r_i + c\cdot (1
 \end{equation}
 
 
-\subsubsection{Metropolis-Hastings update for proportions}\label{sec:updateP}
-\todo{To keep this? or just mention this is the same as \citet{Zhu2017}}
-We update $\mathbf{w}|n$, through the underlying log titres, $\mathbf{x}|n$. Specifically, we choose $i$ uniformly from $n$ and propose new $x_i'$s from $x_i' = x_i + \delta x$, where $\delta x \sim N(0, \sigma^2/s)$, and $s$ is a scaling factor. The new proposed proportion is therefore $\frac{\exp(x_k')}{\sum_{k=1}^n \exp(x_k')}$. Since the proposal distribution is symmetrical, the Hastings ratio is 1. A new update is accepted with probability
+%\subsubsection{Metropolis-Hastings update for proportions}\label{sec:updateP}
+%\todo{To keep this? or just mention this is the same as \citet{Zhu2017}}
+%We update $\mathbf{w}|n$, through the underlying log titres, $\mathbf{x}|n$. Specifically, we choose $i$ uniformly from $n$ and propose new $x_i'$s from $x_i' = x_i + \delta x$, where $\delta x \sim N(0, \sigma^2/s)$, and $s$ is a scaling factor. The new proposed proportion is therefore $\frac{\exp(x_k')}{\sum_{k=1}^n \exp(x_k')}$. Since the proposal distribution is symmetrical, the Hastings ratio is 1. A new update is accepted with probability
 
- $$\min\left(1, \frac{P(\mathbf{w}'|n)}{P(\mathbf{w}|n)} \frac{L(\mathbf{w}', \mathbf{h}, {\mathcal S} | e, D)}{L(\mathbf{w}, \mathbf{h}, {\mathcal S} | e, D)}\right).$$
+ %$$\min\left(1, \frac{P(\mathbf{w}'|n)}{P(\mathbf{w}|n)} \frac{L(\mathbf{w}', \mathbf{h}, {\mathcal S} | e, D)}{L(\mathbf{w}, \mathbf{h}, {\mathcal S} | e, D)}\right).$$
 
-\subsubsection{Gibbs sampling for haplotype and IBD-configuration update}
-
-
-\paragraph{Prior on $\mathcal{S}|n$}
-
-Inbreeding coefficient.
+%\subsubsection{Gibbs sampling for haplotype and IBD-configuration update}
 
 
-To perform inference about the haplotypes present and their proportions we use Markov chain Monte Carlo (MCMC). We use a Metropolis-Hastings algorithm to sample proportions ($\mathbf w$) given $\mathbf h$; and use a Gibbs sampler to update $\mathbf h$ for a given $\mathbf w$, with two types of update: a single haplotype and a pair of haplotypes.
+%\paragraph{Prior on $\mathcal{S}|n$}
+
+%Inbreeding coefficient.
+
+
+%To perform inference about the haplotypes present and their proportions we use Markov chain Monte Carlo (MCMC). We use a Metropolis-Hastings algorithm to sample proportions ($\mathbf w$) given $\mathbf h$; and use a Gibbs sampler to update $\mathbf h$ for a given $\mathbf w$, with two types of update: a single haplotype and a pair of haplotypes.
 
 %\begin{itemize}
   %\item Likelihood
   %\item MCMC
 %\end{itemize}
 
-Hidden markov model, $\mathcal{S}_{i}$ transition probability $t_{i, i+1}$, and emission probability $P(\mathbf{h} | \xi)$.
+%Hidden markov model, $\mathcal{S}_{i}$ transition probability $t_{i, i+1}$, and emission probability $P(\mathbf{h} | \xi)$.
 
 
 
@@ -209,10 +209,25 @@ Hidden markov model, $\mathcal{S}_{i}$ transition probability $t_{i, i+1}$, and 
 
 \item {\bf MCMC parameters for deconvolution}
 
-  \item {\bf Extract crossover events} We treat genome regions of which IBD posterior probabilities greater than 90\% as IBD blocks. Regions that are not identified by a particular IBD region are crossover event candidates. We identify the candidate region of which two sides belong to different IBD blocks as a crossover event.
+\begin{itemize}
+\item {\bf Number of strains}. As described above, we aim to infer more strains than are actually present, starting the MCMC chain with a fixed $n$, which has a default of $5$. At the point of reporting, we discard strains with a proportion less than a fixed threshold, typically $0.01$.
 
-\item {\bf MCMC parameters for recombination map and smoothing}
-We burn the first 10\% of the MCMC chain, and draw every 5th sample of the chain. To collect 1000 samples for each SNP interval.
+\item {\bf Parameters}. \textcolor{black}{The parameter $c$ (Equation~\eqref{eqn:llk}) reflects how much data are available. The mean coverage of the validation data set ranges from 106.20 to 147.04, with a mean of 124.487.} In practice, we set the parameters $c=100$; $\eta = 0$, \textcolor{black}{$\sigma^2 = 5$ which are adjusted accordingly when working with extremely unbalanced samples (Section \ref{sec:prior} and supplementary material)}.  We set the read error rate as 0.01 and the rate of mis-copying as 0.01.
+
+\item {\bf Recombination rate and scaling}. We assume a uniform recombination map, where the genetic distance between loci $i$ and $i+1$ is computed by $\psi_i = D_i / d_m$ where $D_i$ denotes the physical distance between loci $i$ and $i+1$ in nucleotides and $d_m$ denotes the average recombination rate in Morgans bp$^{-1}$. We use the recombination rate for {\it P. falciparum} of 15,000 base pairs per centiMorgan as reported by \citet{Miles2016}. The recombination rate is scaled by a factor $G$, which reflects the effective population size, rate of inbreeding and size and relatedness of the reference panel. \textcolor{black}{In practice, we deconvolve over 1 million markers in field samples. We use a value of $G=20$ to ensure small values for recombination probabilities between any two markers, with a mean of 0.015. A large value of $G$ relaxes the reference panel constraint, becoming an LD free model when $G$ is infinity.  In practice, inference seems largely insensitive to choices around this parameter.}  The scaled genetic distance $G\psi$ is used to compute the transition probability of switching from copying reference haplotype $a$ to reference haplotype $b$ (see Supplementary Materials for details).
+
+\item {\bf Update without linkage disequilibrium}. For initialising the chain, or if the markers present are very widely spaced, linkage disequilibrium can be ignored, which is equivalent to setting the genetic distance between adjacent loci to be infinitely high.  Under these circumstances, the haplotype updates become much simpler and depend only on the population-level allele frequency (PLAF), for example as estimated from the reference panel or provided independently.
+
+\item {\bf Reporting} We aim to provide users with a single point estimate of the haplotypes and their proportions, although the full chain is also available for analysis.  To achieve this we report values at the last iteration - i.e. we report a single sample from the posterior.  However, to measure robustness, we typically repeat the deconvolution with multiple random starting points\textcolor{black}{. We use a majority vote rule on the inferred number of strains; we then select the chain with the lowest average deviance (after removing the burn-in) as our estimate. The deviance measures the difference in log likelihood between the fitted and saturated models, the latter being inferred by setting the WSAF to that of the observed values.} These parameters can be modified by users to achieve a preferred balance between computational speed and confidence.  By default, we set the MCMC sampling rate as 5, with the first 50\% of samples removed as burn in and 800 samples used for estimation.
+
+\item {\bf Reference panel construction}. To infer clonal samples for the reference panel we use the Pf3k project data, running the algorithm without LD on all samples and identifying those with a dominant haplotype (proportion > 0.99) as clonal.  These clonal samples are grouped by region of sampling to form location-specific reference panels.  In addition, we have included a number of reference strains, described in more detail below.
+
+\end{itemize}
+
+  %\item {\bf Extract crossover events} We treat genome regions of which IBD posterior probabilities greater than 90\% as IBD blocks. Regions that are not identified by a particular IBD region are crossover event candidates. We identify the candidate region of which two sides belong to different IBD blocks as a crossover event.
+
+%\item {\bf MCMC parameters for recombination map and smoothing}
+%We burn the first 10\% of the MCMC chain, and draw every 5th sample of the chain. To collect 1000 samples for each SNP interval.
 \end{itemize}
 
 
@@ -323,80 +338,80 @@ $\{\frac{1}{5},\frac{1}{5}, \frac{1}{5}, \frac{2}{5}\}$.
 \newpage
 \input{supplementReset.tex}
 
-\section{Deconvolution example with sample PD0577-C}
+%\section{Deconvolution example with sample PD0577-C}
 
-The following example shows a specific {\textmd DEploid} command to deconvolute the mixed sample {\textmd PD0577-C}:
-\linespread{1}
-\begin{lstlisting}
-dEploid -ref PD0577-C_ref.txt \
-    -alt PD0577-C_alt.txt \
-    -plaf asia-1_PLAF.txt \
-    -exclude asia-1_exclude.txt \
-    -panel asia-1_panel.txt \
-    -o PD0577-C.deconv \
-    -seed 5 \
-    -nSample 250 \
-    -rate 8 \
-    -burn 0.67 \
-    -k 3 \
-    -exportPostProb
-\end{lstlisting}
-\linespread{1.5}
-where ``{\tt -ref PD0577-C\_ref.txt}'' and ``{\tt -alt PD0577-C\_alt.txt}'' define the input text files \footnote{The Pf3k data was deconvoluted using DEploid version v0.1-beta. Recent versions can take VCF files as input as well.} that record the reference and alternative read counts respectively; ``{\tt -plaf asia-1\_PLAF.txt}'' contains the population allele frequencies calculated from total read counts. Note that we use option ``{\tt -exclude asia-1\_exclude.txt}'' to skip deconvoluting monomophic sites; ``{\tt -panel asia-1\_panel.txt}'' specifies a text file including haplotypes of samples listed in Table~\ref{tab:panelSamples}; options ``{\tt -nSample}'', ``{\tt -rate}'' and ``{\tt -burn}'' specify the total number of MCMC samples to take, the sampling rate and the burning rate of the MCMC chain respectively. For detailed documentation, please see \url{http://deploid.readthedocs.io/en/latest/input.html}.
+%The following example shows a specific {\textmd DEploid} command to deconvolute the mixed sample {\textmd PD0577-C}:
+%\linespread{1}
+%\begin{lstlisting}
+%dEploid -ref PD0577-C_ref.txt \
+    %-alt PD0577-C_alt.txt \
+    %-plaf asia-1_PLAF.txt \
+    %-exclude asia-1_exclude.txt \
+    %-panel asia-1_panel.txt \
+    %-o PD0577-C.deconv \
+    %-seed 5 \
+    %-nSample 250 \
+    %-rate 8 \
+    %-burn 0.67 \
+    %-k 3 \
+    %-exportPostProb
+%\end{lstlisting}
+%\linespread{1.5}
+%where ``{\tt -ref PD0577-C\_ref.txt}'' and ``{\tt -alt PD0577-C\_alt.txt}'' define the input text files \footnote{The Pf3k data was deconvoluted using DEploid version v0.1-beta. Recent versions can take VCF files as input as well.} that record the reference and alternative read counts respectively; ``{\tt -plaf asia-1\_PLAF.txt}'' contains the population allele frequencies calculated from total read counts. Note that we use option ``{\tt -exclude asia-1\_exclude.txt}'' to skip deconvoluting monomophic sites; ``{\tt -panel asia-1\_panel.txt}'' specifies a text file including haplotypes of samples listed in Table~\ref{tab:panelSamples}; options ``{\tt -nSample}'', ``{\tt -rate}'' and ``{\tt -burn}'' specify the total number of MCMC samples to take, the sampling rate and the burning rate of the MCMC chain respectively. For detailed documentation, please see \url{http://deploid.readthedocs.io/en/latest/input.html}.
 
-\linespread{1}
-\begin{lstlisting}
-dEploid -ref PD0577-C_ref.txt \
-    -alt PD0577-C_alt.txt \
-    -plaf asia-1_PLAF.txt \
-    -exclude asia-1_exclude.txt \
-    -panel asia-1_panel.txt \
-    -o PD0577-C.deconv \
-    -painting PD0577-C.deconv.hap
-\end{lstlisting}
-\linespread{1.5}
-
-
-
-We use a utility {\tt R} script to plot and interpret the output produced by DEploid. The following command is used to generate Figures~\ref{fig:PD0577} (a) -- (e).
-\linespread{1}
-\begin{lstlisting}
-R --slave "--args
-    -ref PD0577-C_ref.txt
-    -alt PD0577-C_alt.txt
-    -plaf asia-1_PLAF.txt
-    -exclude asia-1_exclude.txt
-    -o PD0577-C.deconv
-    -dEprefix PD0577-C.deconv" < ~/DEploid/utilities/interpretDEploid.r
-\end{lstlisting}
-\linespread{1.5}
-where flags ``{\tt -ref}'', ``{\tt -alt}'', ``{\tt -plaf}'' and ``{\tt -exclude}'' are used in the same manner as in the previous example.
-
-
-\begin{figure}[ht]
-\centering
-\caption{Sample {\textmd PD0577-C} deconvolution with Reference Panel Asia-1. (a) Diagnostic panels from the \texttt{DEploid} output. The top three panels are used as data exploration of sample {\textmd PD0577-C}. From left to right, it shows: 1. Alternative read counts vs reference read counts. 2. Histogram of the allele frequencies within sample.
-3. Allele frequencies at the population level (PLAF) vs allele frequencies within the sample (WSAF): red dots show observed WSAF, which is calculated by read counts; blue does show the expected WSAF. The next three plots from left to right show: 1. MCMC samples for the strain proportions, with the fraction of each color indicating the proportion of a different strain at each MCMC sample. The three colored blocks suggest that there are three strains within sample {\textmd PD0577-C}, with proportions approximately 1/4, 1/4 and 1/2.
-2. Expected WSAF vs observed WSAF. We use the correlation between the observed and expected WSAF as a sanity check for our model. A low correlation suggests poor fitting.
-3. Log likelihood of the MCMC chain. This figure is used to indicate whether the MCMC has converged. The colored dots mark the likelihoods of the model when specific MCMC steps are used: updating the strain porportions, painting a single haplotype and painting a pair of haplotypes are marked in green red and blue respectively. (b) Expected WSAF (blue) and observed WSAF (red) across the genome. This figure highlights the genome diversity within the mixed sample across the genome. (c) (d) and (e) show the posterior painting probabilities for the deconvoluted strains when using the Reference Panel Asia-1. Each panel represents the posterior probability of a chromosome. Chromosomes 1 -- 14 are ordered from left to right, then top to bottom.
-}\label{fig:PD0577}
-\end{figure}
+%\linespread{1}
+%\begin{lstlisting}
+%dEploid -ref PD0577-C_ref.txt \
+    %-alt PD0577-C_alt.txt \
+    %-plaf asia-1_PLAF.txt \
+    %-exclude asia-1_exclude.txt \
+    %-panel asia-1_panel.txt \
+    %-o PD0577-C.deconv \
+    %-painting PD0577-C.deconv.hap
+%\end{lstlisting}
+%\linespread{1.5}
 
 
 
+%We use a utility {\tt R} script to plot and interpret the output produced by DEploid. The following command is used to generate Figures~\ref{fig:PD0577} (a) -- (e).
+%\linespread{1}
+%\begin{lstlisting}
+%R --slave "--args
+    %-ref PD0577-C_ref.txt
+    %-alt PD0577-C_alt.txt
+    %-plaf asia-1_PLAF.txt
+    %-exclude asia-1_exclude.txt
+    %-o PD0577-C.deconv
+    %-dEprefix PD0577-C.deconv" < ~/DEploid/utilities/interpretDEploid.r
+%\end{lstlisting}
+%\linespread{1.5}
+%where flags ``{\tt -ref}'', ``{\tt -alt}'', ``{\tt -plaf}'' and ``{\tt -exclude}'' are used in the same manner as in the previous example.
 
-\newpage
-\input{supplementReset.tex}
 
-\section{Genome fractions of IBD regions}
+%\begin{figure}[ht]
+%\centering
+%\caption{Sample {\textmd PD0577-C} deconvolution with Reference Panel Asia-1. (a) Diagnostic panels from the \texttt{DEploid} output. The top three panels are used as data exploration of sample {\textmd PD0577-C}. From left to right, it shows: 1. Alternative read counts vs reference read counts. 2. Histogram of the allele frequencies within sample.
+%3. Allele frequencies at the population level (PLAF) vs allele frequencies within the sample (WSAF): red dots show observed WSAF, which is calculated by read counts; blue does show the expected WSAF. The next three plots from left to right show: 1. MCMC samples for the strain proportions, with the fraction of each color indicating the proportion of a different strain at each MCMC sample. The three colored blocks suggest that there are three strains within sample {\textmd PD0577-C}, with proportions approximately 1/4, 1/4 and 1/2.
+%2. Expected WSAF vs observed WSAF. We use the correlation between the observed and expected WSAF as a sanity check for our model. A low correlation suggests poor fitting.
+%3. Log likelihood of the MCMC chain. This figure is used to indicate whether the MCMC has converged. The colored dots mark the likelihoods of the model when specific MCMC steps are used: updating the strain porportions, painting a single haplotype and painting a pair of haplotypes are marked in green red and blue respectively. (b) Expected WSAF (blue) and observed WSAF (red) across the genome. This figure highlights the genome diversity within the mixed sample across the genome. (c) (d) and (e) show the posterior painting probabilities for the deconvoluted strains when using the Reference Panel Asia-1. Each panel represents the posterior probability of a chromosome. Chromosomes 1 -- 14 are ordered from left to right, then top to bottom.
+%}\label{fig:PD0577}
+%\end{figure}
 
-%\subsection{\textcolor{red}{Filtering samples by coverage}}
 
-\begin{figure}[h]
-\centering
-\missingfigure[figwidth=\textwidth]{genome IBD fractions? }
-\caption{}
-\end{figure}
+
+
+%\newpage
+%\input{supplementReset.tex}
+
+%\section{Genome fractions of IBD regions}
+
+%%\subsection{\textcolor{red}{Filtering samples by coverage}}
+
+%\begin{figure}[h]
+%\centering
+%\missingfigure[figwidth=\textwidth]{genome IBD fractions? }
+%\caption{}
+%\end{figure}
 
 
 
