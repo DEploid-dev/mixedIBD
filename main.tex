@@ -118,28 +118,33 @@ Genetic analysis of mixed infections is therefore a central problem in {\it Plas
 
 \donenarrative{3. Previous work on DEploid – method for deconvolution of mixed infections, using a reference panel.}
 Our recent work on the program {\tt DEploid} \citep{Zhu2017} enables researchers to deconvolve strains of a multiple infection taking into account of unknown number of strains present and their relative proportions. This method uses within-sample allele frequency imbalance to learn the relative abundance of each strain and tunes the haplotype with a given reference panel. Both simulation studies and deconvolving {\it in vitro} mixtures show robust inference result for mixtures of unrelated strains. However, we observe that when deconvolving mixed field samples, in cases with inbreeding we sometimes fail to separate related strains. Here we develop an enhanced version that models IBD patterns and incorporates into strategy. In the new version of DEploid, we first use inferred IBD genomic regions to help identify the number of strains and proportion inference, then apply a reference panel to tune the inferred haplotypes.
+\donenarrative{4. However, we observed that in cases with inbreeding we sometimes failed to separate related strains.}
+\donenarrative{5. Here we develop an enhanced version that models IBD patterns and incorporates into strategy (first estimate IBD and no. strains, then use reference panel version).}
 
 \donenarrative{6. Apply to 2 large data sets.}
 \donenarrative{7. Findings relevant to efforts to use genomic data to develop genomic predictors of epidemiological parameters.}
 We apply our new method to two large data sets of {\it Plasmodium} families: 2512 samples of {\it P. falciparum} \citep{Pf3k2016} and 228 samples of {\it P. vivax} \citep{Pearson2016}. We use a metric effective $k$ to measure the number of "effective" strains within a malaria-infected patient; and use IBD fractions to measure parasite relatedness within host. \textcolor{red}{We find in countries where we collected both {\it P. falciprium} and {\it P. vivax} samples, the distributions of the effective $k$ and IBD fraction show similar patterns.\todo{need to check and update}} For {\it P. falciprium}, both metrics of effective $k$ and IBD fraction correlate with parasite prevalence in Africa. It therefore enables us to build statistical models to infer the spread of malaria and develop genomic predictors of epidemiological parameters. In particular, we demonstrate instances that IBD fractions can identify exact malaria epidemic incidence.
 
 \section{Method outline and validation}
-The following sections provide details on the statistical model used for inference and its implementation, with additional detail being provided in the Supplementary Material.
+%The following sections provide details on the statistical model used for inference and its implementation, with additional detail being provided in the Supplementary Material.
 
 \subsection{Hidden Markov model for IBD configuration}
-Suppose there are $k$ parasite strains within one host, which implies that there exists $2^{k}$ number of genotypes at any given position along the genome. Consequently, this forms $2^{k}$ allele frequency bands when combining the genotypes with their relative abundance. We refer these bands or patterns as within-sample allele frequency imbalance, which are visually obvious when $k$ is small (below 4 for instance) and strains are vastly distanced from each other (see Figure~\ref{fig:scheme}(a) outer ring). Methods described in \citet{Jack2016} and \citet{Zhu2017} rely on allele frequency imbalance to separate the strains. However, when strains are related to each other, or strain proportions are symmetrical, these bands are less obvious, which increases the difficulty of deconvolution. By including genomic position information, such imbalance can be easily identified along the sequence. In this section, we will brief introduce the methods, but first let's introduce some notations.
+Suppose there are $k$ parasite strains within one host, which implies that there exists $2^{k}$ number of genotypes at any given position along the genome. Consequently, this forms $2^{k}$ allele frequency bands when combining the genotypes with their relative abundance. We refer these bands or patterns as within-sample allele frequency imbalance, which are visually obvious when $k$ is small (below 4 for instance) and strains are vastly distanced from each other (see Figure~\ref{fig:scheme}(a) outer ring). Methods described in \citet{Jack2016} and \citet{Zhu2017} rely on allele frequency imbalance to separate the strains. However, when strains are related to each other, or strain proportions are symmetrical, these bands are less obvious, which increases the difficulty of deconvolution. By including genomic position information, such imbalance can be easily identified along the sequence. %In this section, we will brief introduce the methods, but first let's introduce some notations.
 
-We use a Hidden Markov framework to define our problem.
+At every genomic position $i$, we use hyphen connected strain IDs to denote the IBD-state, indicate IBD-sharing between strains. For example, the state ``1-2-2'' implies that there are 3 strains, but only 2 distinctive strains, since strains 2 and 3 are sharing. Consequently, the possible haplotypes states of the given IBD-state ``1-2-2'' include
+ $\{\{0,0,0\}, \{0,1,1\}, \{1,0,0\}, \{1,1,1\}\}$. For mixed of two strains, we only need to consider cases of IBD or non-IBD, with possible haplotype states of $\{\{0,0\}, \{1,1\}\}$ and $\{\{0,1\}, \{1,0\}\}$. For more than two strains, the IBD state space spans exponentially. For instance, three strains consist with 5 IBD states; four strains consist with 15 IBD states. For each IBD-state, number of haplotype states range from 2 to $2^{k}$. Therefore, this new method is not suitable for deconvolve samples with complicated mixtures over 5. Combining the haplotype state with strain proportions, we obtain the expected WSAF at each position, from which we can compute the likelihood of the haplotype state given data. We can therefore determine the likelihood of IBD configurations given the cumulated IBD likelihood.
 
-haplotype configuration, and IBD configuration, are lattern variables, we observe allele counts.
 
-Assuming we have the correct number of strains and their proportions. We can maximise the
+%We use a Hidden Markov framework to define our problem, .
 
-we later found that
+%haplotype configuration, and IBD configuration, are lattern variables, we observe allele counts.
 
-maximise the likelihood at the correct allele frequency within samples.
+%Assuming we have the correct number of strains and their proportions. We can maximise the
 
-We use hyphen connected strain IDs to denote the IBD-state, indicate IBD-sharing between strains, i.e. for two strains, the states ``1-1'' and ``1-2'' imply cases of non-IBD and IBD; ``1-2-2'' suggest that there are 3 strains, and strains 2 and 3 are IBD sharing.
+%we later found that
+
+%maximise the likelihood at the correct allele frequency within samples.
+
 
 %\begin{figure}[ht]
 %\centering
@@ -158,7 +163,7 @@ We use hyphen connected strain IDs to denote the IBD-state, indicate IBD-sharing
 
 
 \subsection{Integrate IBD painting with DEploid}
-\narrative{1. Overview of approach.  Figure 1a, schematic of approach.}
+\donenarrative{1. Overview of approach.  Figure 1a, schematic of approach.}
 
 
 For convenience, we use LD-only-DEploid to refer to the DEploid version described by \citet{Zhu2017}, and IBD-LD-DEploid for the current implementation, where LD stands for linkage-disequilibrium, which implies that we include haplotype linkage information when a reference panel is given.
@@ -167,7 +172,7 @@ Both LD-only-DEploid and IBD-LD-DEploid use a Markov chain Monte Carlo (MCMC) me
 
 
 
-\narrative{2. Joint estimation of IBD, strains and proportions.  Details in SOM.  Figure 1b.  Example deconvolution in real data showing IBD transitions.}
+\donenarrative{2. Joint estimation of IBD, strains and proportions.  Details in SOM.  Figure 1b.  Example deconvolution in real data showing IBD transitions.}
 
 
 
