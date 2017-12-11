@@ -165,7 +165,7 @@ Both LD-only-DEploid and IBD-LD-DEploid use a Markov chain Monte Carlo (MCMC) me
 
 \donenarrative{3. Validation through empirical data analysis and simulation.  Figure 2 showing simulation results.  Supplementary Figure 1 showing effective k under DEploid with and without IBD.}
 \subsection{Method validation}
-Similar to \citep{Zhu2017}, we validated IBD-LD-DEploid using the same set of {\it in vitro} mixtures created by \citet{Wendler2015} to simulate mixed infections. This dataset includes 27 samples of which DNA extracted from four laboratory parasite lines: 3D7, Dd2, HB3 and 7G8, and mixed with different proportions (mixing proportions are available in supplementary material Fig.\todo{figure id}). To assess the performance, we experimented with different number of fitted strains (3 or 4). We repeated our experiment using the perfect reference panel for the lab mixtures, and found that apart from one experiment of 3 strains mixing with equal proportions, the rest of 26 experiment showed consistent results with the previous version. The new method struggled to converge to the correct solution for a specific set of mixing (see supplementary material), which were unlikely in the field.
+Similar to \citep{Zhu2017}, we validated IBD-LD-DEploid using the same set of {\it in vitro} mixtures created by \citet{Wendler2015} to simulate mixed infections. This dataset includes 27 samples of which DNA extracted from four laboratory parasite lines: 3D7, Dd2, HB3 and 7G8, and mixed with different proportions (mixing proportions are available in supplementary material Fig~S1.1). To assess the performance, we experimented with different number of fitted strains (3 or 4). We repeated our experiment using the perfect reference panel for the lab mixtures, and found that apart from one experiment of 3 strains mixing with equal proportions, the rest of 26 experiment showed consistent results with the previous version. The new method struggled to converge to the correct solution for a specific set of mixing (see supplementary material), which were unlikely in the field.
 
 To test the performance of IBD-LD-DEploid in a more realistic setting, we created {\it in silico} mixtures from 212 clonal samples of Asian origin with two proportions (25/75\% and 45/55\%) for 8071 sites from Chromosome 14. A further 20 randomly chosen samples were used for the reference panel. In order to compare the performance of the two methods at different level of relatedness between the two strains within the host, we set the first 25/50/75\% of the second haplotype the same as the first haplotype to mimic scenarios of low, moderate and high relatedness. To simulate data, we used empirical read depths and drew read counts for the two alleles from the binomial proportions.
 
@@ -193,7 +193,7 @@ Our simulation show that IBD-LD-DEploid correctly recover the percentage of IBD 
 \section{Results}
 \subsection{Application to {\it P. falciprium} and {\it P. vivax} data}
 
-\narrative{1. Data source and preparation (i.e. cleaning).  Supplementary Figure 2 on importance of strong variant filtering.}
+\donenarrative{1. Data source and preparation (i.e. cleaning).  Supplementary Figure 2 on importance of strong variant filtering.}
 
 To estimate relative proportions and strain haplotypes we use IBD-LD-DEploid on high quality biallelic SNP data (both coding and non-coding variants tagged with PASS at the QUAL column in the VCF file) of the Pf3k \citep{Pf3k2016} and {\it P. vivax} Genome Variation dataset\citep{Pearson2016}, with 1,057,830 and 303,616 SNPs for {\it P. falciparum} and {\it P.vivax} respectively. We observe a small number of heterozygous sites with high coverage in the Pf3k data, which can potentially mislead our model to over-fit the data with additional strains. These poorly-genotyped variants are likely to be artefacts of mapping and genotype calling. We therefore identify potential outliers in all samples, and filter out common outliers in at least 50 samples -- 48,443 in total.
 
@@ -224,6 +224,7 @@ For the {\it P. vivax} data, we have the geographical groups as
 
 
 
+
 \narrative{2. Summary of findings within Pf and Pv. Figure 3: Rates of co-infection by geography and species.}
 
 
@@ -239,7 +240,7 @@ For the {\it P. vivax} data, we have the geographical groups as
   \includegraphics[width = 0.7\textwidth]{ibd_frac_hist.png}
   }\\
   \subfloat[][]{
-    \includegraphics[width=0.7\textwidth]{ibdDistribution.png}
+    \includegraphics[width=0.7\textwidth]{ibdDistribution_withVivax.png}
   }\\
   %\subfloat[][]{
     %\includegraphics[width=0.8\textwidth]{ibdDistribution_asia.png}

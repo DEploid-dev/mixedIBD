@@ -13,9 +13,21 @@
 \usepackage{listings}
 \usepackage{color}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% referencing %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{natbib}
 \usepackage{hyperref}
+\usepackage{xcolor}
+\hypersetup{
+    colorlinks,
+    %linkcolor={red!50!black},
+    linkcolor={black},
+    citecolor={blue!50!black},
+    urlcolor={blue!80!black}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage[colorinlistoftodos]{todonotes}
 %\usepackage[disable]{todonotes}
-\usepackage{todonotes}
 
 \newcounter{todocounter}
 \newcommand{\todonum}[2][]
@@ -26,7 +38,7 @@
 
 \newcommand{\donenum}[2][]
 {\stepcounter{todocounter}\done[#1]{\thetodocounter: #2}}
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \definecolor{dkgreen}{rgb}{0,0.6,0}
 \definecolor{gray}{rgb}{0.5,0.5,0.5}
@@ -70,21 +82,12 @@
 
 \newpage
 \input{supplementReset.tex}
-
-\section{Filtering step}
-\textcolor{red}{High quality biallelic SNP data, P.f requires more filtering ...}
-\subsection{P. f}
-
-\subsection{P. v}
-
-\newpage
-\input{supplementReset.tex}
 \section{Deconvoltion IBD methods}
 
-Overall we use mcmc methods.
+%Overall we use mcmc methods.
 
 
-\todo{expand methods}
+%\todo{expand methods}
 
 \subsection{Deconvolving mixed infection}
 \subsubsection{Notations}
@@ -193,15 +196,6 @@ To perform inference about the haplotypes present and their proportions we use M
 Hidden markov model, $\mathcal{S}_{i}$ transition probability $t_{i, i+1}$, and emission probability $P(\mathbf{h} | \xi)$.
 
 
-\subsection{}
-\begin{itemize}
-  \item IBD posterior probability
-
-\end{itemize}
-
-We take the
-
-
 
 \subsection{Implementation details}
 \begin{itemize}
@@ -220,6 +214,29 @@ We take the
 \item {\bf MCMC parameters for recombination map and smoothing}
 We burn the first 10\% of the MCMC chain, and draw every 5th sample of the chain. To collect 1000 samples for each SNP interval.
 \end{itemize}
+
+
+\subsection{Data filtering}
+We find markers with high frequencies in both reference and alternative allele count can mislead our model to fit extra strains. We then use a threshold of ≥ 99.5\% coverage (default) to identify markers with extremely high allele counts. These markers often appears in clusters as a result of poor mapping. We further expand this list of potential “bad markers” by considering their nearest 10 neighbours on both sides along the genome, and identify the nearest markers as “to be excluded” if overlaps are found (see Figure S2.1).
+
+\begin{figure}[htp]
+  \centering{}
+  \subfloat[][]{
+    \includegraphics[width=0.7\textwidth]{PG0415-CaltVsRefAndWSAFvsPLAF.png}
+  }\\
+  \subfloat[][]{
+  \includegraphics[width = 0.45\textwidth]{{PG0415-CNopanel.ring}.png}
+  }
+  \subfloat[][]{
+    \includegraphics[width=0.45\textwidth]{{PG0415-CNopanel.filtered.ring}.png}
+  }\\
+  %\subfloat[][]{
+    %\includegraphics[width=0.8\textwidth]{ibdDistribution_asia.png}
+  %}\\
+  \caption{(a) Distribution of effective $k$ in each country. Countries in Asia show lower effective $k$ in Africa countries. Note Senegal and Gambia are similar to most Asia countries with low values of effective $k$. (b) Histograms of IBD fractions of two strain mixture samples. Relatedness structure of mixed samples peaks around 0.25, 0.5 suggest that mixed infections are caused by sib-strains. (c) Ternary plot of IBD fractions of all IBD, non-IBD and some-IBD of all mixed samples. Asia samples lean towards more IBD, Asia samples lean towards less IBD.}
+  \label{fig:fitering}
+\end{figure}
+
 
 \subsection{Commands}
 
@@ -284,24 +301,24 @@ Since we use panel free, for equal proportions it is difficult to identify.
 Without a reference panel, we assume independence between loci, it is difficult to identify cases between $\{\frac{1}{3},\frac{1}{3},\frac{1}{3}\}$ and $\{\frac{1}{3},\frac{2}{3}\}$, or
 $\{\frac{1}{4},\frac{1}{4}, \frac{1}{4}, \frac{1}{4}\}$ and $\{\frac{1}{4},\frac{1}{4}, \frac{1}{2}\}$, or $\{\frac{1}{5},\frac{1}{5}, \frac{1}{5}, \frac{1}{5}, \frac{1}{5}\}$ and $\{\frac{1}{5},\frac{1}{5}, \frac{3}{5}\}$, $\{\frac{1}{5},\frac{2}{5}, \frac{2}{5}\}$ and
 $\{\frac{1}{5},\frac{1}{5}, \frac{1}{5}, \frac{2}{5}\}$.
-\subsection{Simulation study}
+%\subsection{Simulation study}
 
 
-To estimate COI, relative proportions and strain haplotypes we use DEploid [Zhu et al., 2017] on high quality biallelic SNP data (both coding and non-coding variants tagged with PASS at the QUAL column in the VCF file). In order to improve the accuracy of the deconvolution process and improve efficiency, we first split the Pf3k data into groups, based on genetic similarity. We compute genetic distances between two samples following
+%To estimate COI, relative proportions and strain haplotypes we use DEploid [Zhu et al., 2017] on high quality biallelic SNP data (both coding and non-coding variants tagged with PASS at the QUAL column in the VCF file). In order to improve the accuracy of the deconvolution process and improve efficiency, we first split the Pf3k data into groups, based on genetic similarity. We compute genetic distances between two samples following
 
-where l represents an arbitrary locus, L denotes the total number of loci, and  indicates the non-reference within-sample allele frequency for sample s at locus l.  is then given by
+%where l represents an arbitrary locus, L denotes the total number of loci, and  indicates the non-reference within-sample allele frequency for sample s at locus l.  is then given by
 
-where  is the number of read counts supporting the alternative allele in sample s at locus l, and  is the number of read counts supporting the reference allele in sample s at locus l.
-We find that samples from the same geographical region differentiate into clear clusters. We use this initial grouping as the base for defining the reference panels that assist the deconvolution procedure. Our definition of geographical groups is
-Africa
-Malawi, Congo.
-Ghana (Kassena).
-Nigeria, Senegal, Mali.
-The Gambia, Guinea, Ghana (Kintampo).
-Asia
-Cambodia (Pursat), Cambodia (Pailin), Thailand (Sisakhet).
-Vietnam, Laos, Cambodia (Ratanakiri), Cambodia (Preah Vihear).
-Bangladesh, Myanmar, Thailand (Mae Sot), Thailand (Ranong).
+%where  is the number of read counts supporting the alternative allele in sample s at locus l, and  is the number of read counts supporting the reference allele in sample s at locus l.
+%We find that samples from the same geographical region differentiate into clear clusters. We use this initial grouping as the base for defining the reference panels that assist the deconvolution procedure. Our definition of geographical groups is
+%Africa
+%Malawi, Congo.
+%Ghana (Kassena).
+%Nigeria, Senegal, Mali.
+%The Gambia, Guinea, Ghana (Kintampo).
+%Asia
+%Cambodia (Pursat), Cambodia (Pailin), Thailand (Sisakhet).
+%Vietnam, Laos, Cambodia (Ratanakiri), Cambodia (Preah Vihear).
+%Bangladesh, Myanmar, Thailand (Mae Sot), Thailand (Ranong).
 
 \newpage
 \input{supplementReset.tex}
@@ -373,7 +390,7 @@ where flags ``{\tt -ref}'', ``{\tt -alt}'', ``{\tt -plaf}'' and ``{\tt -exclude}
 
 \section{Genome fractions of IBD regions}
 
-\subsection{\textcolor{red}{Filtering samples by coverage}}
+%\subsection{\textcolor{red}{Filtering samples by coverage}}
 
 \begin{figure}[h]
 \centering
