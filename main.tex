@@ -34,8 +34,8 @@
 %\newcommand\shorttitle[1]{\renewcommand\@shorttitle{#1}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% todo %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\usepackage[colorinlistoftodos]{todonotes}
-%\usepackage[disable]{todonotes}
+%\usepackage[colorinlistoftodos]{todonotes}
+\usepackage[disable]{todonotes}
 
 \newcounter{todocounter}
 \newcommand{\todonum}[2][]
@@ -307,6 +307,8 @@ We found similar samples in Vietnam (3 samples), Gambia (4 samples) Bangladash P
 
 \subsection{Malaria prevalence prediction}
 
+
+
 Independence between effective k and IBD fraction (see Figure~.S*).
 
 \narrative{4. Simulation results to analyse the relationship between prevalence, mixed infection rate and sib-strain rate.  Figure 5 summarising simulations.}
@@ -314,13 +316,19 @@ Independence between effective k and IBD fraction (see Figure~.S*).
 
 \begin{figure}[htp]
 \centering
-\includegraphics[width=0.8\textwidth]{prevelance.png}
+  \subfloat[][]{
+  \includegraphics[width=0.8\textwidth]{prevelance.png}
+}
+\\
+  \subfloat[][]{
+  \includegraphics[width=0.8\textwidth]{Malawi.png}
+}
 \caption{Black dots show African samples for modelling, red dots are the predicted values\textcolor{red}{update with vivax}}
 \end{figure}
 
 
 \section{Discussion}
-
+\textcolor{red}{To expand ...}
 \narrative{1. Recap of main findings.}
 
 \narrative{2. Relationship of mixed infection to prevalence v population size from simulations and interpretation of empirical data in the light of this.}
