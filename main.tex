@@ -131,7 +131,7 @@ We apply our new method to two large data sets of {\it Plasmodium} families: 251
 \subsection{Compute IBD posterior probabilities across the genome}
 Suppose there are $k$ parasite strains within one host, which implies that there exists $2^{k}$ number of genotypes at any given position along the genome. Consequently, this forms $2^{k}$ allele frequency bands when combining the genotypes with their relative abundance. We refer these bands or patterns as within-sample allele frequency imbalance, which are visually obvious when $k$ is small (below 4 for instance) and strains are vastly distanced from each other (see Figure~\ref{fig:scheme}(a) outer ring). Methods described in \citet{Jack2016} and \citet{Zhu2017} rely on allele frequency imbalance to separate the strains. However, when strains are related to each other, or strain proportions are symmetrical, these bands are less obvious, which increases the difficulty of deconvolution. By including genomic position information, such imbalance can be easily identified along the sequence. %In this section, we will brief introduce the methods, but first let's introduce some notations.
 
-At every genomic position $i$, we use hyphen connected strain IDs to denote the IBD-state, indicate IBD-sharing between strains. For example, the state ``1-2-2'' implies that there are 3 strains, but only 2 distinctive strains, and strains 2 and 3 are IBD. Consequently, the possible haplotypes states of the given IBD-state ``1-2-2'' include $\{\{0,0,0\}, \{0,1,1\}, \{1,0,0\}, \{1,1,1\}\}$. For mixed of two strains, we only need to consider cases of IBD or non-IBD, with possible haplotype states of $\{\{0,0\}, \{1,1\}\}$ and $\{\{0,1\}, \{1,0\}\}$. For more than two strains, the IBD state space spans exponentially. For instance, three strains consist with 5 IBD states; four strains consist with 15 IBD states. For each IBD-state, number of haplotype states range from 2 to $2^{k}$. Therefore, this new method is not suitable for deconvolve complicated mixtures samples of five strains. Combining the haplotype state with strain proportions, we can compute the likelihood of data given the expected WSAF at each position. Assuming uniform prior on haplotype states given a IBD state, we can compute the posterior probabilities of IBD-state by accumulating the haplotype posterior probabilities.
+Assuming independence along the genome, at every genomic position $i$, we use hyphen connected strain IDs to denote the IBD-state, indicating IBD-sharing between strains. For example, the state ``1-2-2'' implies that there are 3 strains, but only 2 distinctive strains, and strains 2 and 3 are IBD. Consequently, the possible haplotypes states of the given IBD-state ``1-2-2'' include $\{\{0,0,0\}, \{0,1,1\}, \{1,0,0\}, \{1,1,1\}\}$. For mixed of two strains, we only need to consider cases of IBD or non-IBD, with possible haplotype states of $\{\{0,0\}, \{1,1\}\}$ and $\{\{0,1\}, \{1,0\}\}$. For more than two strains, the IBD state space spans exponentially. For instance, three strains consist with 5 IBD states; four strains consist with 15 IBD states. For each IBD-state, number of haplotype states range from 2 to $2^{k}$. Therefore, this new method is not suitable for deconvolve complicated mixtures samples of five strains. Combining the haplotype state with strain proportions, we can compute the likelihood of data given the expected WSAF at each position. Assuming uniform prior on haplotype states given a IBD state, we can compute the posterior probabilities of IBD-state by accumulating the haplotype posterior probabilities.
 
 
 %\begin{figure}[ht]
@@ -172,7 +172,7 @@ To test the performance of IBD-LD-DEploid in a more realistic setting, we create
 % Expected effective k = 1.6 and 1.98.
 To evaluate accuracy of estimates we used the effective number of strains, calculated as $1/\sum w_{i}^{2}$, which reflects the number and proportions of strains present. We found that for samples with strains of low or moderate relatedness. Both LD-only-DEploid and IBD-LD-DEploid correctly recover the effective number of strains. However, for samples with closely related strains, LD-only-DEploid tends to underestimate the effective number of strains when sequence coverages are low.
 
-Our simulation show that IBD-LD-DEploid correctly recover the percentage of IBD regions of the mixed genomes (Figure~\ref{fig:benchmark}). As expected, IBD-LD-DEploid show similar diagnostics for switches and genotype errors: more switches and genotype errors in 45/55\% mixtures than 25/75\% mixtures. Moreover, we observe lower error rates in 45/55\% mixtures when the two strains are more related, which is expected because the deconvolution of distinct haplotypes length reduces. For field samples, we expect high genotype accuracy and low switch error rates, for samples with unbalanced mixtures and closely related strains.
+Our simulation show that IBD-LD-DEploid correctly recover the percentage of IBD regions of the mixed genomes (Figure~\ref{fig:benchmark}). As expected, IBD-LD-DEploid show similar diagnostics for switches and genotype errors: more switches and genotype errors in 45/55\% mixtures than 25/75\% mixtures. Moreover, we observe lower error rates in 45/55\% mixtures when the two strains are more related, which is expected because the deconvolution of distinct haplotypes length reduces. Therefore, we expect high genotype accuracy and low switch error rates, for field samples with unbalanced mixtures and closely related strains.
 
 
 \begin{figure}[htp]
@@ -195,14 +195,16 @@ Our simulation show that IBD-LD-DEploid correctly recover the percentage of IBD 
 
 \narrative{1. Data source and preparation (i.e. cleaning).  Supplementary Figure 2 on importance of strong variant filtering.}
 
-To estimate relative proportions and strain haplotypes we use IBD-LD-DEploid on high quality biallelic SNP data (both coding and non-coding variants tagged with PASS at the QUAL column in the VCF file) of the Pf3k \citep{Pf3k2016} and P. vivax Genome Variation dataset\citep{Pearson2016}. In order to improve the accuracy of the deconvolution process and improve efficiency, we first split the  data into groups, based on genetic similarity. We compute genetic distances between two samples following:
+To estimate relative proportions and strain haplotypes we use IBD-LD-DEploid on high quality biallelic SNP data (both coding and non-coding variants tagged with PASS at the QUAL column in the VCF file) of the Pf3k \citep{Pf3k2016} and {\it P. vivax} Genome Variation dataset\citep{Pearson2016}, with 1,057,830 and 303,616 SNPs for {\it P. falciparum} and {\it P.vivax} respectively. We observe a small number of heterozygous sites with high coverage in the Pf3k data, which can potentially mislead our model to over-fit the data with additional strains. These poorly-genotyped variants are likely to be artefacts of mapping and genotype calling. We therefore identify potential outliers in all samples, and filter out common outliers in at least 50 samples -- 48,443 in total.
+
+In order to improve the accuracy of the deconvolution process and improve efficiency, we first split the  data into groups, based on genetic similarity. We compute genetic distances between two samples following:
 \begin{equation}
 d(x, y) = \sum_{l}^{L}WSAF_{x,l} * (1-WSAF_{y,l}) + WSAF_{x,l} * (1-WSAF_{y,l})
 \end{equation}
 where $l$ represents an arbitrary locus, $L$ denotes the total number of loci, and $WSAF_{s,l}$ indicates the non-reference within-sample allele frequency for sample $s$ at locus $l$. $WSAF_{s,l}$ is then given by $WSAF_{s,l} = \frac{a_{s,l}}{r_{s,l}+a_{s,l}}$ where $a_{s,l}$ is the number of read counts supporting the alternative allele in sample $s$ at locus $l$, and $r_{s,l}$ is the number of read counts supporting the reference allele in sample $s$ at locus $l$.
 
 We find that samples from the same geographical region differentiate into clear clusters. We use this initial grouping as the base for defining the reference panels that assist the deconvolution procedure. Our definition of geographical groups is
-\begin{itemize}
+\begin{enumerate}
   \item Malawi, Congo.
   \item Ghana (Kassena).
   \item Nigeria, Senegal, Mali.
@@ -210,15 +212,15 @@ We find that samples from the same geographical region differentiate into clear 
   \item Cambodia (Pursat), Cambodia (Pailin), Thailand (Sisakhet).
   \item Vietnam, Laos, Cambodia (Ratanakiri), Cambodia (Preah Vihear).
   \item Bangladesh, Myanmar, Thailand (Mae Sot), Thailand (Ranong).
-\end{itemize}
+\end{enumerate}
 
-For the {\it P. vivax} data, we have
-\begin{itemize}
+For the {\it P. vivax} data, we have the geographical groups as
+\begin{enumerate}
   \item{} Thailand
   \item{} Indonesia, Malaysia, Papua New Guinea
   \item{} Cambodia, Vietnam, Laos
   \item the rest samples: Myanmar, China, Madagascar, Sri Lanka, Brazil and India.
-\end{itemize}
+\end{enumerate}
 
 
 
