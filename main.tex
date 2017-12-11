@@ -199,9 +199,9 @@ To estimate relative proportions and strain haplotypes we use IBD-LD-DEploid on 
 
 In order to improve the accuracy of the deconvolution process and improve efficiency, we first split the  data into groups, based on genetic similarity. We compute genetic distances between two samples following:
 \begin{equation}
-d(x, y) = \sum_{l}^{L}WSAF_{x,l} * (1-WSAF_{y,l}) + WSAF_{x,l} * (1-WSAF_{y,l})
+d(x, y) = \sum_{l}^{L}\textrm{WSAF}_{x,l} * (1-\textrm{WSAF}_{y,l}) + \textrm{WSAF}_{x,l} * (1-\textrm{WSAF}_{y,l})
 \end{equation}
-where $l$ represents an arbitrary locus, $L$ denotes the total number of loci, and $WSAF_{s,l}$ indicates the non-reference within-sample allele frequency for sample $s$ at locus $l$. $WSAF_{s,l}$ is then given by $WSAF_{s,l} = \frac{a_{s,l}}{r_{s,l}+a_{s,l}}$ where $a_{s,l}$ is the number of read counts supporting the alternative allele in sample $s$ at locus $l$, and $r_{s,l}$ is the number of read counts supporting the reference allele in sample $s$ at locus $l$.
+where $l$ represents an arbitrary locus, $L$ denotes the total number of loci, and $\textrm{WSAF}_{s,l}$ indicates the non-reference within-sample allele frequency for sample $s$ at locus $l$. $\textrm{WSAF}_{s,l}$ is then given by $\textrm{WSAF}_{s,l} = \frac{a_{s,l}}{r_{s,l}+a_{s,l}}$ where $a_{s,l}$ is the number of read counts supporting the alternative allele in sample $s$ at locus $l$, and $r_{s,l}$ is the number of read counts supporting the reference allele in sample $s$ at locus $l$.
 
 We find that samples from the same geographical region differentiate into clear clusters. We use this initial grouping as the base for defining the reference panels that assist the deconvolution procedure. Our definition of geographical groups is
 \begin{enumerate}
@@ -224,8 +224,8 @@ For the {\it P. vivax} data, we have the geographical groups as
 
 
 
-
 \narrative{2. Summary of findings within Pf and Pv. Figure 3: Rates of co-infection by geography and species.}
+\textcolor{red}{TODO 2. Summary of findings within Pf and Pv. Figure 3: Rates of co-infection by geography and species.}
 
 
 
@@ -256,6 +256,7 @@ For the {\it P. vivax} data, we have the geographical groups as
 
 
 \subsection{Monitoring malaria epidemic from the IBD configuration probabilities}
+
 \begin{figure}[htp]
   \centering{}
   \subfloat[][]{
@@ -266,6 +267,13 @@ For the {\it P. vivax} data, we have the geographical groups as
   }\\
   \caption{(a) IBD fractions across genome of Gambia samples. Red purple and green colors indicate the fraction of the genomes are IBD. (b) Pairwise correlations of IBD fractions between mixed Gambia samples. The two yellow squares highlight two pairs of samples: PA0068-C and PA0069-C, PA0021-C and PA0027-C that share similar IBD configurations.}\label{fig:gambia}
 \end{figure}
+
+We show how the genomes of co-existing strains are related to each other, observing in some cases high levels of genetic relatedness or inbreeding. We see cases where heterozygosity is structured along the genome in a manner that suggests inbreeding, finding multiple cases of strains that are within 1-2 meioses of each other (Fig~\ref{scheme}(a)). We envision that such a signature could be exploited in future micro-epidemiological studies to help in the inference of infection histories and transmission trees.
+
+At the population level, we explore the malaria epidemic by stacking up all IBD posterior probabilities (Fig~\ref{fig:gambia}(a)). We observe striking variation in inbreeding patterns across populations with a mean inbreeding fraction range of \textcolor{red}{[0.07, 0.54]}. African countries, with the exception of The Gambia and Senegal, seem to have less inbred mixed infections, in agreement with the different levels of genetic diversity observed in each continent. These population-specific differences relate to the epidemiological setting of each region and provide a novel, and potentially important, source of information about local infection dynamics.
+
+
+
 We are able to identify mixed infection from a single mosquito bite or 2 mosquito bites.
 
 We computed pairwise correlation between the IBD-fraction across genome. One would expect samples with the same IBD profile will have high correlation. We found these samples in Vietnam(3 samples), Bangladesh(2 samples), and the Gambia(4 samples). In particular, the Gambia samples are very interesting. Two pairs, PA0068-C and PA0069-C, PA0021-C and PA0027-C show very strong correlations between the IBD-fraction across the genome (see the correlation heatmap).
@@ -307,6 +315,7 @@ We found similar samples in Vietnam (3 samples), Gambia (4 samples) Bangladash P
 
 \subsection{Malaria prevalence prediction}
 
+We believe that the detailed characterization of mixed infections, in conjunction with localised epidemiological datasets like the ones provided by the Malaria Atlas Project [Bhatt et al., 2015], will improve our understanding of malaria epidemiology across the globe, permitting the identification of the major factors that modulate transmission in different countries. We also foresee that these methods will have important applications on the assessment of on-going interventions via genomic data [Volkman et al., 2012].
 
 
 Independence between effective k and IBD fraction (see Figure~.S*).
@@ -323,7 +332,7 @@ Independence between effective k and IBD fraction (see Figure~.S*).
   \subfloat[][]{
   \includegraphics[width=0.8\textwidth]{Malawi.png}
 }
-\caption{Black dots show African samples for modelling, red dots are the predicted values\textcolor{red}{update with vivax}}
+\caption{Black dots show African samples for modelling, red dots are the predicted values \textcolor{red}{1. update with vivax, 2. replace Malawi map with Africa map and Asia map}}
 \end{figure}
 
 
