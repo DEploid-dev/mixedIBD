@@ -272,11 +272,7 @@ We show how the genomes of co-existing strains are related to each other, observ
 
 At the population level, we explore the malaria epidemic by stacking up all IBD posterior probabilities (Fig~\ref{fig:gambia}(a)). We observe striking variation in inbreeding patterns across populations with a mean inbreeding fraction range of \textcolor{red}{[0.07, 0.54]}. African countries, with the exception of The Gambia and Senegal, seem to have less inbred mixed infections, in agreement with the different levels of genetic diversity observed in each continent. These population-specific differences relate to the epidemiological setting of each region and provide a novel, and potentially important, source of information about local infection dynamics.
 
-
-
-We are able to identify mixed infection from a single mosquito bite or 2 mosquito bites.
-
-We computed pairwise correlation between the IBD-fraction across genome. One would expect samples with the same IBD profile will have high correlation. We found these samples in Vietnam(3 samples), Bangladesh(2 samples), and the Gambia(4 samples). In particular, the Gambia samples are very interesting. Two pairs, PA0068-C and PA0069-C, PA0021-C and PA0027-C show very strong correlations between the IBD-fraction across the genome (see the correlation heatmap).
+Between the mixed samples, we computed pairwise correlation between the IBD-fraction across genome. As expected, we observe high correlations in IBD profiles between Malawi samples that had been sequenced twice by the MalariaGEN pipeline. We also observe similar high correlations between unique samples in Vietnam, Gambia, Cambodia and Bangladesh. For example, Figure~\ref{fig:gambia}(b) show two pairs of sample, PA0068-C and PA0069-C, PA0021-C and PA0027-C show very strong correlations between the IBD-fraction across the genome. Samples PA0021-C and PA0027-C show very little evidence of inbreeding. On the other hand, we observe strong negative correlations between the WSAF, which suggests that both infections caused by two mosquito carrying single strain of parasite, but the infection times are different, or one is been treated, because the dominate strain in PA0021-C is the minor strain of PA0027-C, and vice versa. In the other case, parasite strains within samples PA0068-C and PA0069-C show strong evidence of IBD sharing, which can only happen when two people were bitten by the same mosquito, which is carrying two strains that have recombined within the mosquito. Interestingly, we observe the third strain in PA0068-C, which could mean that recombination is already happening again. Or we just don't observe it in PA0069-C.
 
 %These samples are mixtures of two, with proportions of
 %==> PA0021-C_newFilter_seed1_IBD.log <==
@@ -303,12 +299,6 @@ We computed pairwise correlation between the IBD-fraction across genome. One wou
 %#[1] 368
 %#> sum(PA0068.haps$h4 != PA0069.haps$h3)
 %#[1] 438
-
-My conclusion is that PA0021-C and PA0027-C are both infections caused by two mosquito carrying single strain of parasite, but the infection time is different, or one is been treated, because the dominate strain in PA0021-C is the minor strain of PA0027-C, and vice versa.
-
-In the other example,  PA0068-C vs PA0069-C, the dominate strains are the same, and for the second dominate strains. These strains share large IBD, which can only happen when two people were bitten by the same mosquito, which is carrying two strains that have recombined within the mosquito. Interestingly, we observe the third strain in PA0068-C, which could mean that recombination is already happening again. Or we just don't observe it in PA0069-C.
-
-We found similar samples in Vietnam (3 samples), Gambia (4 samples) Bangladash PR0148-C and PR0153-C.
 
 
 
