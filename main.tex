@@ -61,23 +61,21 @@
 
 \begin{document}
 
-\title{The rate and structure of mixed infections in global populations of {\it Plasmodium} malaria}
-%\shorttitle{Global malaria mixed infection}
-\newcommand\shorttitle{Global malaria mixed infection}
-%\shorttitle
+\title{Characterising local epidemiology of {\it P. falciparum} through the structure of mixed infections}
+\newcommand\shorttitle{Mixed infections in malaria}
 \date{}
 
 \author{(LIST OF NAMES! NOT RIGHT ORDER)}
-\author[1,2]{Sha Joe Zhu}
+\author[1]{Sha Joe Zhu}
 \author[1,2,3,4]{Jacob Almagro-Garcia}
-\author[2]{Jason}
-\author[1,3,4]{Richard}
+\author[1]{Jason}
+\author[2,3,4]{Richard}
 \author[1,2,3,4]{Dominic}
-\author[1,2]{Gil Mcvean}
-%\,$^{\text{ 1,\textcolor{black}{2}}}$, Jacob Almagro-Garcia\,$^{\text{ 1,\textcolor{black}{2},3,4}}$, Jason, Richard ... Dominic and Gil McVean\,$^{\text{1,2}}$}
+\author[1,3]{Gil Mcvean}
 
-\affil[1]{Wellcome Trust Centre for Human Genetics, University of Oxford, Oxford, UK}
-\affil[2]{Big Data Institute, Li Ka Shing Centre for Health Information and Discovery, University of Oxford, Oxford, UK}
+
+\affil[1]{Big Data Institute, Li Ka Shing Centre for Health Information and Discovery, University of Oxford, Oxford, UK}
+\affil[2]{Wellcome Trust Centre for Human Genetics, University of Oxford, Oxford, UK}
 \affil[3]{Medical Research Council (MRC) Centre for Genomics and Global Health, University of Oxford, Oxford, UK}
 \affil[4]{Wellcome Trust Sanger Institute, Hinxton, UK}
 %\donenum[inline]{updated affiliation}
@@ -94,15 +92,10 @@
 
 
 \begin{abstract}
-The extent to which individuals infected with malaria pathogens of the genus {\it Plasmodium} carry multiple, genetically distinct strains both reflects local epidemiological processes and can influence the nature and severity of disease.  Large-scale genome sequencing projects of malaria pathogens have the potential to provide high resolution information about the rate and structure of mixed infections, but current analytical approaches often fail to fully capture the diversity and relatedness structure of strains present.  Here, we introduce an enhanced method for deconvolution of mixed infections that identifies the number of strains and patterns of identity by descent between them.  We apply the approach to 2512 samples of {\it P. falciparum} from 14 countries and 228 samples of {\it P. vivax} from across 13 countries.
-%%%%%%%%%%%%%%%%%%% Extracted using the following
-% read.table("pf3k_release_5_metadata.txt", header=T, sep = "\t", stringsAsFactors=F)$country %>% unique
-% see ftp://ngs.sanger.ac.uk/production/malaria/pvgv/May2016_release/README
-%%%%%%%%%%%%%%%%%%%
-Rates of mixed infection vary from \textcolor{red}{XX\%} to \textcolor{red}{XX\%}, with up to \textcolor{red}{XX\%} of individuals carrying at least three strains in \textcolor{red}{XXX}.  In between \textcolor{red}{XX\%} and \textcolor{red}{XX\%} of cases we find evidence for sibling strains, likely arising from a single bite by a multiply-infected mosquito.  The proportion of mixed infections with sibling strains is remarkably constant across species and populations.  Our findings suggest that the rate and relatedness structure of mixed infections will be valuable metrics in characterising malaria epidemiology and mapping changes over space and time.
+Individuals infected with {\it Plasmodium falciparum} malaria pathogens can carry multiple distinct, though sometimes related, strains.  However, how the rate and relatedness of such mixed infections relates to local epidemiological parameters remains unclear.  Here, we develop an enhanced method for strain deconvolution from genome sequencing data, which estimates the number of strains, their proportions, relatedness profiles and individual haplotypes.  We validate the method through simulation and controlled experiments and apply it to 2,512 isolates from 14 countries.  Rates of mixed infection vary from 18-63\% across countries and correlate with independent estimates of prevalence (Pearson $r = XXX, p = XXX$).  54\% of mixed infections involve more than two strains and 71\% include sibling strains likely to have to be have been co-transmitted from a single mosquito.  Relatedness among strains decreases weakly with prevalence ($r = XXX, p = XXX$) and differs between continents, with Asian isolates typically showing elevated relatedness compared to African isolates.  These results are consistent with a mathematical model of mixed infection.  We propose that spatial and temporal patterns of mixed infection can be used to estimate parameters of local parasite epidemiology.  
 \end{abstract}
 
-\keywords{Malaria, genome, epidemiology, IBD}
+\keywords{Malaria, genome, epidemiology, relatedness}
 
 
 \section{Introduction}
@@ -125,10 +118,19 @@ Our recent work on the program {\tt DEploid} \citep{Zhu2017} enables researchers
 \donenarrative{7. Findings relevant to efforts to use genomic data to develop genomic predictors of epidemiological parameters.}
 We apply our new method to two large data sets of {\it Plasmodium} families: 2512 samples of {\it P. falciparum} \citep{Pf3k2016} and 228 samples of {\it P. vivax} \citep{Pearson2016}. We find that \textcolor{red}{XX\%} and \textcolor{red}{XX\%} of {\it P. f} and {\it P.v} samples are mixed respectively.  We use a metric effective $k$ to measure the number of "effective" strains within a malaria-infected patient, and find low number of effective number of strains in Asian countries compare to African countries. We use IBD fractions to measure parasite relatedness within host. \textcolor{red}{We find in countries where we collected both {\it P. falciprium} and {\it P. vivax} samples, the distributions of the effective $k$ and IBD fraction show similar patterns.\todo{need to check and update}} For {\it P. falciprium}, both metrics of effective $k$ and IBD fraction correlate with parasite prevalence in Africa. It therefore enables us to build statistical models to infer the spread of malaria and develop genomic predictors of epidemiological parameters. In particular, we demonstrate instances that IBD fractions can identify exact malaria epidemic incidence.
 
-\section{Method outline and validation}
+
+
+
+
+\section{An enhanced method for strain deconvolution in the presence of relatedness}
+
 The following sections provide details on the statistical model used for inference and its implementation, with additional detail being provided in the Supplementary Material.
 
-\subsection{``Paint'' IBD posterior probabilities across the genome}
+
+
+
+\subsection{Estimating genomic relatedness profiles among strains}
+
 Suppose there are $k$ parasite strains within one host, which implies that there exists $2^{k}$ number of genotypes at any given position along the genome. Consequently, this forms $2^{k}$ allele frequency bands when combining the genotypes with their relative abundance. We refer these bands or patterns as within-sample allele frequency imbalance, which are visually obvious when $k$ is small (below 4 for instance) and strains are vastly distanced from each other (see Figure~\ref{fig:scheme}(a) outer ring). Methods described in \citet{Jack2016} and \citet{Zhu2017} rely on allele frequency imbalance to separate the strains. However, when strains are related to each other, or strain proportions are symmetrical, these bands are less obvious, which increases the difficulty of deconvolution. By including genomic position information, such imbalance can be easily identified along the sequence. %In this section, we will brief introduce the methods, but first let's introduce some notations.
 
 We use an IBD method to investigate the heterogeneity along the genome. Assuming independence along the genome, at every genomic position $i$, we use hyphen connected strain IDs to denote the IBD-state, indicating IBD-sharing between strains. For example, the state ``1-2-2'' implies that there are 3 strains, but only 2 distinctive strains, and strains 2 and 3 are IBD. Consequently, the possible haplotypes states of the given IBD-state ``1-2-2'' include $\{\{0,0,0\}, \{0,1,1\}, \{1,0,0\}, \{1,1,1\}\}$. For mixed of two strains, we only need to consider cases of IBD or non-IBD, with possible haplotype states of $\{\{0,0\}, \{1,1\}\}$ and $\{\{0,1\}, \{1,0\}\}$. For more than two strains, the IBD state space spans exponentially. For instance, three strains consist with 5 IBD states; four strains consist with 15 IBD states. For each IBD-state, number of haplotype states range from 2 to $2^{k}$. Therefore, this new method is not suitable for deconvolve complicated mixtures samples of five strains. From experience, we assume no more than five strains within one infection. Combining the haplotype state with strain proportions, we can compute the likelihood of data given the expected WSAF at each position. Assuming uniform prior on haplotype states given a IBD state, we can compute the posterior probabilities of IBD-state by accumulating the haplotype posterior probabilities.
@@ -150,7 +152,9 @@ We use an IBD method to investigate the heterogeneity along the genome. Assuming
 \end{figure}
 
 
-\subsection{Integrate IBD painting with DEploid}
+
+
+\subsection{Strain deconvolution using relatedness profiles}
 \donenarrative{1. Overview of approach.  Figure 1a, schematic of approach.}
 
 For convenience, we use LD-only-DEploid to refer to the DEploid version described by \citet{Zhu2017}, and IBD-LD-DEploid for the current implementation, where LD stands for linkage-disequilibrium, which implies that we include haplotype linkage information when a reference panel is given.
@@ -164,7 +168,8 @@ Both LD-only-DEploid and IBD-LD-DEploid use a Markov chain Monte Carlo (MCMC) me
 
 
 \donenarrative{3. Validation through empirical data analysis and simulation.  Figure 2 showing simulation results.  Supplementary Figure 1 showing effective k under DEploid with and without IBD.}
-\subsection{Method validation}
+
+\subsection{Validation}
 Similar to \citep{Zhu2017}, we validated IBD-LD-DEploid using the same set of {\it in vitro} mixtures created by \citet{Wendler2015} to simulate mixed infections. This dataset includes 27 samples of which DNA extracted from four laboratory parasite lines: 3D7, Dd2, HB3 and 7G8, and mixed with different proportions (mixing proportions are available in supplementary material Fig~S1.1). To assess the performance, we experimented with different number of fitted strains (3 or 4). We repeated our experiment using the perfect reference panel for the lab mixtures, and found that apart from one experiment of 3 strains mixing with equal proportions, the rest of 26 experiment showed consistent results with the previous version. The new method struggled to converge to the correct solution for a specific set of mixing (see supplementary material), which were unlikely in the field.
 
 To test the performance of IBD-LD-DEploid in a more realistic setting, we created {\it in silico} mixtures from 212 clonal samples of Asian origin with two proportions (25/75\% and 45/55\%) for 8071 sites from Chromosome 14. A further 20 randomly chosen samples were used for the reference panel. In order to compare the performance of the two methods at different level of relatedness between the two strains within the host, we set the first 25/50/75\% of the second haplotype the same as the first haplotype to mimic scenarios of low, moderate and high relatedness. To simulate data, we used empirical read depths and drew read counts for the two alleles from the binomial proportions.
@@ -190,8 +195,11 @@ Our simulation show that IBD-LD-DEploid correctly recover the percentage of IBD 
 }\label{fig:benchmark}
 \end{figure}
 
+
+
+
 \section{Results}
-\subsection{Application to {\it P. falciprium} and {\it P. vivax} data}
+\subsection{Application to {\it P. falciprium} data}
 
 \donenarrative{1. Data source and preparation (i.e. cleaning).  Supplementary Figure 2 on importance of strong variant filtering.}
 
