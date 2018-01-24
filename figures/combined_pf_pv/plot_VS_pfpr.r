@@ -2,7 +2,7 @@ rm(list=ls())
 library(dplyr)
 library(ggplot2)
 load("snap.Rdata")
-pfpr = read.table("pfpr_from_map.txt", header=F, stringsAsFactors=F)
+pfpr = read.csv("latest_pfpr_summary.txt", header=F, stringsAsFactors=F)
 meta_with_yr = read.csv("pf3k_release_5_metadata_20170728_cleaned.csv", header=T, stringsAsFactors=F)
 mean_eff_k = c()
 
@@ -19,7 +19,7 @@ for ( i in 1:dim(pfpr)[1] ){
 
     country = pfpr$V1[i] %>% gsub(".2.*$","",.)
 #    print(country)
-    year = pfpr$V3[i]
+    year = pfpr$V2[i]
     tmpSamples = meta_with_yr$sample_name[meta_with_yr$country == country & meta_with_yr$year == year]
     sampleIdx = which(samples %in% tmpSamples)
     mean_eff_k = c(mean_eff_k, adjusted.k.all.ibd_ld[sampleIdx] %>% mean(.))
@@ -30,75 +30,61 @@ for ( i in 1:dim(pfpr)[1] ){
 
 }
 
-predict_countries = c("Thailand","Cambodia","Vietnam","Laos", "Bangladesh", "Myanmar")
-predict_use_eff_k = c()
-predict_use_ibd = c()
-for (country_i in predict_countries){
-    tmpSamples = meta$sample[meta$country == country_i]
-    sampleIdx = which(samples %in% tmpSamples)
-    predict_use_eff_k = c(predict_use_eff_k, adjusted.k.all.ibd_ld[sampleIdx] %>% mean(.))
-    predict_use_ibd = c(predict_use_ibd, ibd.prob.all.case[sampleIdx] %>% mean(.,na.rm = T))
-
-}
-
-load("pv-snap.Rdata")
-pv.predict_countries = c("Thailand","Cambodia","Indonesia")
-pv.predict_use_eff_k = c()
-pv.predict_use_ibd = c()
-for (country_i in pv.predict_countries){
-    tmpSamples = meta$Sample.ID[meta$Country == country_i]
-    sampleIdx = which(samples %in% tmpSamples)
-    pv.predict_use_eff_k = c(pv.predict_use_eff_k, adjusted.k.all.ibd_ld[sampleIdx] %>% mean(.))
-    pv.predict_use_ibd = c(pv.predict_use_ibd, ibd.prob.all.case[sampleIdx] %>% mean(.,na.rm = T))
-
-}
-
 
 pdf("prevelance.pdf", width = 16, height = 8)
 par(mfrow = c(1,2))
 par(mar =c(5,5,5,2))
-idx = which(!is.na(mean_eff_k) & n.sample > 5)
+idx = which(!is.na(mean_eff_k) & n.sample > 15)
 #idx = which(!is.na(mean_eff_k) )
-plot(mean_eff_k, pfpr$V2, type = "n", main = paste("Prevalence vs effective number of strains, correlation: ", round(cor(mean_eff_k[idx], pfpr$V2[idx]), digits = 2)),  xlim=c(1,1.8), ylim = c(0,0.5), ylab="Pf prevalence", xlab = "Effective number of strains", cex.lab = 1.5)
+plot(mean_eff_k, pfpr$V4, type = "n", main = paste("Prevalence vs effective number of strains, correlation: ", round(cor(mean_eff_k[idx], pfpr$V4[idx]), digits = 2)),  xlim=c(1,1.8), ylim = c(0.0001,0.5), ylab="Pf Parasite Rate", xlab = "Effective number of strains", cex.lab = 1.5)
 x = mean_eff_k[idx]
-lm1 = lm(pfpr$V2[idx]~x)
+lm1 = lm(pfpr$V4[idx]~x)
 newx <- seq(1, 1.8, length.out=100)
 preds <- predict(lm1, newdata = data.frame(x=newx),
                  interval = 'confidence')
 polygon(c(rev(newx), newx), c(rev(preds[ ,3]), preds[ ,2]), col = adjustcolor('grey80', alpha.f = 0.4), border = NA)
 
 #text(mean_eff_k, pfpr$V2, labels = paste(pfpr$V1, "(",n.sample,")", sep=""), col = "aquamarine")
-text(mean_eff_k, pfpr$V2, labels = paste(pfpr$V1, "(",n.sample,")", sep=""))
+#text(mean_eff_k, pfpr$V4, labels = paste(pfpr$V1, "(",n.sample,")", sep=""))
 abline(lm1)
 
-new_pfpr = predict(lm1, newdata=data.frame(x = predict_use_eff_k))
-text(predict_use_eff_k, new_pfpr, labels = predict_countries, col="coral")
+p.color = rep("grey80", length(mean_eff_k))
+p.color[idx] = "black"
+country.factor = as.factor(pfpr$V1 %>% gsub(".2.*$","",.))
+p.pch = country.factor %>% as.numeric
+points(mean_eff_k, pfpr$V4, col = p.color, pch = p.pch)
 
-pv.new_pfpr = predict(lm1, newdata=data.frame(x = pv.predict_use_eff_k))
+#for (i in 1:length(mean_eff_k)){
+#    lines(rep(mean_eff_k[i],2), c(pfpr$V3[i], pfpr$V5[i]), col = p.color[i])
+#}
+legend("bottomright", legend = levels(country.factor), pch = 1:14)
 
-text(pv.predict_use_eff_k, pv.new_pfpr, labels = paste("pv.", pv.predict_countries, sep=""), col="purple")
 
-
-idx = which(!is.na(mean_ibd) & n.sample > 5)
-plot(mean_ibd, pfpr$V2, type = "n", main = paste("Prevalence vs IBD fraction, correlation: ", round(cor(mean_ibd[idx], pfpr$V2[idx]), digits = 2 )),  xlim=c(0.2,0.7), ylim = c(0,0.5), ylab="Pf prevalence", xlab = "IBD fraction", cex.lab = 1.5)
+idx = which(!is.na(mean_ibd) & n.sample > 15)
+plot(mean_ibd, pfpr$V4, type = "n", main = paste("Prevalence vs IBD fraction, correlation: ", round(cor(mean_ibd[idx], pfpr$V4[idx]), digits = 2 )),  xlim=c(0.2,0.7), ylim = c(0,0.5), ylab="Pf Parasite Rate", xlab = "IBD fraction", cex.lab = 1.5)
 #text(mean_ibd, pfpr$V2, labels = paste(pfpr$V1, "(",n.sample,")", sep=""))
 #abline(lm(pfpr$V2~mean_ibd))
 x = mean_ibd[idx]
-lm2 = lm(pfpr$V2[idx]~x)
+lm2 = lm(pfpr$V4[idx]~x)
 newx <- seq(0.1, 0.8, length.out=100)
 preds <- predict(lm2, newdata = data.frame(x=newx),
                  interval = 'confidence')
 polygon(c(rev(newx), newx), c(rev(preds[ ,3]), preds[ ,2]), col = adjustcolor('grey80', alpha.f = 0.4), border = NA)
 
 #text(mean_ibd, pfpr$V2, labels = paste(pfpr$V1, "(",n.sample,")", sep=""), col = "aquamarine")
-text(mean_ibd, pfpr$V2, labels = paste(pfpr$V1, "(",n.sample,")", sep=""))
+#text(mean_ibd, pfpr$V4, labels = paste(pfpr$V1, "(",n.sample,")", sep=""))
 abline(lm2)
 
-new_pfpr = predict(lm2, newdata=data.frame(x = predict_use_ibd))
-text(predict_use_ibd, new_pfpr, labels = predict_countries, col="coral")
 
-pv.new_pfpr = predict(lm2, newdata=data.frame(x = pv.predict_use_ibd))
-text(pv.predict_use_ibd, pv.new_pfpr, labels = paste("pv.", pv.predict_countries, sep=""), col="purple")
+#new_pfpr = predict(lm2, newdata=data.frame(x = predict_use_ibd))
+#text(predict_use_ibd, new_pfpr, labels = predict_countries, col="coral")
 
+#pv.new_pfpr = predict(lm2, newdata=data.frame(x = pv.predict_use_ibd))
+#text(pv.predict_use_ibd, pv.new_pfpr, labels = paste("pv.", pv.predict_countries, sep=""), col="purple")
+
+p.color = rep("grey80", length(mean_ibd))
+p.color[idx] = "black"
+points(mean_ibd, pfpr$V4, col = p.color, pch = p.pch)
+legend("topright", legend = levels(country.factor), pch = 1:14)
 
 dev.off()
