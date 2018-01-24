@@ -76,7 +76,7 @@
 \corr{gil.mcvean@bdi.ox.ac.uk}{GM}
 
 \affil[1]{Big Data Institute, Li Ka Shing Centre for Health Information and Discovery, University of Oxford, Oxford, UK}
-\affil[2]{Wellcome Trust Centre for Human Genetics, University of Oxford, Oxford, UK}
+\affil[2]{Wellcome Centre for Human Genetics, University of Oxford, Oxford, UK}
 \affil[3]{Medical Research Council (MRC) Centre for Genomics and Global Health, University of Oxford, Oxford, UK}
 \affil[4]{Wellcome Trust Sanger Institute, Hinxton, UK}
 %\donenum[inline]{updated affiliation}
@@ -139,7 +139,7 @@ Unlike our previous work, \texttt{DEploidIBD} infers strain structure in two ste
   \centering{}
   \subfloat[][]{\includegraphics[width=0.6\textwidth]{{myring.ring}.png}}
   \\
-  \subfloat[][]{\includegraphics[width=0.7\textwidth]{scheme.png}}
+  %\subfloat[][]{\includegraphics[width=0.7\textwidth]{scheme.png}}
    \caption{Deconvolution of field sample PD0577-C from Thailand.  (a) The profile of within-sample allele frequency along chromosomes 11 and 12 (black points) suggests a changing profile of IBD with three distinct strains, estimated to be at frequencies of $22\%$, $52\%$ and $26\%$ respectively (other chromosomes omitted for clarity); blue points indicate expected allele frequencies within the isolate.  However, the strains are inferred to be sibs of each other: green segments identify where all three strains are IBD; yellow, orange and dark orange segments identify the regions where one pair of strains are IBD but the others are not.  In no region are all three strains inferred to be distinct. (b) Summary of allele frequencies observed within the isolate shown as a scatter-plot of the numbers of reads supporting the reference (REF: x-axis) and alternative (ALT: y-axis) alleles.  A graphical description of the modules and workflows for \texttt{DEploidIBD} is given in Figure 1 - figure supplement 1.}\label{fig:fig1}
 \end{figure}
 
@@ -481,4 +481,19 @@ Zhu, J. S., {\em et al} (2017)
 
 \end{thebibliography}
 
+
+
+\appendix
+\begin{appendixbox}
+\begin{center}
+  \includegraphics[width=0.6\textwidth]{{myring.ring}.png}
+  \captionof{figure}{Deconvolution of field sample PD0577-C from Thailand. The profile of within-sample allele frequency along chromosomes 11 and 12 (black points) suggests a changing profile of IBD with three distinct strains, estimated to be at frequencies of $22\%$, $52\%$ and $26\%$ respectively (other chromosomes omitted for clarity); blue points indicate expected allele frequencies within the isolate.  However, the strains are inferred to be sibs of each other: green segments identify where all three strains are IBD; yellow, orange and dark orange segments identify the regions where one pair of strains are IBD but the others are not.  In no region are all three strains inferred to be distinct. (b) Summary of allele frequencies observed within the isolate shown as a scatter-plot of the numbers of reads supporting the reference (REF: x-axis) and alternative (ALT: y-axis) alleles.}
+\end{center}
+
+\begin{center}
+  \includegraphics[width=0.7\textwidth]{scheme.png}
+  \captionof{figure}{A graphical description of the modules and workflows for \texttt{DEploidIBD} is given in Figure 1 - figure supplement 1.}
+\end{center}
+
+\end{appendixbox}
 \end{document}

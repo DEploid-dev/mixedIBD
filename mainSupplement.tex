@@ -1,4 +1,4 @@
-\documentclass{article}
+\documentclass[9pt,lineno]{elife}
 \usepackage{fullpage,amsmath,url,cases}
 \usepackage{natbib,longtable,graphicx,tikz}
 \usepackage{subfig}
@@ -71,17 +71,17 @@
 
 \begin{document}
 \maketitle{}
-\listoftodos
-\clearpage
-\setcounter{page}{1}
+%\listoftodos
+%\clearpage
+%\setcounter{page}{1}
 
-\maketitle
+%\maketitle
 \tableofcontents
 
-\setcounter{section}{0}
+%\setcounter{section}{0}
 
 \newpage
-\input{supplementReset.tex}
+%\input{supplementReset.tex}
 \section{Deconvoltion IBD methods}
 
 %Overall we use mcmc methods.
@@ -232,7 +232,7 @@ L(q_{i}| e, D) \propto \frac{\Gamma(a_i + c\cdot \pi_{i}) \Gamma(r_i + c\cdot (1
 
 
 \subsection{Data filtering}
-We find markers with high frequencies in both reference and alternative allele count can mislead our model to fit extra strains. We then use a threshold of ≥ 99.5\% coverage (default) to identify markers with extremely high allele counts. These markers often appears in clusters as a result of poor mapping. We further expand this list of potential “bad markers” by considering their nearest 10 neighbours on both sides along the genome, and identify the nearest markers as “to be excluded” if overlaps are found (see Figure S2.1).
+We find markers with high frequencies in both reference and alternative allele count can mislead our model to fit extra strains. We then use a threshold of $\geq$ 99.5\% coverage (default) to identify markers with extremely high allele counts. These markers often appears in clusters as a result of poor mapping. We further expand this list of potential “bad markers” by considering their nearest 10 neighbours on both sides along the genome, and identify the nearest markers as “to be excluded” if overlaps are found (see Figure S2.1).
 
 \begin{figure}[htp]
   \centering{}
@@ -282,7 +282,7 @@ dEploid ${common} ${mcmcCommon} -o ${prefix} -ibd
 
 Our deconvolution experiment used 17,530 sites for all experiments in the rest of this section, unless specified otherwise.
 
-To evaluate accuracy of estimates we used the effective number of strains, calculated as  1/∑w2i1/∑wi2 , which reflects the number and proportions of strains present. We also assessed sensitivity of estimates to the number of fitted strains (3 or 5). Typically, we find consistent inference of the effective number of strains regardless of the assumption of number of strains or the use of LD information (see Fig. 1). The deviance between the expected and inferred proportions per sample is bounded by the inverse of the deviation between expected and observed effective number of strains
+To evaluate accuracy of estimates we used the effective number of strains, calculated as $1/\sum w_{i}^{2}$, which reflects the number and proportions of strains present. We also assessed sensitivity of estimates to the number of fitted strains (3 or 5). Typically, we find consistent inference of the effective number of strains regardless of the assumption of number of strains or the use of LD information (see Fig. 1). The deviance between the expected and inferred proportions per sample is bounded by the inverse of the deviation between expected and observed effective number of strains
 
 
 Against DEploid without using IBD methods.
