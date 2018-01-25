@@ -77,7 +77,8 @@ simulate.epi<-function(I, V, gamma=0.05, lambda.per.mos=0.1, pi=0.5, nu=1, alpha
 
 simulate.epi(I=c(100,0,0), V=c(900,100,0));
 
-nn<-c(10,50,100,150, 200,300, 400, 500,750,1000,2000);
+#nn<-c(10,50,100,150, 200,300, 400, 500,750,1000,2000);
+nn<-seq(1, 500, length.out = 100)
 phi.sim<-0.3;
 ss<-array(0,c(length(nn), 6));
 for (i in 1:length(nn)) ss[i,]<-simulate.epi(I=c(100,0,0), V=c(0.9*nn[i], 0.1*nn[i], 0), phi=phi.sim);
@@ -85,8 +86,8 @@ for (i in 1:length(nn)) ss[i,]<-simulate.epi(I=c(100,0,0), V=c(0.9*nn[i], 0.1*nn
 pdf("prev_vs_fractions.pdf")
 par(mfrow=c(1,1));
 
-plot((ss[,2]+ss[,3])/(ss[,1]+ss[,2]+ss[,3]), ss[,3]/(ss[,2]+ss[,3]), xlab="Prevalence", ylim=c(0,0.7), ylab="Fraction", type="b", col="blue");
-lines((ss[,2]+ss[,3])/(ss[,1]+ss[,2]+ss[,3]),(ss[,6]*phi.sim*ss[,1])/(ss[,6]*phi.sim*ss[,1]+(ss[,5]+ss[,6])*ss[,2]), col="orange", type="b");
+plot((ss[,2]+ss[,3])/(ss[,1]+ss[,2]+ss[,3]), ss[,3]/(ss[,2]+ss[,3]), xlab="Prevalence", ylim=c(0,0.5), xlim=c(0,.5), ylab="Fraction", type="l", col="blue");
+lines((ss[,2]+ss[,3])/(ss[,1]+ss[,2]+ss[,3]),(ss[,6]*phi.sim*ss[,1])/(ss[,6]*phi.sim*ss[,1]+(ss[,5]+ss[,6])*ss[,2]), col="orange", type="l");
 legend("topleft",legend=c("Multiple infection", "Sib-infection"), bty="n", border=NA, fill=c("blue", "orange"));
 
 
@@ -101,9 +102,10 @@ meta_with_yr = read.csv("pf3k_release_5_metadata_20170728_cleaned.csv", header=T
 unrelated_frac = c()
 sib_frac = c()
 n.sample = c()
-
+country.list = c()
 for ( i in 1:dim(pfpr)[1] ){
     country = pfpr$V1[i] %>% gsub(".2.*$","",.)
+    country.list = c(country.list, country)
 #    print(country)
     year = pfpr$V2[i]
     a = which(meta_with_yr$country == country & meta_with_yr$year == year)
@@ -121,10 +123,13 @@ for ( i in 1:dim(pfpr)[1] ){
 
 
 idx = which(n.sample > 15)
-points( pfpr$V4[idx], unrelated_frac[idx], pch = "x", col="blue")
+p.pch = rep("x", length(pfpr$V4))
+p.pch[country.list %in% c("Thailand", "Cambodia", "Bangladesh", "Vietnam", "Myanmar", "Laos")] = "o"
+points( pfpr$V4[idx], unrelated_frac[idx], col="blue", pch = p.pch[idx])
+legend( "topright", legend = c("Asia countries", "Africa countries"), pch = c("o", "x"))
 #text( pfpr$V4[idx], unrelated_frac[idx], labels = paste(pfpr$V1, "(",n.sample,")"), col="blue")
 
-points( pfpr$V4[idx], sib_frac[idx], pch = "x", col="orange")
+points( pfpr$V4[idx], sib_frac[idx], col="orange", pch = p.pch[idx])
 dev.off()
 names(pfpr) = c("group", "year", "pfpr.low", "pfpr", "pfpr.up")
 pfpr$sib_frac = sib_frac

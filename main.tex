@@ -137,8 +137,9 @@ Unlike our previous work, \texttt{DEploidIBD} infers strain structure in two ste
 
 \begin{figure}[ht]
   \centering{}
-  \subfloat[][]{\includegraphics[width=0.6\textwidth]{{myring.ring}.png}}
-  \\
+  \subfloat[][]{\includegraphics[width=0.3\textwidth]{altVsRef.pdf}}
+  \subfloat[][]{\includegraphics[width=0.65\textwidth]{hap_post_prob_hap.pdf}}
+  %\\
   %\subfloat[][]{\includegraphics[width=0.7\textwidth]{scheme.png}}
    \caption{Deconvolution of field sample PD0577-C from Thailand.  (a) The profile of within-sample allele frequency along chromosomes 11 and 12 (black points) suggests a changing profile of IBD with three distinct strains, estimated to be at frequencies of $22\%$, $52\%$ and $26\%$ respectively (other chromosomes omitted for clarity); blue points indicate expected allele frequencies within the isolate.  However, the strains are inferred to be sibs of each other: green segments identify where all three strains are IBD; yellow, orange and dark orange segments identify the regions where one pair of strains are IBD but the others are not.  In no region are all three strains inferred to be distinct. (b) Summary of allele frequencies observed within the isolate shown as a scatter-plot of the numbers of reads supporting the reference (REF: x-axis) and alternative (ALT: y-axis) alleles.  A graphical description of the modules and workflows for \texttt{DEploidIBD} is given in Figure 1 - figure supplement 1.}\label{fig:fig1}
 \end{figure}
@@ -178,7 +179,7 @@ Our simulation show that IBD-LD-DEploid correctly recover the percentage of IBD 
 
 \donenarrative{1. Data source and preparation (i.e. cleaning).  Supplementary Figure 2 on importance of strong variant filtering.}
 
-To estimate relative proportions and strain haplotypes we use IBD-LD-DEploid on high quality biallelic SNP data (both coding and non-coding variants tagged with PASS at the QUAL column in the VCF file) of the Pf3k \citep{Pf3k2016} and {\it P. vivax} Genome Variation dataset\citep{Pearson2016}, with 1,057,830 and 303,616 SNPs for {\it P. falciparum} and {\it P.vivax} respectively. We observe a small number of heterozygous sites with high coverage in the Pf3k data, which can potentially mislead our model to over-fit the data with additional strains. These poorly-genotyped variants are likely to be artefacts of mapping and genotype calling. We therefore identify potential outliers in all samples, and filter out common outliers in at least 50 samples -- 48,443 in total.
+To estimate relative proportions and strain haplotypes we use IBD-LD-DEploid on high quality biallelic SNP data (both coding and non-coding variants tagged with PASS at the QUAL column in the VCF file) of the Pf3k~\citep{Pf3k2016} and {\it P. vivax} Genome Variation dataset~\citep{Pearson2016}, with 1,057,830 and 303,616 SNPs for {\it P. falciparum} and {\it P.vivax} respectively. We observe a small number of heterozygous sites with high coverage in the Pf3k data, which can potentially mislead our model to over-fit the data with additional strains. These poorly-genotyped variants are likely to be artefacts of mapping and genotype calling. We therefore identify potential outliers in all samples, and filter out common outliers in at least 50 samples -- 48,443 in total.
 
 In order to improve the accuracy of the deconvolution process and improve efficiency, we first split the  data into groups, based on genetic similarity. We compute genetic distances between two samples following:
 \begin{equation}
