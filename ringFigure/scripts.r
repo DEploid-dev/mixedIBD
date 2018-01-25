@@ -66,7 +66,7 @@ plot.wsaf.vs.index.ring <- function ( coverage, expWSAF = c(), expWSAFChrom = c(
 }
 
 
-png(paste(myInput$outPrefix, ".ring.png", sep = ""), width = 3500, height = 3500)
+png(paste(myInput$outPrefix, ".ring.png", sep = ""), width = 3500, height = 3500, bg = "transparent")
     cexSize = 2.5
 
 dEploidOutput = fun.dEploidPrefix ( myInput$dEploidPrefix )
@@ -106,3 +106,5 @@ circlize::circos.trackPlotRegion(factor = probs$CHROM, ylim=c(0,1), track.height
 
 circlize::circos.clear();
 dev.off()
+
+system("convert myring.ring.png -quality 100 myring.ring.pdf")

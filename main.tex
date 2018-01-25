@@ -102,7 +102,7 @@ Individuals infected with {\it Plasmodium falciparum} malaria pathogens can carr
 \section{Introduction}
 
 
-Individuals infected with malaria-causing parasites of the genus {\it Plasmodium} can often be found to carry multiple, distinct strains (REFS).  Such mixed infections are likely indicative of intense local exposure rates, being found commonly in regions of Africa with high rates of prevalence \citep{Bhatt2015}, though are also documented for P. vivax and other malaria-causing parasites \citep{Mueller2007, Collins2012}, even in regions of much lower prevalence \citep{Howes2016, Steenkeste2010}.  For example, REF report GIVE EXAMPLES OF RATES OF MIXED INFECTION PREVIOUSLY REPORTED.  Mixed infections have been associated with increased disease severity (REFS) and also provide the fuel for generating genomic diversity within the parasite, enabling co-transmission to the mosquito vector where sexual recombination occurs (REFS).  Mixed infections are transient (IS ANYTHING REPORTED ON DURATION?), though whether this is driven entirely by the host immune response or whether it is influenced by interactions between the distinct strains is not known (CHECK!).
+Individuals infected with malaria-causing parasites of the genus {\it Plasmodium} can often be found to carry multiple, distinct strains (REFS).  Such mixed infections are likely indicative of intense local exposure rates, being found commonly in regions of Africa with high rates of prevalence \citep{Bhatt2015, Howes2016}, though are also documented for {\it P. vivax} and other malaria-causing parasites \citep{Mueller2007, Collins2012}, even in regions of much lower prevalence \citep{Howes2016, Steenkeste2010}.  For example, REF report GIVE EXAMPLES OF RATES OF MIXED INFECTION PREVIOUSLY REPORTED.  Mixed infections have been associated with increased disease severity (REFS) and also provide the fuel for generating genomic diversity within the parasite, enabling co-transmission to the mosquito vector where sexual recombination occurs (REFS).  Mixed infections are transient (IS ANYTHING REPORTED ON DURATION?), though whether this is driven entirely by the host immune response or whether it is influenced by interactions between the distinct strains is not known (CHECK!).
 
 Although mixed infections can be studied from SNP barcodes \citep{Galinsky2015} or single locus polymorphisms \citep{Jack2016}, genome sequencing provides a powerful approach for detecting mixed infections \citep{Chang2017}.  Genetic differences between strains within a host are manifest as polymorphic sites within the isolate, which motivates statistical approaches for estimating the number of distinct strains, their relative proportions and genome sequences \citep{Zhu2017}.  Although genomic approaches cannot identify individuals infected multiple times by identical strains (and have to filter sequencing data heavily to eliminate false signs of polymorphism arising from sequencing error and problems of incomplete or erroneous reference assemblies), they provide a rich characterization of within host diversity.
 
@@ -112,8 +112,6 @@ The rate and relatedness structure of mixed infections (and how these relate to 
 Here, we develop, test and apply an enhanced method for strain deconvolution, which builds on the previously-published \texttt{DEploid} software.  The method works by separating the process of estimating strain number, proportions and relatedness structures from the problems of inferring genome sequences and provides substantial advances in accuracy in complex setting or lower coverage data.  We apply the approach to 2,512 isolates of {\it P. falciparum} drawn from 14 countries and a range of years, characterizing the rate and nature of mixed infections, including patterns of relatedness.  We show that rates of mixed infection are highly correlated with independent, non-genetic estimates of malaria infection prevalence (Q is it Africa alone?), but the relatedness structure is much more variable and differs between Africa and Asian populations with comparable prevalence.  We introduce a simple deterministic mathematical model that identifies key epidemiological parameters in determining statistics of mixed infection and that recapitulates several empirical observations.  Finally, we discuss the likely impact of sampling strategies and the prospects for using pathogen genomic data to augment surveillance within control programmes.
 
 
-%\donenarrative{1. Why mixed infection is relevant to biology and epidemiology.}
-%Malaria is a vital disease, and is transmitted by anopheline mosquitoes. The cause of this disease is the malaria parasite belongs to the {\it Plasmodium} family. Human malaria is caused by {\it P. falciparum}, {\it P. malariae}, {\it P. ovale}, {\it P. vivax} and {\it P. knowlesi} \citep{Mueller2007, Collins2012}. In particular, infections casued by {\it P. falcipium} and {\it P. vivax} are the most common. \todo{citation, missing reference}
 
 %Humans with {\it Plasmodium} malaria often have mixed infections, i.e. they carry a mixture of genetically different parasites of the same species. Infections with multiple {\it Plasmodium} species do occur, but is not the focus of this study. Sometimes mixed infection is the result of multiple mosquito bites, particularly in geographical locations with high levels of malaria transmission.  On other occasions it is the result of a single mosquito transmitting a genetic mixture of parasites from one person to another. This is of considerable biological interest because the parasites undergo sexual recombination within the mosquito, i.e. transmission of mixed infections enables new genetic forms to be generated by sexual recombination within the parasite population.
 
@@ -137,11 +135,9 @@ Unlike our previous work, \texttt{DEploidIBD} infers strain structure in two ste
 
 \begin{figure}[ht]
   \centering{}
-  \subfloat[][]{\includegraphics[width=0.3\textwidth]{altVsRef.pdf}}
-  \subfloat[][]{\includegraphics[width=0.65\textwidth]{hap_post_prob_hap.pdf}}
-  %\\
-  %\subfloat[][]{\includegraphics[width=0.7\textwidth]{scheme.png}}
-   \caption{Deconvolution of field sample PD0577-C from Thailand.  (a) The profile of within-sample allele frequency along chromosomes 11 and 12 (black points) suggests a changing profile of IBD with three distinct strains, estimated to be at frequencies of $22\%$, $52\%$ and $26\%$ respectively (other chromosomes omitted for clarity); blue points indicate expected allele frequencies within the isolate.  However, the strains are inferred to be sibs of each other: green segments identify where all three strains are IBD; yellow, orange and dark orange segments identify the regions where one pair of strains are IBD but the others are not.  In no region are all three strains inferred to be distinct. (b) Summary of allele frequencies observed within the isolate shown as a scatter-plot of the numbers of reads supporting the reference (REF: x-axis) and alternative (ALT: y-axis) alleles.  A graphical description of the modules and workflows for \texttt{DEploidIBD} is given in Figure 1 - figure supplement 1.}\label{fig:fig1}
+  \subfloat[][]{\includegraphics[width=0.28\textwidth]{altVsRef_small.pdf}}
+  \subfloat[][]{\includegraphics[width=0.7\textwidth]{hap_post_prob_hap.pdf}}
+   \caption{Deconvolution of field sample PD0577-C from Thailand.  (a) Summary of allele frequencies observed within the isolate shown as a scatter-plot of the numbers of reads supporting the reference (REF: x-axis) and alternative (ALT: y-axis) alleles. (b) The profile of within-sample allele frequency along chromosomes 11 and 12 (black points) suggests a changing profile of IBD with three distinct strains, estimated to be at frequencies of $22\%$, $52\%$ and $26\%$ respectively (other chromosomes omitted for clarity); blue points indicate expected allele frequencies within the isolate.  However, the strains are inferred to be sibs of each other: green segments identify where all three strains are IBD; yellow, orange and dark orange segments identify the regions where one pair of strains are IBD but the others are not.  In no region are all three strains inferred to be distinct. A graphical description of the modules and workflows for \texttt{DEploidIBD} is given in Appendix~\ref{appedix:workflow} Figure~\ref{fig:workflow}.}\label{fig:fig1}
 \end{figure}
 
 
@@ -487,14 +483,24 @@ Zhu, J. S., {\em et al} (2017)
 \appendix
 \begin{appendixbox}
 \begin{center}
-  \includegraphics[width=0.6\textwidth]{{myring.ring}.png}
+  \includegraphics[width=0.6\textwidth]{{myring.ring}.pdf}
   \captionof{figure}{Deconvolution of field sample PD0577-C from Thailand. The profile of within-sample allele frequency along chromosomes 11 and 12 (black points) suggests a changing profile of IBD with three distinct strains, estimated to be at frequencies of $22\%$, $52\%$ and $26\%$ respectively (other chromosomes omitted for clarity); blue points indicate expected allele frequencies within the isolate.  However, the strains are inferred to be sibs of each other: green segments identify where all three strains are IBD; yellow, orange and dark orange segments identify the regions where one pair of strains are IBD but the others are not.  In no region are all three strains inferred to be distinct. (b) Summary of allele frequencies observed within the isolate shown as a scatter-plot of the numbers of reads supporting the reference (REF: x-axis) and alternative (ALT: y-axis) alleles.}
 \end{center}
 
 \begin{center}
-  \includegraphics[width=0.7\textwidth]{scheme.png}
+  \includegraphics[width=0.7\textwidth]{scheme.pdf}
+  \captionof{figure}{A graphical description of the modules and workflows for \texttt{DEploidIBD}.}
+  \label{fig:workflow}
+\end{center}
+\label{appedix:workflow}
+\end{appendixbox}
+
+\begin{appendixbox}
+\begin{center}
+  \includegraphics[width=0.8\textwidth]{prevelance.pdf}
   \captionof{figure}{A graphical description of the modules and workflows for \texttt{DEploidIBD} is given in Figure 1 - figure supplement 1.}
 \end{center}
-
 \end{appendixbox}
+
+
 \end{document}
