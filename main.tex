@@ -102,12 +102,12 @@ Individuals infected with {\it Plasmodium falciparum} malaria pathogens can carr
 \section{Introduction}
 
 
-Individuals infected with malaria-causing parasites of the genus {\it Plasmodium} can often be found to carry multiple, distinct strains (REFS).  Such mixed infections are likely indicative of intense local exposure rates, being found commonly in regions of Africa with high rates of prevalence \citep{Bhatt2015, Howes2016}, though are also documented for {\it P. vivax} and other malaria-causing parasites~\citep{Mueller2007, Collins2012}, even in regions of much lower prevalence~\citep{Howes2016, Steenkeste2010}.  For example, REF report GIVE EXAMPLES OF RATES OF MIXED INFECTION PREVIOUSLY REPORTED.  Mixed infections have been associated with increased disease severity (REFS) and also provide the fuel for generating genomic diversity within the parasite, enabling co-transmission to the mosquito vector where sexual recombination occurs (REFS).  Mixed infections are transient (IS ANYTHING REPORTED ON DURATION?), though whether this is driven entirely by the host immune response or whether it is influenced by interactions between the distinct strains is not known (CHECK!).
+Individuals infected with malaria-causing parasites of the genus {\it Plasmodium} can often be found to carry multiple, distinct strains \citep{Bell2006}  Such mixed infections are likely indicative of intense local exposure rates, being found commonly in regions of Africa with high rates of prevalence \citep{Bhatt2015, Howes2016}, though are also documented for {\it P. vivax} and other malaria-causing parasites~\citep{Mueller2007, Collins2012}, even in regions of much lower prevalence~\citep{Howes2016, Steenkeste2010}.  For example, REF report GIVE EXAMPLES OF RATES OF MIXED INFECTION PREVIOUSLY REPORTED.  Mixed infections have been associated with increased disease severity \citep{deRoode2005} and also provide the fuel for generating genomic diversity within the parasite, enabling co-transmission to the mosquito vector where sexual recombination occurs \citep{Mzilahowa2007}.  Mixed infections are transient (IS ANYTHING REPORTED ON DURATION?), though whether this is driven entirely by the host immune response or whether it is influenced by interactions between the distinct strains is not known (CHECK!).
 
 Although mixed infections can be studied from SNP barcodes~\citep{Galinsky2015} or single locus polymorphisms~\citep{Jack2016}, genome sequencing provides a powerful approach for detecting mixed infections~\citep{Chang2017}.  Genetic differences between strains within a host are manifest as polymorphic sites within the isolate, which motivates statistical approaches for estimating the number of distinct strains, their relative proportions and genome sequences~\citep{Zhu2017}.  Although genomic approaches cannot identify individuals infected multiple times by identical strains (and have to filter sequencing data heavily to eliminate false signs of polymorphism arising from sequencing error and problems of incomplete or erroneous reference assemblies), they provide a rich characterization of within host diversity~\citep{Manske2012}.
 
 An important observation made from sequencing data collected to date is that the different strains present can be highly related~\citep{Nair2014, Trevino2017}.  For example, in {\it P. vivax}, 58\% of mixed infections show long stretches of within host homozygosity have been observed~\citep{Pearson2016}; \citet{Nkhoma2012} reported an average of 78.7 per cent {\it P. falciparum} alleles sharing in Malawi and 87.6 per cent sharing in Thailand. This could result from co-infection by sibling strains, where a mosquito vector had acquired multiple strains from biting multiple infected hosts, hosts themselves multiply infected, or both.  Alternatively, relatedness can occur when population diversity is low, such as during the early stages of an outbreak or following severe population bottlenecks.  At the population level, extensive relatedness has also been observed.  For example, following the impact of control programmes within Senegal~\citep{Mouzin2010}, haplotype diversity within isolates dropped as a result of the population bottleneck~\citep{Wong2017}.
-The rate and relatedness structure of mixed infections (and how these relate to other infected individuals within a population) clearly relate to the local epidemiology.  However, progress towards utilising this source of information is limited by three problems.  The first is that, while strain deconvolution within mixed infections has received substantial attention~\citep{Galinsky2015, Jack2016, Chang2017}, joint deconvolution of strains and estimation of relatedness structures has not been attempted~\citep{Schaffner2017}.  Because existing deconvolution methods assume equal relatedness along the genome, differences in relatedness that occur, for example, through infection by sibling strains can lead to errors in the estimation of the number, proportions and sequences of individual strains (Figure \ref{fig:fig1}).  Recently, progress has been made in the case of dual-infections with balanced proportions~\citep{Henden2016}, but a general solution is lacking.  The second limitation is that little is known about how the rate and relatedness structure of mixed infections relates to underlying epidemiological parameters.  Informally, mixed infections will occur when prevalence is high; an observation exploited by Daniels et al. (2015) when estimating changes in prevalence over time.  However, the quantitative nature of this relationship, the key parameters that influence mixed infection rates and how patterns of relatedness relate to infection dynamics are largely unexplored.  Finally, an important, but often overlooked issue is the sampling design.  Malaria parasites may be taken from individuals presenting with disease or as part of a surveillance programme.  They are also often highly clustered in time and space.  What the impact of different approaches have on observed genomic variation is not clear.  Nevertheless, because mixed infection rates are likely to respond rapidly to changes in prevalence, exploring these issues is an important task.
+The rate and relatedness structure of mixed infections (and how these relate to other infected individuals within a population) clearly relate to the local epidemiology.  However, progress towards utilising this source of information is limited by three problems.  The first is that, while strain deconvolution within mixed infections has received substantial attention~\citep{Galinsky2015, Jack2016, Chang2017}, joint deconvolution of strains and estimation of relatedness structures has not been attempted.  Because existing deconvolution methods assume equal relatedness along the genome, differences in relatedness that occur, for example, through infection by sibling strains can lead to errors in the estimation of the number, proportions and sequences of individual strains (Figure \ref{fig:fig1}).  Recently, progress has been made in the case of dual-infections with balanced proportions~\citep{Henden2016}, but a general solution is lacking.  The second limitation is that little is known about how the rate and relatedness structure of mixed infections relates to underlying epidemiological parameters.  Informally, mixed infections will occur when prevalence is high; an observation exploited by \citet{Cerqueira2017} when estimating changes in transmission over time.  However, the quantitative nature of this relationship, the key parameters that influence mixed infection rates and how patterns of relatedness relate to infection dynamics are largely unexplored.  Finally, an important, but often overlooked issue is the sampling design.  Malaria parasites may be taken from individuals presenting with disease or as part of a surveillance programme.  They are also often highly clustered in time and space.  What the impact of different approaches have on observed genomic variation is not clear.  Nevertheless, because mixed infection rates are likely to respond rapidly to changes in prevalence, exploring these issues is an important task.
 
 Here, we develop, test and apply an enhanced method for strain deconvolution, which builds on the previously-published \texttt{DEploid} software.  The method works by separating the process of estimating strain number, proportions and relatedness structures from the problems of inferring genome sequences and provides substantial advances in accuracy in complex setting or lower coverage data.  We apply the approach to 2,512 isolates of {\it P. falciparum} drawn from 14 countries and a range of years, characterizing the rate and nature of mixed infections, including patterns of relatedness.  We show that rates of mixed infection are highly correlated with independent, non-genetic estimates of malaria infection prevalence, but the relatedness structure is much more variable and differs between Africa and Asian populations with comparable prevalence.  We introduce a simple deterministic mathematical model that identifies key epidemiological parameters in determining statistics of mixed infection and that recapitulates several empirical observations.  Finally, we discuss the likely impact of sampling strategies and the prospects for using pathogen genomic data to augment surveillance within control programmes.
 
@@ -321,6 +321,11 @@ None declared.
 
 \begin{thebibliography}{}
 
+\bibitem[\protect\citeauthoryear{Bell, de Roode, Sim Read, and Koella}{Bell et~al.}{2006}]{Bell2006}
+Bell A.~S. {\em et al.} (2006)
+\newblock Within-host competition in genetically diverse malaria infection: parasite virulence and competitive success.
+\newblock {\em Evolution\/}~{\em 60}(7), 1358--1371.
+
 \bibitem[\protect\citeauthoryear{Bhatt}{Bhatt et~al.}{2015}]{Bhatt2015}
 Bhatt, S. {\em et al}.
 \newblock The effect of malaria control on Plasmodium falciparum in Africa between 2000 and 2015.
@@ -333,13 +338,19 @@ Browning, S. R. and B.~L. Browning (2007)
   whole-genome association studies by use of localised haplotype clustering.
 \newblock {\em Am. J. Hum. Genet.\/}~{\em 81\/}(5), 1084--1097.
 
+\bibitem[\protect\citeauthoryear{Cerqueira}{Cerqueira et~al.}{2017}]{Cerqueira2017}
+Cerqueira, G.C. {\em et al}. (2017)
+\newblock Longitudinal genomic surveillance of {\em Plasmodium falciparum} malaria parasites reveals complex genomic architecture of emerging artemisinin resistance.
+\newblock {\em Genome Biology}~{\em 18}:78.
+
+
 \bibitem[\protect\citeauthoryear{Chang}{Chang et~al.}{2017}]{Chang2015}
-Chang, C.C. et al. (2015)
+Chang, C.C. {\em et al}. (2015)
 \newblock Second-generation PLINK: rising to the challenge of larger and richer datasets.
 \newblock {\em GigaScience}~{\em 4}.
 
 \bibitem[\protect\citeauthoryear{Chang}{Chang et~al.}{2017}]{Chang2017}
-Change, H.~H. et al. (2017)
+Change, H.~H. {\em et al}. (2017)
 \newblock THE REAL McCOIL: A method for the concurrent estimation of the complexity of infection and SNP allele frequency for malaria parasites.
 \newblock {\em PLoS Comput. Biol.\/}~{\em 13\/}(1), e1005348.
 
@@ -347,6 +358,15 @@ Change, H.~H. et al. (2017)
 Collins, W. E. (2012).
 \newblock {\it Plasmodium knowlesi}: A malaria parasite of monkeys and humans.
 \newblock {\em Annual Review of Entomology}~{\em 57\/}, 107--21.
+
+
+\bibitem[\protect\citeauthoryear{de~Roode, Pansini, Cheesman, Helinski,
+  Huijben, Wargo, Bell, Chan, Walliker, and Read}{de~Roode
+  et~al.}{2005}]{deRoode2005}
+de~Roode, J. {\em et al}. (2005)
+\newblock Virulence and competitive ability in genetically diverse malaria infections.
+\newblock {\em Proc. Natl. Acad. Sci. USA\/}~{\em 102\/}(21), 7624--7628.
+
 
 \bibitem[\protect\citeauthoryear{Galinsky et~al.}{Galinsky et~al.}{2015}]{Galinsky2015}
 Galinsky, K. {\em et al}. (2015)
@@ -413,6 +433,13 @@ Mueller, I. {\em et al}. (2007)
 \newblock {\it Plasmodium malariae} and {\it Plasmodium ovale} -- the ``bashful'' malaria parasites.
 \newblock {\em Trends in Parasitology}~{\em 23\/} (6), 278--283.
 
+
+
+\bibitem[\protect\citeauthoryear{Mzilahowa et~al.}{Mzilahowa et~al.}{2007}]{Mzilahowa2007}
+Mzilahowa, T. {\em et al}. (2007)
+\newblock “Sexual” Population Structure and Genetics of the Malaria Agent {\em P. falciparum}.
+\newblock {\em PLOS ONE}~{\em 2}(7): e613.
+
 \bibitem[\protect\citeauthoryear{Nair et~al.}{Nair et~al.}{2014}]{Nair2014}
 Nair, S. {\em et al}. (2014)
 \newblock Single-cell genomics for dissection of complex malaria infections.
@@ -457,10 +484,10 @@ Trevino, S. {\em et al}. (2017)
 \newblock High-Resolution Single-Cell Sequencing of Malaria Parasites.
 \newblock {\em Genome Biol. Evol.\/}~{\em 9}(12):3373--3383.
 
-\bibitem[\protect\citeauthoryear{Schaffner}{Schaffner}{2017}]{Schaffner2017}
-Schaffner, S. F. {\em et al.} (2017)
-\newblock {hmmIBD: software to infer pairwise identity by descent between haploid genotypes},
-\newblock {\em bioRxiv}, doi:10.1101/188078.
+%\bibitem[\protect\citeauthoryear{Schaffner}{Schaffner}{2017}]{Schaffner2017}
+%Schaffner, S. F. {\em et al.} (2017)
+%\newblock {hmmIBD: software to infer pairwise identity by descent between haploid genotypes},
+%\newblock {\em bioRxiv}, doi:10.1101/188078.
 
 \bibitem[\protect\citeauthoryear{Steenkeste}{Steenkeste}{2010}]{Steenkeste2010}
 Steenkeste N. {\em et al.} 2010.
