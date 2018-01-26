@@ -102,7 +102,7 @@ Individuals infected with {\it Plasmodium falciparum} malaria pathogens can carr
 \section{Introduction}
 
 
-Individuals infected with malaria-causing parasites of the genus {\it Plasmodium} can often be found to carry multiple, distinct strains \citep{Bell2006}  Such mixed infections are likely indicative of intense local exposure rates, being found commonly in regions of Africa with high rates of prevalence \citep{Bhatt2015, Howes2016}, though are also documented for {\it P. vivax} and other malaria-causing parasites~\citep{Mueller2007, Collins2012}, even in regions of much lower prevalence~\citep{Howes2016, Steenkeste2010}.  For example, REF report GIVE EXAMPLES OF RATES OF MIXED INFECTION PREVIOUSLY REPORTED.  Mixed infections have been associated with increased disease severity \citep{deRoode2005} and also provide the fuel for generating genomic diversity within the parasite, enabling co-transmission to the mosquito vector where sexual recombination occurs \citep{Mzilahowa2007}.  Mixed infections are transient (IS ANYTHING REPORTED ON DURATION?), though whether this is driven entirely by the host immune response or whether it is influenced by interactions between the distinct strains is not known (CHECK!).
+Individuals infected with malaria-causing parasites of the genus {\it Plasmodium} can often be found to carry multiple, distinct strains~\citep{Bell2006}  Such mixed infections are likely indicative of intense local exposure rates, being found commonly in regions of Africa with high rates of prevalence~\citep{Bhatt2015, Howes2016}, though are also documented for {\it P.~vivax} and other malaria-causing parasites~\citep{Mueller2007, Collins2012}, even in regions of much lower prevalence~\citep{Howes2016, Steenkeste2010}.  For example, \citet{Pearson2016} reports 45\% of {\it P.~vivax} infections are mixed.  Mixed infections have been associated with increased disease severity \citep{deRoode2005} and also provide the fuel for generating genomic diversity within the parasite, enabling co-transmission to the mosquito vector where sexual recombination occurs \citep{Mzilahowa2007}.  Mixed infections are transient \citep{Bruce2002, Zimmerman2004}, though whether this is driven entirely by the host immune response~\citep{Bormann2011} or whether it is influenced by interactions between the distinct strains is not known~\citep{Enosse2006, Bushman2016}.
 
 Although mixed infections can be studied from SNP barcodes~\citep{Galinsky2015} or single locus polymorphisms~\citep{Jack2016}, genome sequencing provides a powerful approach for detecting mixed infections~\citep{Chang2017}.  Genetic differences between strains within a host are manifest as polymorphic sites within the isolate, which motivates statistical approaches for estimating the number of distinct strains, their relative proportions and genome sequences~\citep{Zhu2017}.  Although genomic approaches cannot identify individuals infected multiple times by identical strains (and have to filter sequencing data heavily to eliminate false signs of polymorphism arising from sequencing error and problems of incomplete or erroneous reference assemblies), they provide a rich characterization of within host diversity~\citep{Manske2012}.
 
@@ -134,7 +134,7 @@ Unlike our previous work, \texttt{DEploidIBD} infers strain structure in two ste
 
 \subsection{Validation}
 
-We validated \texttt{DEploidIBD} through two experiments.  First, to test consistency with \texttt{DEploid} \citet{Zhu2017}, we re-analysed the 27 experimental mixtures from \citep{Wendler2015}.  This dataset includes 27 samples of various mixtures of four laboratory parasite lines (3D7, Dd2, HB3 and 7G8; Figure \ref{fig:benchmark} – figure supplement 1).  Allowing for mixtures of up to four strains and using optimal reference panels, we found essentially identical performance with the single-step \texttt{DEploid} method, with the exception of three strains of equal proportions where LD info is necessary to achieve accurate deconvolution (Figure \ref{fig:benchmark}).  
+We validated \texttt{DEploidIBD} through two experiments.  First, to test consistency with \texttt{DEploid} \citet{Zhu2017}, we re-analysed the 27 experimental mixtures from \citep{Wendler2015}.  This dataset includes 27 samples of various mixtures of four laboratory parasite lines (3D7, Dd2, HB3 and 7G8; Figure \ref{fig:benchmark} – figure supplement 1).  Allowing for mixtures of up to four strains and using optimal reference panels, we found essentially identical performance with the single-step \texttt{DEploid} method, with the exception of three strains of equal proportions where LD info is necessary to achieve accurate deconvolution (Figure \ref{fig:benchmark}).
 
 To test the performance of \texttt{DEploidIBD} in a more realistic setting, we created {\it in silico} mixtures from 212 clonal samples of Asian origin with two proportions (25/75\% and 45/55\%) for 8071 sites from Chromosome 14.  A further 20 randomly chosen samples were used as the reference panel. In order to compare the performance of the two methods at different levels of relatedness, we set 25\%, 50\% and 75\% of the second haplotype to be the same as the first haplotype to mimic scenarios of low, medium and high relatedness. To simulate data, we used empirical read depths and drew read counts for the two alleles from binomial proportions.  We inferred strain proportions (summarised by the effective number of strains: $1/\sum w_{i}^{2}$), and haplotypes.  Both \texttt{DEploid} and \texttt{DEploidIBD} correctly estimate strain proportions with low to moderate relatedness and high coverage.  However, for samples with closely related strains, particularly at low coverage, only \texttt{DEploidIBD} can identify the correct number of strains and IBD fractions.  Genotype and phase errors are comparable between methods, though decrease with increasing relatedness due to the increased homozygosity.  In summary, joint inference of IBD profiles and strain haplotypes is expected to improve estimates of strain proportions (and hence haplotypes), particularly in regions with high rates of IBD and with low sequencing coverage.
 
@@ -337,6 +337,21 @@ Browning, S. R. and B.~L. Browning (2007)
   whole-genome association studies by use of localised haplotype clustering.
 \newblock {\em Am. J. Hum. Genet.\/}~{\em 81\/}(5), 1084--1097.
 
+\bibitem[\protect\citeauthoryear{Bormann and Matuschewski}{Bormann and Matuschewski}{2011}]{Bormann2011}
+Bormann, S. and Matuschewski, K. (2011)
+\newblock Protective immunity against malaria by ‘natural immunization’: a question of dose, parasite diversity, or both?
+\newblock {\em Current Opinion in Immunology}~{\em 23}(4):500--508.
+
+\bibitem[\protect\citeauthoryear{Bruce and Day}{Bruce and Day}{2002}]{Bruce2002}
+Bruce, M. and Day, K. (2002)
+\newblock Cross-species regulation of malaria parasitaemia in the human host.
+\newblock {\em Current Opinion in Microbiology}~{\em 5}(4):431--437.
+
+\bibitem[\protect\citeauthoryear{Bushman}{Bushman et~al.}{2016}]{Bushman2016}
+Bushman, M. {\em et al}. 2016
+\newblock Within-host competition and drug resistance in the human malaria parasite {\it Plasmodium falciparum}.
+\newblock {\em Proc Biol Sci.}~{\em 283}(1826): 20153038.
+
 \bibitem[\protect\citeauthoryear{Cerqueira}{Cerqueira et~al.}{2017}]{Cerqueira2017}
 Cerqueira, G.C. {\em et al}. (2017)
 \newblock Longitudinal genomic surveillance of {\em Plasmodium falciparum} malaria parasites reveals complex genomic architecture of emerging artemisinin resistance.
@@ -366,6 +381,10 @@ de~Roode, J. {\em et al}. (2005)
 \newblock Virulence and competitive ability in genetically diverse malaria infections.
 \newblock {\em Proc. Natl. Acad. Sci. USA\/}~{\em 102\/}(21), 7624--7628.
 
+\bibitem[\protect\citeauthoryear{Enosse et~al.}{Enosse et~al.}{2006}]{Enosse2006}
+Enosse, S. {\em et al}. (2006)
+\newblock RTS,S/AS02A Malaria Vaccine Does Not Induce Parasite CSP T Cell Epitope Selection and Reduces Multiplicity of Infection
+\newblock {\em PLOS Clinical Trials}~{\em 1}(1): e5.
 
 \bibitem[\protect\citeauthoryear{Galinsky et~al.}{Galinsky et~al.}{2015}]{Galinsky2015}
 Galinsky, K. {\em et al}. (2015)
@@ -382,27 +401,27 @@ Gusev, A. (2011)
 \newblock DASH: a method for identical-by-descent haplotype mapping uncovers association with recent variation.
 \newblock {\em Am J Hum Genet.}~{\em 88}(6):706--717.
 
-\bibitem[\protect\citeauthoryear{Hinch}{Hinch}{2011}]{Hinch2011}
+\bibitem[\protect\citeauthoryear{Hinch}{Hinch et~al.}{2011}]{Hinch2011}
 Hinch, A. G. {\em et al}. (2011)
 \newblock The landscape of recombination in African Americans.
 \newblock {\em Nature\/}~{\em 476}, 170--175.
 
-\bibitem[\protect\citeauthoryear{Henden}{Henden}{2016}]{Henden2016}
+\bibitem[\protect\citeauthoryear{Henden}{Henden et~al.}{2016}]{Henden2016}
 Henden, L. {\em et al}. (2016)
 \newblock Detecting selection signals in {\it Plasmodium falciparum} using identity-by-descent analysis,
 \newblock {\em bioRxiv.\/}, 088039.
 
-\bibitem[\protect\citeauthoryear{Howes}{Howes}{2016}]{Howes2016}
+\bibitem[\protect\citeauthoryear{Howes}{Howes et~al.}{2016}]{Howes2016}
 Howes, R.E. {\em et al}. (2016)
 \newblock Global Epidemiology of Plasmodium vivax
 \newblock {\em Am. J. Trop. Med. Hyg\/}~{\em 95}, 15--34.
 
-\bibitem[\protect\citeauthoryear{Jiang}{Jiang}{2011}]{Jiang2011}
+\bibitem[\protect\citeauthoryear{Jiang}{Jiang et~al.}{2011}]{Jiang2011}
 Jiang, H. {\em et al}. (2011)
 \newblock High recombination rates and hotspots in a {\it Plasmodium falciparum} genetic cross.
 \newblock {\em Genome Biology.\/}~{\em 12}, R33.
 
-\bibitem[\protect\citeauthoryear{Lopez}{Lopez}{2012}]{Lopez2012}
+\bibitem[\protect\citeauthoryear{Lopez}{Lopez et~al.}{2012}]{Lopez2012}
 Lopez A. {\em et al}. (2012)
 \newblock Genetic diversity of {\it Plasmodium vivax} and {\it Plasmodium falciparum} in Honduras.
 \newblock {\em Malaria Journal.\/}~{\em 11}, 391.
@@ -417,12 +436,12 @@ Miles, A. {\em et al}. (2015)
 \newblock Indels, structural variation, and recombination drive genomic diversity in {\it Plasmodium falciparum}.
 \newblock {\em Genome Res.\/}~{\em26\/}, 1288--1299.
 
-\bibitem[\protect\citeauthoryear{Mouzin}{Mouzin}{2010}]{Mouzin2010}
+\bibitem[\protect\citeauthoryear{Mouzin}{Mouzin et~al.}{2010}]{Mouzin2010}
 Mouzin, E. {\em et al}. (2010)
 \newblock Focus on Senegal roll back malaria: Progress and Impact Series.
 \newblock Geneva: World Health Organization; 2010.
 
-\bibitem[\protect\citeauthoryear{Mu}{Mu}{2005}]{Mu2005}
+\bibitem[\protect\citeauthoryear{Mu}{Mu et~al.}{2005}]{Mu2005}
 Mu, J. {\em et al}. (2005)
 \newblock Recombination Hotspots and Population Structure in {\it Plasmodium falciparum}.
 \newblock {\em PLOS Biology.\/}~{\em 3}, e335.
@@ -444,12 +463,12 @@ Nair, S. {\em et al}. (2014)
 \newblock Single-cell genomics for dissection of complex malaria infections.
 \newblock {\em Genome research.\/}~{\em 24}, 1028--1038.
 
-\bibitem[\protect\citeauthoryear{Neafsey}{Neafsey}{2012}]{Neafsey2012}
+\bibitem[\protect\citeauthoryear{Neafsey}{Neafsey et~al.}{2012}]{Neafsey2012}
 Neafsey, D. {\em et al}.(2012)
 \newblock The malaria parasite {\it Plasmodium vivax} exhibits greater genetic diversity than {\it Plasmodium falciparum}.
 \newblock {\em Nature Genetics\/}~{\em 44\/}(9), 1046--1052.
 
-\bibitem[\protect\citeauthoryear{Nkhoma}{Nkhoma}{2012}]{Nkhoma2012}
+\bibitem[\protect\citeauthoryear{Nkhoma}{Nkhoma et~al.}{2012}]{Nkhoma2012}
 Nkhoma, SC. {\em et al}.(2012)
 \newblock Close kinship within multiple-genotype malaria parasite infections.
 \newblock {\em Proc Biol Sci}~{\em 279}(1738):2589--2598.
@@ -478,7 +497,7 @@ Rutledge. G. G., {\em et al}. (2017)
 The Pf3k Project: pilot data release 5 (2016)
 \newblock {www.malariagen.net/data/pf3k-5} [accessed 1 June 2016]
 
-\bibitem[\protect\citeauthoryear{Trevino}{Trevino}{2017}]{Trevino2017}
+\bibitem[\protect\citeauthoryear{Trevino}{Trevino et~al.}{2017}]{Trevino2017}
 Trevino, S. {\em et al}. (2017)
 \newblock High-Resolution Single-Cell Sequencing of Malaria Parasites.
 \newblock {\em Genome Biol. Evol.\/}~{\em 9}(12):3373--3383.
@@ -488,14 +507,14 @@ Trevino, S. {\em et al}. (2017)
 %\newblock {hmmIBD: software to infer pairwise identity by descent between haploid genotypes},
 %\newblock {\em bioRxiv}, doi:10.1101/188078.
 
-\bibitem[\protect\citeauthoryear{Steenkeste}{Steenkeste}{2010}]{Steenkeste2010}
+\bibitem[\protect\citeauthoryear{Steenkeste}{Steenkeste et~al.}{2010}]{Steenkeste2010}
 Steenkeste N. {\em et al.} 2010.
 \newblock Sub-microscopic malaria cases and
 mixed malaria infection in a remote area of high malaria endemicity in Rattanakiri Province, Cambodia: implication for
 malaria elimination.
 \newblock {\em Malar J}~{\em 9}: 108.
 
-\bibitem[\protect\citeauthoryear{Wegmann}{Wegmann}{2011}]{Wegmann2011}
+\bibitem[\protect\citeauthoryear{Wegmann}{Wegmann et~al.}{2011}]{Wegmann2011}
 Wegmann, D. {\em et al}.(2011)
 \newblock Recombination rates in admixed individuals identified by ancestry-based inference.
 \newblock {\em Nature Genetics\/}~{\em 43\/}, 847--894.
@@ -510,7 +529,7 @@ WHO. (2016)
 \newblock {World Malaria Report 2015}.
 \newblock {\em World Health Organization\/}.
 
-\bibitem[\protect\citeauthoryear{Wong}{Wong}{2017}]{Wong2017}
+\bibitem[\protect\citeauthoryear{Wong}{Wong et~al.}{2017}]{Wong2017}
 Wong W., {\em et al}. (2017)
 \newblock Genetic relatedness analysis reveals the cotransmission of genetically related {\it Plasmodium falciparum} parasites in Thiès, Senegal.
 \newblock {\em Genome Medicine.\/}~{\em 9}:5. doi:10.1186/s13073-017-0398-0.
@@ -520,6 +539,10 @@ Zhu, J. S., {\em et al} (2017)
 \newblock {Deconvoluting multiple infections in {\it Plasmodium falciparum} from high throughput sequencing data}.
 \newblock {\em Bioinformatics\/}~{\em \/}btx530. doi: https://doi.org/10.1093/bioinformatics/btx530
 
+\bibitem[\protect\citeauthoryear{Zimmerman}{Zimmerman et~al.}{2004}]{Zimmerman2004}
+Zimmerman, P., {\em et al} (2004)
+\newblock Why do we need to know more about mixed Plasmodium species infections in humans?
+\newblock {\em Trends Parasitol.}~{\em 20}(9):440--447.
 \end{thebibliography}
 
 
