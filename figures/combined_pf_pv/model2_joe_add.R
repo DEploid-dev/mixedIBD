@@ -89,7 +89,7 @@ par(mfrow=c(1,1));
 
 plot((ss[,2]+ss[,3])/(ss[,1]+ss[,2]+ss[,3]), ss[,3]/(ss[,2]+ss[,3]), xlab="Prevalence", ylim=c(0,0.3), xlim=c(0,.5), ylab="Fraction", type="l", col="blue", cex.lab = 1.5);
 lines((ss[,2]+ss[,3])/(ss[,1]+ss[,2]+ss[,3]),(ss[,6]*phi.sim*ss[,1])/(ss[,6]*phi.sim*ss[,1]+(ss[,5]+ss[,6])*ss[,2]), col="orange", type="l");
-legend("top",legend=c("Multiple infection", "Sib-infection"), bty="n", border=NA, fill=c("blue", "orange"));
+legend("top",legend=c("Mixed infection", "Sib-infection"), bty="n", border=NA, fill=c("blue", "orange"));
 
 
 load("snap.Rdata")
@@ -143,11 +143,62 @@ write.table(pfpr, "pfpr_with_sib_unrelated_frac.txt", row.names=F, quote=F, sep=
 
 pdf("prev_vs_fractions_blowup.pdf")
 par(mfrow=c(1,1));
+#par(mar = c(5,5,2,2))
+
+plot((ss[,2]+ss[,3])/(ss[,1]+ss[,2]+ss[,3]), ss[,3]/(ss[,2]+ss[,3]), xlab="", ylim=c(0,0.3), xlim=c(0,.005), ylab="", type="l", col="blue", cex.axis = 2);
+lines((ss[,2]+ss[,3])/(ss[,1]+ss[,2]+ss[,3]),(ss[,6]*phi.sim*ss[,1])/(ss[,6]*phi.sim*ss[,1]+(ss[,5]+ss[,6])*ss[,2]), col="orange", type="l");
+#legend("top",legend=c("Mixed infection", "Sib-infection"), bty="n", border=NA, fill=c("blue", "orange"));
+
+
+load("snap.Rdata")
+library(dplyr)
+
+inferred.k.all.ibd_ld[adjusted.k.all.ibd_ld == 1] = 1
+
+
+pfpr = read.csv("latest_pfpr_summary.txt", header=F, stringsAsFactors=F)
+meta_with_yr = read.csv("pf3k_release_5_metadata_20170728_cleaned.csv", header=T, stringsAsFactors=F)
+unrelated_frac = c()
+sib_frac = c()
+n.sample = c()
+country.list = c()
+for ( i in 1:dim(pfpr)[1] ){
+    country = pfpr$V1[i] %>% gsub(".2.*$","",.)
+    country.list = c(country.list, country)
+#    print(country)
+    year = pfpr$V2[i]
+    a = which(meta_with_yr$country == country & meta_with_yr$year == year)
+    tmpSamples = meta_with_yr$sample_name[a]
+    sampleIdx = which(samples %in% tmpSamples)
+    num_unrelated = sum(ibd.prob.2strain.allIBD[sampleIdx] < .1, na.rm=T) +
+                    sum(ibd.prob.3strain.nonIBD[sampleIdx] > 0.9, na.rm=T)
+    unrelated_frac = c(unrelated_frac, num_unrelated/length(sampleIdx))
+
+    num_sib = sum(ibd.prob.2strain.allIBD[sampleIdx] < .7 & ibd.prob.2strain.allIBD[sampleIdx] > .3, na.rm=T) +
+          sum((ibd.prob.3strain.someIBD[sampleIdx] + ibd.prob.3strain.allIBD[sampleIdx])> 0.9, na.rm=T)
+    sib_frac = c(sib_frac, num_sib/length(sampleIdx))
+    n.sample = c(n.sample, length(sampleIdx))
+}
+
+
+idx = which(n.sample > 15)
+p.pch = rep("x", length(pfpr$V4))
+p.pch[country.list %in% c("Thailand", "Cambodia", "Bangladesh", "Vietnam", "Myanmar", "Laos")] = "o"
+points( pfpr$V4[idx], unrelated_frac[idx], col="blue", pch = p.pch[idx], cex = 2)
+#legend( "topright", legend = c("Asia countries", "Africa countries"), pch = c("o", "x"),bty="n", border=NA,)
+
+points( pfpr$V4[idx], sib_frac[idx], col="orange", pch = p.pch[idx], cex = 2)
+dev.off()
+
+
+
+pdf("prev_vs_fractions.pdf")
+par(mfrow=c(1,1));
 par(mar = c(5,5,2,2))
 
-plot((ss[,2]+ss[,3])/(ss[,1]+ss[,2]+ss[,3]), ss[,3]/(ss[,2]+ss[,3]), xlab="Prevalence", ylim=c(0,0.3), xlim=c(0,.005), ylab="Fraction", type="l", col="blue", cex.lab = 1.5);
+plot((ss[,2]+ss[,3])/(ss[,1]+ss[,2]+ss[,3]), ss[,3]/(ss[,2]+ss[,3]), xlab="Prevalence", ylim=c(0,0.5), xlim=c(0,.5), ylab="Fraction", type="l", col="blue", cex.lab = 1.5);
 lines((ss[,2]+ss[,3])/(ss[,1]+ss[,2]+ss[,3]),(ss[,6]*phi.sim*ss[,1])/(ss[,6]*phi.sim*ss[,1]+(ss[,5]+ss[,6])*ss[,2]), col="orange", type="l");
-legend("top",legend=c("Multiple infection", "Sib-infection"), bty="n", border=NA, fill=c("blue", "orange"));
+legend("top",legend=c("Mixed infection", "Sib-infection"), bty="n", border=NA, fill=c("blue", "orange"));
 
 
 load("snap.Rdata")
@@ -192,14 +243,13 @@ points( pfpr$V4[idx], sib_frac[idx], col="orange", pch = p.pch[idx])
 dev.off()
 
 
+#nn<-seq(1, 500, length.out = 100)
+#phi.sim<-0.3;
+#ss<-array(0,c(length(nn), 6));
+#for (i in 1:length(nn)) ss[i,]<-simulate.epi(I=c(100,0,0), V=c(0.9*nn[i], 0.1*nn[i], 0), phi=phi.sim, alpha = .8);
 
-nn<-seq(1, 500, length.out = 100)
-phi.sim<-0.3;
-ss<-array(0,c(length(nn), 6));
-for (i in 1:length(nn)) ss[i,]<-simulate.epi(I=c(100,0,0), V=c(0.9*nn[i], 0.1*nn[i], 0), phi=phi.sim, alpha = .8);
+#plot((ss[,2]+ss[,3])/(ss[,1]+ss[,2]+ss[,3]), ss[,3]/(ss[,2]+ss[,3]), xlab="Prevalence", ylim=c(0,0.3), xlim=c(0,.005), ylab="Fraction", type="l", col="blue", cex.lab = 1.5);
+#lines((ss[,2]+ss[,3])/(ss[,1]+ss[,2]+ss[,3]),(ss[,6]*phi.sim*ss[,1])/(ss[,6]*phi.sim*ss[,1]+(ss[,5]+ss[,6])*ss[,2]), col="orange", type="l");
+#legend("top",legend=c("Mixed infection", "Sib-infection"), bty="n", border=NA, fill=c("blue", "orange"));
 
-plot((ss[,2]+ss[,3])/(ss[,1]+ss[,2]+ss[,3]), ss[,3]/(ss[,2]+ss[,3]), xlab="Prevalence", ylim=c(0,0.3), xlim=c(0,.005), ylab="Fraction", type="l", col="blue", cex.lab = 1.5);
-lines((ss[,2]+ss[,3])/(ss[,1]+ss[,2]+ss[,3]),(ss[,6]*phi.sim*ss[,1])/(ss[,6]*phi.sim*ss[,1]+(ss[,5]+ss[,6])*ss[,2]), col="orange", type="l");
-legend("top",legend=c("Multiple infection", "Sib-infection"), bty="n", border=NA, fill=c("blue", "orange"));
-
-points( pfpr$V4[idx], sib_frac[idx], col="orange", pch = p.pch[idx])
+#points( pfpr$V4[idx], sib_frac[idx], col="orange", pch = p.pch[idx])

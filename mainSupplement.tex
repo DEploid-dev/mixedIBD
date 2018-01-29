@@ -414,6 +414,32 @@ $\{\frac{1}{5},\frac{1}{5}, \frac{1}{5}, \frac{2}{5}\}$.
 %\caption{}
 %\end{figure}
 
+\section{Data preparation}
+To estimate relative proportions and strain haplotypes we use IBD-LD-DEploid on high quality biallelic SNP data (both coding and non-coding variants tagged with PASS at the QUAL column in the VCF file) of the Pf3k~\citep{Pf3k2016} and {\it P. vivax} Genome Variation dataset~\citep{Pearson2016}, with 1,057,830 and 303,616 SNPs for {\it P. falciparum} and {\it P.vivax} respectively. We observe a small number of heterozygous sites with high coverage in the Pf3k data, which can potentially mislead our model to over-fit the data with additional strains. These poorly-genotyped variants are likely to be artefacts of mapping and genotype calling. We therefore identify potential outliers in all samples, and filter out common outliers in at least 50 samples -- 48,443 in total.
+
+In order to improve the accuracy of the deconvolution process and improve efficiency, we first split the  data into groups, based on genetic similarity. We compute genetic distances between two samples following:
+\begin{equation}
+\end{equation}
+where $l$ represents an arbitrary locus, $L$ denotes the total number of loci, and $\textrm{WSAF}_{s,l}$ indicates the non-reference within-sample allele frequency for sample $s$ at locus $l$. $\textrm{WSAF}_{s,l}$ is then given by $\textrm{WSAF}_{s,l} = \frac{a_{s,l}}{r_{s,l}+a_{s,l}}$ where $a_{s,l}$ is the number of read counts supporting the alternative allele in sample $s$ at locus $l$, and $r_{s,l}$ is the number of read counts supporting the reference allele in sample $s$ at locus $l$.
+
+We find that samples from the same geographical region differentiate into clear clusters. We use this initial grouping as the base for defining the reference panels that assist the deconvolution procedure. Our definition of geographical groups is
+\begin{enumerate}
+  \item Malawi, Congo.
+  \item Ghana (Kassena).
+  \item Nigeria, Senegal, Mali.
+  \item The Gambia, Guinea, Ghana (Kintampo).
+  \item Cambodia (Pursat), Cambodia (Pailin), Thailand (Sisakhet).
+  \item Vietnam, Laos, Cambodia (Ratanakiri), Cambodia (Preah Vihear).
+  \item Bangladesh, Myanmar, Thailand (Mae Sot), Thailand (Ranong).
+\end{enumerate}
+
+For the {\it P. vivax} data, we have the geographical groups as
+\begin{enumerate}
+  \item{} Thailand
+  \item{} Indonesia, Malaysia, Papua New Guinea
+  \item{} Cambodia, Vietnam, Laos
+  \item the rest samples: Myanmar, China, Madagascar, Sri Lanka, Brazil and %India.
+\end{enumerate}
 
 
 \begin{figure}[htp]
