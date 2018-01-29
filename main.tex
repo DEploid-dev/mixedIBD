@@ -93,7 +93,7 @@
 
 
 \begin{abstract}
-Individuals infected with {\it Plasmodium falciparum} malaria pathogens can carry multiple distinct, though sometimes related, strains.  However, how the rate and relatedness of such mixed infections relates to local epidemiological parameters remains unclear.  Here, we develop an enhanced method for strain deconvolution from genome sequencing data, which estimates the number of strains, their proportions, relatedness profiles and individual haplotypes.  We validate the method through simulation and controlled experiments and apply it to 2,512 isolates from 14 countries.  Rates of mixed infection vary from 18-63\% across countries and correlate with independent estimates of prevalence (Pearson $r = 0.76,~p = 7.528e-06$).  54\% of mixed infections involve more than two strains and 71\% include sibling strains likely to have to be have been co-transmitted from a single mosquito.  Relatedness among strains decreases with prevalence ($r = -0.75,~p = 1.412e-05$) and differs between continents, with Asian isolates typically showing elevated relatedness compared to African isolates.  These results are consistent with a mathematical model of mixed infection.  We propose that spatial and temporal patterns of mixed infection can be used to estimate parameters of local parasite epidemiology.
+Individuals infected with {\it Plasmodium falciparum} malaria pathogens can carry multiple distinct, though sometimes related, strains.  However, how the rate and relatedness of such mixed infections relates to local epidemiological parameters remains unclear.  Here, we develop an enhanced method for strain deconvolution from genome sequencing data, which estimates the number of strains, their proportions, relatedness profiles and individual haplotypes.  We validate the method through simulation and controlled experiments and apply it to 2,512 isolates from 14 countries.  Rates of mixed infection vary from 18\%-63\% across countries and correlate with independent estimates of prevalence (Pearson $r = 0.76,~p = 7.5e-06$).  54\% of mixed infections involve more than two strains and 71\% include sibling strains likely to have to be have been co-transmitted from a single mosquito.  Relatedness among strains decreases with prevalence ($r = -0.75,~p = 1.4e-05$) and differs between continents, with Asian isolates typically showing elevated relatedness compared to African isolates.  These results are consistent with a mathematical model of mixed infection.  We propose that spatial and temporal patterns of mixed infection can be used to estimate parameters of local parasite epidemiology.
 \end{abstract}
 
 \keywords{Malaria, genome, epidemiology, relatedness}
@@ -153,7 +153,7 @@ To test the performance of \texttt{DEploidIBD} in a more realistic setting, we c
   \subfloat[][]{
   \includegraphics[width = 0.8\textwidth]{IBDHapError.pdf}
   }
-  \caption{Simulation results. (a)Comparison of effective number of strains between \texttt{DEploid} and \texttt{DEploidIBD}. (b)Expected and inferred percentage of IBD regions for IBD-LD-DEploid. (c) Histograms of switch error and genotype error across 76 simulated Pf3k samples for IBD-LD-DEploid. In all figures, we excluded eight cases out of the 100 experiments where simulated haplotypes were over 99\% identical and 16 cases where average coverage was below 20.
+  \caption{Simulation results. (a)Comparison of effective number of strains between \texttt{DEploid} and \texttt{DEploidIBD}. (b)Expected and inferred percentage of IBD regions for \texttt{DEploid}. (c) Histograms of switch error and genotype error across 76 simulated Pf3k samples for \texttt{DEploid}. In all figures, we excluded eight cases out of the 100 experiments where simulated haplotypes were over 99\% identical, and 16 cases where average coverage was below 20.
 }\label{fig:benchmark}
 \end{figure}
 
@@ -161,41 +161,40 @@ To test the performance of \texttt{DEploidIBD} in a more realistic setting, we c
 
 
 \section{Results}
-\subsection{Application to {\it P. falciprium} data}
 
-\donenarrative{1. Data source and preparation (i.e. cleaning).  Supplementary Figure 2 on importance of strong variant filtering.}
+\subsection{Application to 2,512 {\it P. falciprium} field samples from 14 countries}
 
-To estimate relative proportions and strain haplotypes we use IBD-LD-DEploid on high quality biallelic SNP data (both coding and non-coding variants tagged with PASS at the QUAL column in the VCF file) of the Pf3k~\citep{Pf3k2016} and {\it P. vivax} Genome Variation dataset~\citep{Pearson2016}, with 1,057,830 and 303,616 SNPs for {\it P. falciparum} and {\it P.vivax} respectively. We observe a small number of heterozygous sites with high coverage in the Pf3k data, which can potentially mislead our model to over-fit the data with additional strains. These poorly-genotyped variants are likely to be artefacts of mapping and genotype calling. We therefore identify potential outliers in all samples, and filter out common outliers in at least 50 samples -- 48,443 in total.
+To investigate how the rate and relatedness structure of mixed infections varies among geographical regions with different epidemiological characteristics, we applied \texttt{DEploidIBD} to 2,512 field samples released by the Pf3k Consortium (REF).  A summary of the samples is presented in Table \ref{tab:Pf3ksamples}.  After filtering, we typed approximately 1M variable SNP positions across all samples, sequenced to an average depth of XXX (range XXX – XXX).  See Supplementary Material for details of filters and data availability.  Samples were grouped into four geographical regions within Africa and three within Asia based on genetic similarity (Table \ref{tab:Pf3ksamples}).  
 
-In order to improve the accuracy of the deconvolution process and improve efficiency, we first split the  data into groups, based on genetic similarity. We compute genetic distances between two samples following:
-\begin{equation}
-d(x, y) = \sum_{l}^{L}\textrm{WSAF}_{x,l} * (1-\textrm{WSAF}_{y,l}) + \textrm{WSAF}_{x,l} * (1-\textrm{WSAF}_{y,l})
-\end{equation}
-where $l$ represents an arbitrary locus, $L$ denotes the total number of loci, and $\textrm{WSAF}_{s,l}$ indicates the non-reference within-sample allele frequency for sample $s$ at locus $l$. $\textrm{WSAF}_{s,l}$ is then given by $\textrm{WSAF}_{s,l} = \frac{a_{s,l}}{r_{s,l}+a_{s,l}}$ where $a_{s,l}$ is the number of read counts supporting the alternative allele in sample $s$ at locus $l$, and $r_{s,l}$ is the number of read counts supporting the reference allele in sample $s$ at locus $l$.
-
-We find that samples from the same geographical region differentiate into clear clusters. We use this initial grouping as the base for defining the reference panels that assist the deconvolution procedure. Our definition of geographical groups is
-\begin{enumerate}
-  \item Malawi, Congo.
-  \item Ghana (Kassena).
-  \item Nigeria, Senegal, Mali.
-  \item The Gambia, Guinea, Ghana (Kintampo).
-  \item Cambodia (Pursat), Cambodia (Pailin), Thailand (Sisakhet).
-  \item Vietnam, Laos, Cambodia (Ratanakiri), Cambodia (Preah Vihear).
-  \item Bangladesh, Myanmar, Thailand (Mae Sot), Thailand (Ranong).
-\end{enumerate}
-
-For the {\it P. vivax} data, we have the geographical groups as
-\begin{enumerate}
-  \item{} Thailand
-  \item{} Indonesia, Malaysia, Papua New Guinea
-  \item{} Cambodia, Vietnam, Laos
-  \item the rest samples: Myanmar, China, Madagascar, Sri Lanka, Brazil and India.
-\end{enumerate}
+Across continents and countries we find substantial variation in the rate and relatedness structure of mixed infections (Figure \ref{fig:Pf3kResults}).  Within Africa, rates of mixed infection vary from 18\% in Senegal to 63\% in Malawi.  In the South East Asian field samples, mixed infection rates are generally lower, though also vary considerably; between 22\% in Thailand to 56\% in Bangladesh.  
 
 
 
-\narrative{2. Summary of findings within Pf and Pv. Figure 3: Rates of co-infection by geography and species.}
-\textcolor{red}{TODO 2. Summary of findings within Pf and Pv. Figure 3: Rates of co-infection by geography and species.}
+%To estimate relative proportions and strain haplotypes we use IBD-LD-DEploid on high quality biallelic SNP data (both coding and non-coding variants tagged with PASS at the QUAL column in the VCF file) of the Pf3k~\citep{Pf3k2016} and {\it P. vivax} Genome Variation dataset~\citep{Pearson2016}, with 1,057,830 and 303,616 SNPs for {\it P. falciparum} and {\it P.vivax} respectively. We observe a small number of heterozygous sites with high coverage in the Pf3k data, which can potentially mislead our model to over-fit the data with additional strains. These poorly-genotyped variants are likely to be artefacts of mapping and genotype calling. We therefore identify potential outliers in all samples, and filter out common outliers in at least 50 samples -- 48,443 in total.
+
+%In order to improve the accuracy of the deconvolution process and improve efficiency, we first split the  data into groups, based on genetic similarity. We compute genetic distances between two samples following:
+%\begin{equation}
+%\end{equation}
+%where $l$ represents an arbitrary locus, $L$ denotes the total number of loci, and $\textrm{WSAF}_{s,l}$ indicates the non-reference within-sample allele frequency for sample $s$ at locus $l$. $\textrm{WSAF}_{s,l}$ is then given by $\textrm{WSAF}_{s,l} = \frac{a_{s,l}}{r_{s,l}+a_{s,l}}$ where $a_{s,l}$ is the number of read counts supporting the alternative allele in sample $s$ at locus $l$, and $r_{s,l}$ is the number of read counts supporting the reference allele in sample $s$ at locus $l$.
+
+%We find that samples from the same geographical region differentiate into clear clusters. We use this initial grouping as the base for defining the reference panels that assist the deconvolution procedure. Our definition of geographical groups is
+%\begin{enumerate}
+%  \item Malawi, Congo.
+%  \item Ghana (Kassena).
+%  \item Nigeria, Senegal, Mali.
+%  \item The Gambia, Guinea, Ghana (Kintampo).
+%  \item Cambodia (Pursat), Cambodia (Pailin), Thailand (Sisakhet).
+%  \item Vietnam, Laos, Cambodia (Ratanakiri), Cambodia (Preah Vihear).
+%  \item Bangladesh, Myanmar, Thailand (Mae Sot), Thailand (Ranong).
+%\end{enumerate}
+
+%For the {\it P. vivax} data, we have the geographical groups as
+%\begin{enumerate}
+%  \item{} Thailand
+%  \item{} Indonesia, Malaysia, Papua New Guinea
+%  \item{} Cambodia, Vietnam, Laos
+%  \item the rest samples: Myanmar, China, Madagascar, Sri Lanka, Brazil and %India.
+%\end{enumerate}
 
 
 
@@ -297,6 +296,9 @@ Independence between effective k and IBD fraction (see Figure~.S*).
 \end{figure}
 
 
+
+
+
 \section{Discussion}
 \textcolor{red}{To expand ...}
 \narrative{1. Recap of main findings.}
@@ -311,11 +313,23 @@ The new method have greatly advanced current IBD methods for studying {\it Plasm
 
 
 
+
+
+
 \section{ACKNOWLEDGMENTS}
-We thank the Pf3k consortium for valuable insights. The project is funded by the Wellcome Trust grant [100956/Z/13/Z] to GM.
+We thank the Pf3k consortium for valuable insights. The project is funded by  Wellcome (100956/Z/13/Z to GM, \ldots).  
+
+
+
 
 \section{DISCLOSURE DECLARATION}
 None declared.
+
+
+
+
+
+
 
 
 \begin{thebibliography}{}
