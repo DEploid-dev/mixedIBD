@@ -125,10 +125,12 @@ Unlike our previous work, \texttt{DEploidIBD} infers strain structure in two ste
 
 
 \begin{figure}[ht]
-  \centering{}
+  %\centering{}
   \subfloat[][]{\includegraphics[width=0.28\textwidth]{altVsRef_small.pdf}}
   \subfloat[][]{\includegraphics[width=0.7\textwidth]{hap_post_prob_hap.pdf}}
-   \caption{Deconvolution of field sample PD0577-C from Thailand.  (a) Summary of allele frequencies observed within the isolate shown as a scatter-plot of the numbers of reads supporting the reference (REF: x-axis) and alternative (ALT: y-axis) alleles. (b) The profile of within-sample allele frequency along chromosomes 11 and 12 (black points) suggests a changing profile of IBD with three distinct strains, estimated to be at frequencies of $22\%$, $52\%$ and $26\%$ respectively (other chromosomes omitted for clarity, see Appendix~\ref{appedix:workflow}--Figure~\ref{fig:ring}); blue points indicate expected allele frequencies within the isolate.  However, the strains are inferred to be sibs of each other: green segments identify where all three strains are IBD; yellow, orange and dark orange segments identify the regions where one pair of strains are IBD but the others are not.  In no region are all three strains inferred to be distinct. A graphical description of the modules and workflows for \texttt{DEploidIBD} is given in Appendix~\ref{appedix:workflow}--Figure~\ref{fig:workflow}.}\label{fig:fig1}
+   \caption{Deconvolution of field sample PD0577-C from Thailand.  (a) Summary of allele frequencies observed within the isolate shown as a scatter-plot of the numbers of reads supporting the reference (REF: x-axis) and alternative (ALT: y-axis) alleles. (b) The profile of within-sample allele frequency along chromosomes 11 and 12 (black points) suggests a changing profile of IBD with three distinct strains, estimated to be at frequencies of $22\%$, $52\%$ and $26\%$ respectively (other chromosomes omitted for clarity, see Figure~\ref{fig:fig1}-Supplement~1); blue points indicate expected allele frequencies within the isolate.  However, the strains are inferred to be sibs of each other: green segments identify where all three strains are IBD; yellow, orange and dark orange segments identify the regions where one pair of strains are IBD but the others are not.  In no region are all three strains inferred to be distinct. A graphical description of the modules and workflows for \texttt{DEploidIBD} is given in Figure~\ref{fig:fig1}-Supplement~2.}\label{fig:fig1}
+   \figsupp{Whole genome deconvolution of field sample PD0577-C is represented in ring figures. The outer ring show expected WSAF (blue) and observed WSAF (red) across the genome. Red and blue points indicate observed and expected allele frequencies within the isolate. This inner ring marks the IBD regions of the three strains: green segments identify where all three strains are IBD; yellow, orange and dark orange segments identify the regions where one pair of strains are IBD but the others are not.  In no region are all three strains inferred to be distinct.}{\includegraphics[width=\textwidth]{{myring.ring}.pdf}}
+   \figsupp{A graphical description of the modules and workflows for \texttt{DEploidIBD}.}{\includegraphics[width=\textwidth]{scheme.pdf}}
 \end{figure}
 
 
@@ -164,13 +166,107 @@ To test the performance of \texttt{DEploidIBD} in a more realistic setting, we c
 
 \subsection{Application to 2,512 {\it P. falciprium} field samples from 14 countries}
 
-To investigate how the rate and relatedness structure of mixed infections varies among geographical regions with different epidemiological characteristics, we applied \texttt{DEploidIBD} to 2,512 field samples released by the Pf3k Consortium (REF).  A summary of the samples is presented in Table \ref{tab:Pf3ksamples}.  After filtering, we typed approximately 1M variable SNP positions across all samples, sequenced to an average depth of XXX (range XXX – XXX).  See Supplementary Material for details of filters and data availability.  Samples were grouped into four geographical regions within Africa and three within Asia based on genetic similarity (Table \ref{tab:Pf3ksamples}).
+To investigate how the rate and relatedness structure of mixed infections varies among geographical regions with different epidemiological characteristics, we applied \texttt{DEploidIBD} to 2,512 field samples released by the Pf3k Consortium (REF).  A summary of the samples is presented in Table \ref{tab:Pf3ksamples}.  After filtering, we typed approximately 1M variable SNP positions across all samples, sequenced to an average depth of 86.16 (range 1.02 – 675.57).  See Supplementary Material for details of filters and data availability.  Samples were grouped into four geographical regions within Africa and three within Asia based on genetic similarity (Table \ref{tab:Pf3ksamples}).
+
+\begin{table}
+\begin{tabular}{ccccccc}
+ \hline \hline
+Country & Location & Year & Sample size & Read Depth (s.e.) & Group \\
+ \hline
+The Gambia&GM\_Coastal&2008&65&129.28 (9.42)&Africa 4\\
+ \hline
+Malawi&Chikwawa&2011&208&96.69 (3.17)&Africa 1\\
+&&NA&92&94.38 (3.5)&Africa 1\\
+&&2012&10&133.18 (9.7)&Africa 1\\
+&&2014&7&128.39 (3.11)&Africa 1\\
+&Zomba&2011&34&88.49 (9.41)&Africa 1\\
+&&NA&17&49.65 (7.49)&Africa 1\\
+&&2012&1&90.72 (NA)&Africa 1\\
+ \hline
+DR of the Congo&Kinshasa&2013&113&48.76 (3.16)&Africa 1\\
+ \hline
+Ghana&Kassena&2009&121&82.47 (5.49)&Africa 2\\
+&&NA&28&217.71 (34.47)&Africa 2\\
+&&2010&173&103.15 (8.56)&Africa 2\\
+&&2011&96&72.48 (4.27)&Africa 2\\
+&&2012&39&110.02 (4.35)&Africa 2\\
+&&2013&92&114.11 (4.52)&Africa 2\\
+&Kintampo&2011&7&85.68 (11.81)&Africa 4\\
+&&NA&20&106.76 (16.97)&Africa 4\\
+&&2012&38&142.56 (9.46)&Africa 4\\
+&&2013&3&164.92 (53.39)&Africa 4\\
+ \hline
+Mali&Kolle&2007&51&81.53 (10.55)&Africa 3\\
+&Faladje&2007&36&75.12 (10.06)&Africa 3\\
+&Bandiagara&2007&9&94.94 (25.17)&Africa 3\\
+ \hline
+Nigeria&Ilorin&2011&1&39.21 (NA)&Africa 3\\
+&&2012&4&51.25 (20.9)&Africa 3\\
+ \hline
+Senegal&Thies&2002&5&59.97 (7.76)&Africa 3\\
+&&2004&2&129.82 (68.19)&Africa 3\\
+&&2001&1&58.96 (NA)&Africa 3\\
+&&2008&22&94.37 (4.94)&Africa 3\\
+&&2011&32&97.01 (6.02)&Africa 3\\
+&&2007&4&82.83 (9.02)&Africa 3\\
+&&2009&43&175.1 (14.86)&Africa 3\\
+&&2010&24&159.27 (9.74)&Africa 3\\
+&Velingara&2004&2&56.21 (2.22)&Africa 3\\
+&&2005&2&70.68 (4.01)&Africa 3\\
+ \hline
+Guinea&Nzerekore&2011&100&75.42 (4.51)&Africa 4\\
+ \hline
+\end{tabular}\caption{}\label{tab:Pf3ksamples}
+\end{table}
+
+\begin{table}
+\ContinuedFloat
+\begin{tabular}{ccccccc}
+ \hline
+ \hline
+Country & Location & Year & Sample size & Read Depth (s.e.) & Group \\
+ \hline
+Thailand&Sisakhet&2011&5&111.87 (25.4)&Asia 1\\
+&&2012&13&88.75 (13.05)&Asia 1\\
+&&2013&4&57.24 (7.78)&Asia 1\\
+&Ranong&2011&9&96.05 (18.42)&Asia 3\\
+&&2012&11&81.73 (12.44)&Asia 3\\
+&Mae Sot&2011&37&67.29 (7.28)&Asia 3\\
+&&2012&69&83.45 (4.89)&Asia 3\\
+ \hline
+Cambodia&Pursat&2009&18&75.34 (9.31)&Asia 1\\
+&&2010&101&90.85 (5.2)&Asia 1\\
+&&NA&5&180.88 (97.2)&Asia 1\\
+&&2011&104&48.47 (3.04)&Asia 1\\
+&&2012&7&37.47 (19.15)&Asia 1\\
+&Pailin&2011&50&52.8 (4.12)&Asia 1\\
+&&2012&34&46.36 (5.19)&Asia 1\\
+&Ratanakiri&2010&50&70.79 (6.08)&Asia 2\\
+&&2011&82&44.76 (4.22)&Asia 2\\
+&&2012&15&43.81 (8.94)&Asia 2\\
+&Preah Vihear&2011&75&50.67 (5.16)&Asia 2\\
+&&2012&29&44.53 (6.82)&Asia 2\\
+ \hline
+Vietnam&Phuoc Long&2011&27&67.76 (7.21)&Asia 2\\
+&&2012&5&106.54 (6.29)&Asia 2\\
+&Bu Gia Map&2011&44&65.64 (5.02)&Asia 2\\
+&&2012&20&110.29 (8.71)&Asia 2\\
+&Bu Dang&2011&1&94.02 (NA)&Asia 2\\
+ \hline
+Laos&Attapeu&2011&59&71.41 (4.17)&Asia 2\\
+&&2012&26&76.61 (6.98)&Asia 2\\
+ \hline
+Myanmar&Bago Division&2011&12&59.34 (7.09)&Asia 3\\
+&&2012&47&62.21 (5.16)&Asia 3\\
+&&2013&1&27.4 (NA)&Asia 3\\
+ \hline
+Bangladesh&Ramu&2012&50&53.41 (4.17)&Asia 3\\
+ \hline
+ \hline
+\end{tabular}\caption{Table continued.}
+\end{table}
 
 Across continents and countries we find substantial variation in the rate and relatedness structure of mixed infections (Figure \ref{fig:Pf3kResults}).  Within Africa, rates of mixed infection vary from 18\% in Senegal to 63\% in Malawi.  In the South East Asian field samples, mixed infection rates are generally lower, though also vary considerably; between 22\% in Thailand to 56\% in Bangladesh.
-
-
-
-
 
 
 \narrative{3. Summary of findings about relatedness within mixed infections.  Figure 4.  Relatedness structure histogram showing peaks at 0.25, 0.5, etc. and relationship between mixed infection rate and sib-strain.}
@@ -534,30 +630,6 @@ Zimmerman, P., {\em et al} (2004)
 \newblock {\em Trends Parasitol.}~{\em 20}(9):440--447.
 \end{thebibliography}
 
-
-
-\appendix
-\begin{appendixbox}
-\begin{center}
-  \includegraphics[width=0.6\textwidth]{{myring.ring}.pdf}
-  \captionof{figure}{Whole genome deconvolution of field sample PD0577-C from Thailand. The estimated relative frequencies are $22\%$, $52\%$ and $26\%$.   The outer ring show expected WSAF (blue) and observed WSAF (red) across the genome. Red and blue points indicate observed and expected allele frequencies within the isolate. This inner ring marks the IBD regions of the three strains: green segments identify where all three strains are IBD; yellow, orange and dark orange segments identify the regions where one pair of strains are IBD but the others are not.  In no region are all three strains inferred to be distinct.}
-  \label{fig:ring}
-\end{center}
-
-\begin{center}
-  \includegraphics[width=0.7\textwidth]{scheme.pdf}
-  \captionof{figure}{A graphical description of the modules and workflows for \texttt{DEploidIBD}.}
-  \label{fig:workflow}
-\end{center}
-\label{appedix:workflow}
-\end{appendixbox}
-
-\begin{appendixbox}
-\begin{center}
-  \includegraphics[width=0.8\textwidth]{prevelance.pdf}
-  \captionof{figure}{A graphical description of the modules and workflows for \texttt{DEploidIBD} is given in Figure 1 - figure supplement 1.}
-\end{center}
-\end{appendixbox}
 
 
 \end{document}
