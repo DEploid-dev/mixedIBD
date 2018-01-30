@@ -125,12 +125,13 @@ Unlike our previous work, \texttt{DEploidIBD} infers strain structure in two ste
 
 
 \begin{figure}[ht]
-  %\centering{}
+  \begin{center}
   \subfloat[][]{\includegraphics[width=0.28\textwidth]{altVsRef_small.pdf}}
   \subfloat[][]{\includegraphics[width=0.7\textwidth]{hap_post_prob_hap.pdf}}
    \caption{Deconvolution of field sample PD0577-C from Thailand.  (a) Summary of allele frequencies observed within the isolate shown as a scatter-plot of the numbers of reads supporting the reference (REF: x-axis) and alternative (ALT: y-axis) alleles. (b) The profile of within-sample allele frequency along chromosomes 11 and 12 (black points) suggests a changing profile of IBD with three distinct strains, estimated to be at frequencies of $22\%$, $52\%$ and $26\%$ respectively (other chromosomes omitted for clarity, see Figure~\ref{fig:fig1}-Supplement~1); blue points indicate expected allele frequencies within the isolate.  However, the strains are inferred to be sibs of each other: green segments identify where all three strains are IBD; yellow, orange and dark orange segments identify the regions where one pair of strains are IBD but the others are not.  In no region are all three strains inferred to be distinct. A graphical description of the modules and workflows for \texttt{DEploidIBD} is given in Figure~\ref{fig:fig1}-Supplement~2.}\label{fig:fig1}
-   \figsupp{Whole genome deconvolution of field sample PD0577-C is represented in ring figures. The outer ring show expected WSAF (blue) and observed WSAF (red) across the genome. Red and blue points indicate observed and expected allele frequencies within the isolate. This inner ring marks the IBD regions of the three strains: green segments identify where all three strains are IBD; yellow, orange and dark orange segments identify the regions where one pair of strains are IBD but the others are not.  In no region are all three strains inferred to be distinct.}{\includegraphics[width=\textwidth]{{myring.ring}.pdf}}
-   \figsupp{A graphical description of the modules and workflows for \texttt{DEploidIBD}.}{\includegraphics[width=\textwidth]{scheme.pdf}}
+   \end{center}
+   \figsupp{Whole genome deconvolution of field sample PD0577-C is represented in ring figures. The outer ring show expected WSAF (blue) and observed WSAF (red) across the genome. Red and blue points indicate observed and expected allele frequencies within the isolate. This inner ring marks the IBD regions of the three strains: green segments identify where all three strains are IBD; yellow, orange and dark orange segments identify the regions where one pair of strains are IBD but the others are not.  In no region are all three strains inferred to be distinct.}{\includegraphics[width=.7\textwidth]{{myring.ring}.pdf}}
+   \figsupp{A graphical description of the modules and workflows for \texttt{DEploidIBD}.}{\includegraphics[width=.8\textwidth]{scheme.pdf}}
 \end{figure}
 
 
@@ -145,7 +146,7 @@ To test the performance of \texttt{DEploidIBD} in a more realistic setting, we c
 
 
 \begin{figure}[htp]
-  \centering{}
+  \begin{center}
   \subfloat[][]{
   \includegraphics[width = 0.45\textwidth]{diagnositicPlot_of_effK_final.pdf}
   }
@@ -157,6 +158,9 @@ To test the performance of \texttt{DEploidIBD} in a more realistic setting, we c
   }
   \caption{Simulation results. (a)Comparison of effective number of strains between \texttt{DEploid} and \texttt{DEploidIBD}. (b)Expected and inferred percentage of IBD regions for \texttt{DEploid}. (c) Histograms of switch error and genotype error across 76 simulated Pf3k samples for \texttt{DEploid}. In all figures, we excluded eight cases out of the 100 experiments where simulated haplotypes were over 99\% identical, and 16 cases where average coverage was below 20.
 }\label{fig:benchmark}
+  \end{center}
+  \figsupp{27 samples of various mixtures of four laboratory parasite lines (3D7, Dd2, HB3 and 7G8}{\includegraphics[width = 0.65\textwidth]{eff_k_both.pdf}}
+  \figsupp{Haplotype quality}{\includegraphics[width = 0.8\textwidth]{DEploid_IBD_haps_compare.pdf}}
 \end{figure}
 
 
@@ -268,6 +272,11 @@ Bangladesh&Ramu&2012&50&53.41 (4.17)&Asia 3\\
 
 Across continents and countries we find substantial variation in the rate and relatedness structure of mixed infections (Figure \ref{fig:Pf3kResults}).  Within Africa, rates of mixed infection vary from 18\% in Senegal to 63\% in Malawi.  In the South East Asian field samples, mixed infection rates are generally lower, though also vary considerably; between 22\% in Thailand to 56\% in Bangladesh.
 
+\begin{figure}[htp]
+  \centering{}
+  \includegraphics[width=\textwidth]{barPlots_by_gil.pdf}
+  \caption{tmp}\label{fig:Pf3kResults}
+\end{figure}
 
 \narrative{3. Summary of findings about relatedness within mixed infections.  Figure 4.  Relatedness structure histogram showing peaks at 0.25, 0.5, etc. and relationship between mixed infection rate and sib-strain.}
 
