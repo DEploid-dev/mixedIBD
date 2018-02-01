@@ -159,8 +159,9 @@ To test the performance of \texttt{DEploidIBD} in a more realistic setting, we c
   \caption{Simulation results. (a)Comparison of effective number of strains between \texttt{DEploid} and \texttt{DEploidIBD}. (b)Expected and inferred percentage of IBD regions for \texttt{DEploid}. (c) Histograms of switch error and genotype error across 76 simulated Pf3k samples for \texttt{DEploid}. In all figures, we excluded eight cases out of the 100 experiments where simulated haplotypes were over 99\% identical, and 16 cases where average coverage was below 20.
 }\label{fig:benchmark}
   \end{center}
-  \figsupp{27 samples of various mixtures of four laboratory parasite lines (3D7, Dd2, HB3 and 7G8}{\includegraphics[width = 0.65\textwidth]{eff_k_both.pdf}}
-  \figsupp{Haplotype quality}{\includegraphics[width = 0.8\textwidth]{DEploid_IBD_haps_compare.pdf}}
+  \figsupp{Experimental validation and effective number of strains inferred by {\tt DEploidIBD}. We use a reference panel of the laboratory parasite lines (3D7, Dd2, HB3 and 7G8) to deconvolve the same lab-mixed samples, assuming 3 and 4 strains within a sample. Each experiment is repeated without IBD method. Black crosses indicate the true effective number of strains. Purple crosses indicate median values obtained from 30 replicates when using {\tt DEploidIBD} with a panel and assuming that the maximum number of strains is 4. The coloured dots show the inferred effective number of strains across replicates with intensity proportional to fraction.
+  }{\includegraphics[width = 0.65\textwidth]{eff_k_both.pdf}}
+  \figsupp{Comparison of true and inferred haplotypes for Chromosome 14 (2,369 SNPs) in sample PG0396-C before and after haplotype painting using a reference panel of the laboratory parasite lines (3D7, Dd2, HB3 and 7G8). The yellow, cyan and white background label the haplotype segments from strains 7G8, HB3 and Dd2 respectively. The switch errors are obtained by counting the changes of a strain segment mapped to reference strains; the genotype errors are the discordance between the strain and the mapped reference segments. }{\includegraphics[width = 0.8\textwidth]{DEploid_IBD_haps_compare.pdf}}
 \end{figure}
 
 
