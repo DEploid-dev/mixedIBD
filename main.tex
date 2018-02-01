@@ -172,11 +172,12 @@ To test the performance of \texttt{DEploidIBD} in a more realistic setting, we c
 
 To investigate how the rate and relatedness structure of mixed infections varies among geographical regions with different epidemiological characteristics, we applied \texttt{DEploidIBD} to 2,512 field samples released by the Pf3k Consortium (REF).  A summary of the samples is presented in Table \ref{tab:Pf3ksamples}.  After filtering, we typed approximately 1M variable SNP positions across all samples, sequenced to an average depth of 86.16 (range 1.02 – 675.57).  See Supplementary Material for details of filters and data availability.  Samples were grouped into four geographical regions within Africa and three within Asia based on genetic similarity (Table \ref{tab:Pf3ksamples}).
 
-\begin{table}
-\begin{tabular}{ccccccc}
- \hline \hline
+\begin{table}[bt]
+  \caption{Data summary of African samples.}\label{tab:Pf3ksamples}
+\begin{tabular}{l l c c c c c}
+\toprule
 Country & Location & Year & Sample size & Read Depth (s.e.) & Group \\
- \hline
+\midrule
 The Gambia&GM\_Coastal&2008&65&129.28 (9.42)&Africa 4\\
  \hline
 Malawi&Chikwawa&2011&208&96.69 (3.17)&Africa 1\\
@@ -219,17 +220,22 @@ Senegal&Thies&2002&5&59.97 (7.76)&Africa 3\\
 &&2005&2&70.68 (4.01)&Africa 3\\
  \hline
 Guinea&Nzerekore&2011&100&75.42 (4.51)&Africa 4\\
- \hline
-\end{tabular}\caption{}\label{tab:Pf3ksamples}
+\bottomrule
+\end{tabular}
+
+\medskip
+Source: \url{ftp://ngs.sanger.ac.uk/production/pf3k/release_5/5.1}
+
+\tabledata{Pf3k data release 5.1 contains a set of {\em de novo} genotypes for the 5.0 sample set. The genotyping, including both indel and SNP variants, was performed using a pipeline based on GATK best practices.}
 \end{table}
 
-\begin{table}
+\begin{table}[bt]
 \ContinuedFloat
-\begin{tabular}{ccccccc}
- \hline
- \hline
+\caption{Table continued. Data summary of Asia samples.}
+\begin{tabular}{l l c c c c c}
+\toprule
 Country & Location & Year & Sample size & Read Depth (s.e.) & Group \\
- \hline
+\midrule
 Thailand&Sisakhet&2011&5&111.87 (25.4)&Asia 1\\
 &&2012&13&88.75 (13.05)&Asia 1\\
 &&2013&4&57.24 (7.78)&Asia 1\\
@@ -265,9 +271,8 @@ Myanmar&Bago Division&2011&12&59.34 (7.09)&Asia 3\\
 &&2013&1&27.4 (NA)&Asia 3\\
  \hline
 Bangladesh&Ramu&2012&50&53.41 (4.17)&Asia 3\\
- \hline
- \hline
-\end{tabular}\caption{Table continued.}
+\bottomrule
+\end{tabular}
 \end{table}
 
 Across continents and countries we find substantial variation in the rate and relatedness structure of mixed infections (Figure \ref{fig:Pf3kResults}).  Within Africa, rates of mixed infection vary from 18\% in Senegal to 63\% in Malawi.  In the South East Asian field samples, mixed infection rates are generally lower, though also vary considerably; between 22\% in Thailand to 56\% in Bangladesh.
