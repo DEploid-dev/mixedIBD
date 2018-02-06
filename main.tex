@@ -5,7 +5,7 @@
 \usepackage{amsmath}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% referencing %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\usepackage{natbib}
+%\usepackage{natbib}
 \usepackage{hyperref}
 \usepackage{xcolor}
 \hypersetup{
@@ -102,7 +102,7 @@ Individuals infected with {\it Plasmodium falciparum} malaria pathogens can carr
 \section{Introduction}
 
 
-Individuals infected with malaria-causing parasites of the genus {\it Plasmodium} can often be found to carry multiple, distinct strains~\citep{Bell2006}  Such mixed infections are likely indicative of intense local exposure rates, being found commonly in regions of Africa with high rates of prevalence~\citep{Bhatt2015, Howes2016}, though are also documented for {\it P.~vivax} and other malaria-causing parasites~\citep{Mueller2007, Collins2012}, even in regions of much lower prevalence~\citep{Howes2016, Steenkeste2010}.  For example, \citet{Pearson2016} reports 45\% of {\it P.~vivax} infections are mixed.  Mixed infections have been associated with increased disease severity \citep{deRoode2005} and also provide the fuel for generating genomic diversity within the parasite, enabling co-transmission to the mosquito vector where sexual recombination occurs \citep{Mzilahowa2007}.  Mixed infections are transient \citep{Bruce2002, Zimmerman2004}, though whether this is driven entirely by the host immune response~\citep{Bormann2011} or whether it is influenced by interactions between the distinct strains is not known~\citep{Enosse2006, Bushman2016}.
+Individuals infected with malaria-causing parasites of the genus {\it Plasmodium} can often be found to carry multiple, distinct strains~\citep{Bell2006}  Such mixed infections are likely indicative of intense local exposure rates, being found commonly in regions of Africa with high rates of prevalence~\citep{Bhatt2015, Howes2016}, though are also documented for {\it P.~vivax} and other malaria-causing parasites~\citep{Mueller2007, Collins2012}, even in regions of much lower prevalence~\citep{Howes2016, Steenkeste2010}.  For example, \citet{Pearson2016} reports 45\% of {\it P.~vivax} infections are mixed.  Mixed infections have been associated with increased disease severity \citep{deRoode2005} and also provide the fuel for generating genomic diversity within the parasite, enabling co-transmission to the mosquito vector where sexual recombination occurs \citep{Mzilahowa2007}.  Mixed infections are transient \citep{Bruce2002, Zimmerman2004}, though whether this is driven entirely by the host immune response~\citep{Borrmann2011} or whether it is influenced by interactions between the distinct strains is not known~\citep{Enosse2006, Bushman2016}.
 
 Although mixed infections can be studied from SNP barcodes~\citep{Galinsky2015} or single locus polymorphisms~\citep{Jack2016}, genome sequencing provides a powerful approach for detecting mixed infections~\citep{Chang2017}.  Genetic differences between strains within a host are manifest as polymorphic sites within the isolate, which motivates statistical approaches for estimating the number of distinct strains, their relative proportions and genome sequences~\citep{Zhu2017}.  Although genomic approaches cannot identify individuals infected multiple times by identical strains (and have to filter sequencing data heavily to eliminate false signs of polymorphism arising from sequencing error and problems of incomplete or erroneous reference assemblies), they provide a rich characterization of within host diversity~\citep{Manske2012}.
 
@@ -179,8 +179,6 @@ To investigate how the rate and relatedness structure of mixed infections varies
 \toprule
 Country & Location & Year & Sample size & Read Depth (s.e.) & Group \\
 \midrule
-The Gambia      &GM\_Coastal    &2008 &65   &129  (9.4 )&Africa 4\\
- \hline
 Malawi          &Chikwawa       &2011 &208  &97   (3.2 )&Africa 1\\
                 &               &NA   &92   &94   (3.5 )&Africa 1\\
                 &               &2012 &10   &133  (9.7 )&Africa 1\\
@@ -219,6 +217,8 @@ Senegal         &Thies          &2002 &5    &60   (7.8 )&Africa 3\\
                 &               &2010 &24   &159  (9.7 )&Africa 3\\
                 &Velingara      &2004 &2    &56   (2.2 )&Africa 3\\
                 &               &2005 &2    &71   (4   )&Africa 3\\
+ \hline
+The Gambia      &GM\_Coastal    &2008 &65   &129  (9.4 )&Africa 4\\
  \hline
 Guinea          &Nzerekore      &2011 &100  &75   (4.5 )&Africa 4\\
 \bottomrule
@@ -415,236 +415,7 @@ None declared.
 
 
 
-
-
-
-\begin{thebibliography}{}
-
-\bibitem[\protect\citeauthoryear{Bell, de Roode, Sim Read, and Koella}{Bell et~al.}{2006}]{Bell2006}
-Bell A.~S. {\em et al.} (2006)
-\newblock Within-host competition in genetically diverse malaria infection: parasite virulence and competitive success.
-\newblock {\em Evolution\/}~{\em 60}(7), 1358--1371.
-
-\bibitem[\protect\citeauthoryear{Bhatt}{Bhatt et~al.}{2015}]{Bhatt2015}
-Bhatt, S. {\em et al}.
-\newblock The effect of malaria control on Plasmodium falciparum in Africa between 2000 and 2015.
-\newblock {\em Nature\/}~{\em 526}, 207--211, 2015.
-
-\bibitem[\protect\citeauthoryear{Browning and Browning}{Browning and
-  Browning}{2007}]{Browning2007}
-Browning, S. R. and B.~L. Browning (2007)
-\newblock Rapid and accurate haplotype phasing and missing-data inference for
-  whole-genome association studies by use of localised haplotype clustering.
-\newblock {\em Am. J. Hum. Genet.\/}~{\em 81\/}(5), 1084--1097.
-
-\bibitem[\protect\citeauthoryear{Bormann and Matuschewski}{Bormann and Matuschewski}{2011}]{Bormann2011}
-Bormann, S. and Matuschewski, K. (2011)
-\newblock Protective immunity against malaria by ‘natural immunization’: a question of dose, parasite diversity, or both?
-\newblock {\em Current Opinion in Immunology}~{\em 23}(4):500--508.
-
-\bibitem[\protect\citeauthoryear{Bruce and Day}{Bruce and Day}{2002}]{Bruce2002}
-Bruce, M. and Day, K. (2002)
-\newblock Cross-species regulation of malaria parasitaemia in the human host.
-\newblock {\em Current Opinion in Microbiology}~{\em 5}(4):431--437.
-
-\bibitem[\protect\citeauthoryear{Bushman}{Bushman et~al.}{2016}]{Bushman2016}
-Bushman, M. {\em et al}. 2016
-\newblock Within-host competition and drug resistance in the human malaria parasite {\it Plasmodium falciparum}.
-\newblock {\em Proc Biol Sci.}~{\em 283}(1826): 20153038.
-
-\bibitem[\protect\citeauthoryear{Cerqueira}{Cerqueira et~al.}{2017}]{Cerqueira2017}
-Cerqueira, G.C. {\em et al}. (2017)
-\newblock Longitudinal genomic surveillance of {\em Plasmodium falciparum} malaria parasites reveals complex genomic architecture of emerging artemisinin resistance.
-\newblock {\em Genome Biology}~{\em 18}:78.
-
-
-\bibitem[\protect\citeauthoryear{Chang}{Chang et~al.}{2017}]{Chang2015}
-Chang, C.C. {\em et al}. (2015)
-\newblock Second-generation PLINK: rising to the challenge of larger and richer datasets.
-\newblock {\em GigaScience}~{\em 4}.
-
-\bibitem[\protect\citeauthoryear{Chang}{Chang et~al.}{2017}]{Chang2017}
-Change, H.~H. {\em et al}. (2017)
-\newblock THE REAL McCOIL: A method for the concurrent estimation of the complexity of infection and SNP allele frequency for malaria parasites.
-\newblock {\em PLoS Comput. Biol.\/}~{\em 13\/}(1), e1005348.
-
-\bibitem[\protect\citeauthoryear{Collins}{Collins}{2012}]{Collins2012}
-Collins, W. E. (2012).
-\newblock {\it Plasmodium knowlesi}: A malaria parasite of monkeys and humans.
-\newblock {\em Annual Review of Entomology}~{\em 57\/}, 107--21.
-
-
-\bibitem[\protect\citeauthoryear{de~Roode, Pansini, Cheesman, Helinski,
-  Huijben, Wargo, Bell, Chan, Walliker, and Read}{de~Roode
-  et~al.}{2005}]{deRoode2005}
-de~Roode, J. {\em et al}. (2005)
-\newblock Virulence and competitive ability in genetically diverse malaria infections.
-\newblock {\em Proc. Natl. Acad. Sci. USA\/}~{\em 102\/}(21), 7624--7628.
-
-\bibitem[\protect\citeauthoryear{Enosse et~al.}{Enosse et~al.}{2006}]{Enosse2006}
-Enosse, S. {\em et al}. (2006)
-\newblock RTS,S/AS02A Malaria Vaccine Does Not Induce Parasite CSP T Cell Epitope Selection and Reduces Multiplicity of Infection
-\newblock {\em PLOS Clinical Trials}~{\em 1}(1): e5.
-
-\bibitem[\protect\citeauthoryear{Galinsky et~al.}{Galinsky et~al.}{2015}]{Galinsky2015}
-Galinsky, K. {\em et al}. (2015)
-\newblock COIL: a methodology for evaluating malarial complexity of infection using likelihood from single nucleotide polymorphism data.
-\newblock {\em Malar. J.\/}~{\em14\/}(4), 1--9.
-
-\bibitem[\protect\citeauthoryear{Gusev et~al.}{Gusev et~al.}{2009}]{Gusev2009}
-Gusev, A. (2009)
-\newblock Whole population, genome-wide mapping of hidden relatedness.
-\newblock {\em Genome Res.}{\em 19}(2):318--326.
-
-\bibitem[\protect\citeauthoryear{Gusev et~al.}{Gusev et~al.}{2011}]{Gusev2011}
-Gusev, A. (2011)
-\newblock DASH: a method for identical-by-descent haplotype mapping uncovers association with recent variation.
-\newblock {\em Am J Hum Genet.}~{\em 88}(6):706--717.
-
-\bibitem[\protect\citeauthoryear{Hinch}{Hinch et~al.}{2011}]{Hinch2011}
-Hinch, A. G. {\em et al}. (2011)
-\newblock The landscape of recombination in African Americans.
-\newblock {\em Nature\/}~{\em 476}, 170--175.
-
-\bibitem[\protect\citeauthoryear{Henden}{Henden et~al.}{2016}]{Henden2016}
-Henden, L. {\em et al}. (2016)
-\newblock Detecting selection signals in {\it Plasmodium falciparum} using identity-by-descent analysis,
-\newblock {\em bioRxiv.\/}, 088039.
-
-\bibitem[\protect\citeauthoryear{Howes}{Howes et~al.}{2016}]{Howes2016}
-Howes, R.E. {\em et al}. (2016)
-\newblock Global Epidemiology of Plasmodium vivax
-\newblock {\em Am. J. Trop. Med. Hyg\/}~{\em 95}, 15--34.
-
-\bibitem[\protect\citeauthoryear{Jiang}{Jiang et~al.}{2011}]{Jiang2011}
-Jiang, H. {\em et al}. (2011)
-\newblock High recombination rates and hotspots in a {\it Plasmodium falciparum} genetic cross.
-\newblock {\em Genome Biology.\/}~{\em 12}, R33.
-
-\bibitem[\protect\citeauthoryear{Lopez}{Lopez et~al.}{2012}]{Lopez2012}
-Lopez A. {\em et al}. (2012)
-\newblock Genetic diversity of {\it Plasmodium vivax} and {\it Plasmodium falciparum} in Honduras.
-\newblock {\em Malaria Journal.\/}~{\em 11}, 391.
-
-\bibitem[\protect\citeauthoryear{Manske et~al.}{Manske et~al.}{2012}]{Manske2012}
-Manske, M. {\em et al}. (2012)
-\newblock Analysis of plasmodium falciparum diversity in natural infections by deep sequencing.
-\newblock {\em Nature\/}~{\em 487\/}(7407), 375--379.
-
-\bibitem[\protect\citeauthoryear{Miles et~al.}{Miles et~al.}{2016}]{Miles2016}
-Miles, A. {\em et al}. (2015)
-\newblock Indels, structural variation, and recombination drive genomic diversity in {\it Plasmodium falciparum}.
-\newblock {\em Genome Res.\/}~{\em26\/}, 1288--1299.
-
-\bibitem[\protect\citeauthoryear{Mouzin}{Mouzin et~al.}{2010}]{Mouzin2010}
-Mouzin, E. {\em et al}. (2010)
-\newblock Focus on Senegal roll back malaria: Progress and Impact Series.
-\newblock Geneva: World Health Organization; 2010.
-
-\bibitem[\protect\citeauthoryear{Mu}{Mu et~al.}{2005}]{Mu2005}
-Mu, J. {\em et al}. (2005)
-\newblock Recombination Hotspots and Population Structure in {\it Plasmodium falciparum}.
-\newblock {\em PLOS Biology.\/}~{\em 3}, e335.
-
-\bibitem[\protect\citeauthoryear{Mueller et~al.}{Mueller et~al.}{2007}]{Mueller2007}
-Mueller, I. {\em et al}. (2007)
-\newblock {\it Plasmodium malariae} and {\it Plasmodium ovale} -- the ``bashful'' malaria parasites.
-\newblock {\em Trends in Parasitology}~{\em 23\/} (6), 278--283.
-
-
-
-\bibitem[\protect\citeauthoryear{Mzilahowa et~al.}{Mzilahowa et~al.}{2007}]{Mzilahowa2007}
-Mzilahowa, T. {\em et al}. (2007)
-\newblock “Sexual” Population Structure and Genetics of the Malaria Agent {\em P. falciparum}.
-\newblock {\em PLOS ONE}~{\em 2}(7): e613.
-
-\bibitem[\protect\citeauthoryear{Nair et~al.}{Nair et~al.}{2014}]{Nair2014}
-Nair, S. {\em et al}. (2014)
-\newblock Single-cell genomics for dissection of complex malaria infections.
-\newblock {\em Genome research.\/}~{\em 24}, 1028--1038.
-
-\bibitem[\protect\citeauthoryear{Neafsey}{Neafsey et~al.}{2012}]{Neafsey2012}
-Neafsey, D. {\em et al}.(2012)
-\newblock The malaria parasite {\it Plasmodium vivax} exhibits greater genetic diversity than {\it Plasmodium falciparum}.
-\newblock {\em Nature Genetics\/}~{\em 44\/}(9), 1046--1052.
-
-\bibitem[\protect\citeauthoryear{Nkhoma}{Nkhoma et~al.}{2012}]{Nkhoma2012}
-Nkhoma, SC. {\em et al}.(2012)
-\newblock Close kinship within multiple-genotype malaria parasite infections.
-\newblock {\em Proc Biol Sci}~{\em 279}(1738):2589--2598.
-
-\bibitem[\protect\citeauthoryear{O'Brien et~al.}{O'Brien et~al.}{2016}]{Jack2016}
-O'Brien D. J. {\em et al}. (2016)
-\newblock Inferring Strain Mixture within Clinical {\em Plasmodium falciparum} Isolates from Genomic Sequence Data.
-\newblock {\em PLoS Comput. Biol.\/}~{\em 12\/}(6): e1004824.
-
-\bibitem[\protect\citeauthoryear{O'Brien et~al.}{O'Brien et~al.}{2015}]{Jack2016Inbreeding}
-O'Brien D. J. {\em et al}. (2016)
-\newblock Approaches to estimating inbreeding coefficients in clinical isolates of {\it Plasmodium falciparum} from genomic sequence data.
-\newblock {\em Malaria Journal\/}~{\em 15}:473.
-
-\bibitem[\protect\citeauthoryear{Pearson et~al.}{Pearson et~al.}{2016}]{Pearson2016}
-Pearson, R. D. {\em et al}. (2016)
-\newblock {Genomic analysis of local variation and recent evolution in {\it Plasmodium vivax}}.
-\newblock {\em Nat. Genet.\/}~{\em 48}, 959--964.
-
-\bibitem[\protect\citeauthoryear{Rutledge}{Rutledge et~al.}{2017}]{Rutledge2017}
-Rutledge. G. G., {\em et al}. (2017)
-\newblock {\it Plasmodium} malariae and P. ovale genomes provide insights into malaria parasite evolution
-\newblock {\em Nature.\/}~{\em 542}, 101--104.
-
-\bibitem[\protect\citeauthoryear{Pf3k}{Pf3k}{2016}]{Pf3k2016}
-The Pf3k Project: pilot data release 5 (2016)
-\newblock {www.malariagen.net/data/pf3k-5} [accessed 1 June 2016]
-
-\bibitem[\protect\citeauthoryear{Trevino}{Trevino et~al.}{2017}]{Trevino2017}
-Trevino, S. {\em et al}. (2017)
-\newblock High-Resolution Single-Cell Sequencing of Malaria Parasites.
-\newblock {\em Genome Biol. Evol.\/}~{\em 9}(12):3373--3383.
-
-%\bibitem[\protect\citeauthoryear{Schaffner}{Schaffner}{2017}]{Schaffner2017}
-%Schaffner, S. F. {\em et al.} (2017)
-%\newblock {hmmIBD: software to infer pairwise identity by descent between haploid genotypes},
-%\newblock {\em bioRxiv}, doi:10.1101/188078.
-
-\bibitem[\protect\citeauthoryear{Steenkeste}{Steenkeste et~al.}{2010}]{Steenkeste2010}
-Steenkeste N. {\em et al.} 2010.
-\newblock Sub-microscopic malaria cases and
-mixed malaria infection in a remote area of high malaria endemicity in Rattanakiri Province, Cambodia: implication for
-malaria elimination.
-\newblock {\em Malar J}~{\em 9}: 108.
-
-\bibitem[\protect\citeauthoryear{Wegmann}{Wegmann et~al.}{2011}]{Wegmann2011}
-Wegmann, D. {\em et al}.(2011)
-\newblock Recombination rates in admixed individuals identified by ancestry-based inference.
-\newblock {\em Nature Genetics\/}~{\em 43\/}, 847--894.
-
-\bibitem[\protect\citeauthoryear{Wendler}{Wendler}{2015}]{Wendler2015}
-Wendler, J. (2015)
-\newblock {\em Accessing complex genomic variation in} {P}lasmodium falciparum {\em natural infection}.
-\newblock {Ph.\ D. thesis, University of Oxford.}
-
-\bibitem[\protect\citeauthoryear{WHO}{WHO}{2016}]{WHO2016}
-WHO. (2016)
-\newblock {World Malaria Report 2015}.
-\newblock {\em World Health Organization\/}.
-
-\bibitem[\protect\citeauthoryear{Wong}{Wong et~al.}{2017}]{Wong2017}
-Wong W., {\em et al}. (2017)
-\newblock Genetic relatedness analysis reveals the cotransmission of genetically related {\it Plasmodium falciparum} parasites in Thiès, Senegal.
-\newblock {\em Genome Medicine.\/}~{\em 9}:5. doi:10.1186/s13073-017-0398-0.
-
-\bibitem[\protect\citeauthoryear{Zhu, Garcia, McVean}{Zhu et~al.}{2017}]{Zhu2017}
-Zhu, J. S., {\em et al} (2017)
-\newblock {Deconvoluting multiple infections in {\it Plasmodium falciparum} from high throughput sequencing data}.
-\newblock {\em Bioinformatics\/}~{\em \/}btx530. doi: https://doi.org/10.1093/bioinformatics/btx530
-
-\bibitem[\protect\citeauthoryear{Zimmerman}{Zimmerman et~al.}{2004}]{Zimmerman2004}
-Zimmerman, P., {\em et al} (2004)
-\newblock Why do we need to know more about mixed Plasmodium species infections in humans?
-\newblock {\em Trends Parasitol.}~{\em 20}(9):440--447.
-\end{thebibliography}
-
+\bibliography{mixedIBD.bib}
 
 
 \end{document}

@@ -10,9 +10,15 @@ suptex = $(shell grep "\.tex" mainSupplement.tex | sed -e "s/^.*{//g" -e "s/\}//
 coverLetter.pdf: coverLetter.tex
 	pdflatex coverLetter.tex
 
-main.pdf: main.tex ${mainfiguresPng} ${mainfiguresPdf}
+main.pdf: main.tex ${mainfiguresPng} ${mainfiguresPdf} main.bbl
 	pdflatex main.tex
 	pdflatex main.tex
+
+main.aux: main.tex
+	pdflatex main.tex
+
+main.bbl: main.aux
+	bibtex main.aux
 
 mainSupplement.pdf: mainSupplement.tex ${supfigures} ${supfigurespdf} ${suptex} supplementReset.tex
 	pdflatex mainSupplement.tex
