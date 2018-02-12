@@ -102,7 +102,7 @@ Individuals infected with {\it Plasmodium falciparum} malaria pathogens can carr
 \section{Introduction}
 
 
-Individuals infected with malaria-causing parasites of the genus {\it Plasmodium} can often be found to carry multiple, distinct strains~\citep{Bell2006}  Such mixed infections are likely indicative of intense local exposure rates, being found commonly in regions of Africa with high rates of prevalence~\citep{Bhatt2015, Howes2016}, though are also documented for {\it P.~vivax} and other malaria-causing parasites~\citep{Mueller2007, Collins2012}, even in regions of much lower prevalence~\citep{Howes2016, Steenkeste2010}.  For example, \citet{Pearson2016} reports 45\% of {\it P.~vivax} infections are mixed.  Mixed infections have been associated with increased disease severity \citep{deRoode2005} and also provide the fuel for generating genomic diversity within the parasite, enabling co-transmission to the mosquito vector where sexual recombination occurs \citep{Mzilahowa2007}.  Mixed infections are transient \citep{Bruce2002, Zimmerman2004}, though whether this is driven entirely by the host immune response~\citep{Borrmann2011} or whether it is influenced by interactions between the distinct strains is not known~\citep{Enosse2006, Bushman2016}.
+Individuals infected with malaria-causing parasites of the genus {\it Plasmodium} can often be found to carry multiple, distinct strains~\citep{Bell2006}  Such mixed infections are likely indicative of intense local exposure rates, being found commonly in regions of Africa with high rates of prevalence~\citep{Bhatt2015, Howes2016}, though are also documented for {\it P.~vivax} and other malaria-causing parasites~\citep{Mueller2007, Collins2012}, even in regions of much lower prevalence~\citep{Howes2016, Steenkeste2010}.  For example, \citet{Pearson2016} reports 45\% of {\it P.~vivax} infections are mixed.  Mixed infections have been associated with increased disease severity \citep{deRoode2005} and also provide the fuel for generating genomic diversity within the parasite, enabling co-transmission to the mosquito vector where sexual recombination occurs \citep{Mzilahowa2007}.  Mixed infections are transient \citep{Bruce2002, Zimmerman2004}, but little is known about distribution of duration or whether clearance of one or more strains results purely from host immunity~\citep{Borrmann2011} or can be influenced by interactions between the distinct strains is not known~\citep{Enosse2006, Bushman2016}.
 
 Although mixed infections can be studied from SNP barcodes~\citep{Galinsky2015} or single locus polymorphisms~\citep{Jack2016}, genome sequencing provides a powerful approach for detecting mixed infections~\citep{Chang2017}.  Genetic differences between strains within a host are manifest as polymorphic sites within the isolate, which motivates statistical approaches for estimating the number of distinct strains, their relative proportions and genome sequences~\citep{Zhu2017}.  Although genomic approaches cannot identify individuals infected multiple times by identical strains (and have to filter sequencing data heavily to eliminate false signs of polymorphism arising from sequencing error and problems of incomplete or erroneous reference assemblies), they provide a rich characterization of within host diversity~\citep{Manske2012}.
 
@@ -113,12 +113,12 @@ Here, we develop, test and apply an enhanced method for strain deconvolution, wh
 
 
 
-\section{An enhanced method for strain deconvolution in the presence of relatedness}
+\section{Strain deconvolution in the presence of relatedness}
 
 Existing methods for deconvolution of mixed infections assume that the different genetic strains present in mixed infections are unrelated.  This assumption allows for efficient computation of priors for allele frequencies within samples, either through assuming independence of loci~\citep{Jack2016} or as sequences generated as imperfect mosaics of some (pre-defined) reference panel~\citep{Zhu2017}.  However, when strains are related to each other, certain allele frequencies are excluded; for example, within a region of identity by descent (IBD) for a mixed infection with two strains, only allele frequencies of 0 and 1 are possible.  Because patterns of IBD are likely to vary along the genome, these constraints can cause problems for estimators, which can try to fit complex strain combinations (with relatedness) as simpler configurations (without relatedness).  Below we outline the approach taken to integrating IBD into \texttt{DEploid} and validate the approach.  Further details are provided in the Supplementary Material.
 
 
-\subsection{Estimating genomic relatedness profiles among strains}
+\subsection{Decoding genomic relatedness among strains}
 
 Many approaches to detecting IBD using hidden Markov models of transition into and out of IBD~\citep{Chang2015, Gusev2009, Gusev2011}.  We have generalized this approach for the case of $k$ strains, where there are $2^k$ possible genotype configurations at any one locus ({\it Plasmodium} strains are haploid).  For a given set of strain proportions within the isolate, this results in $2^k$ possible distinct allele frequencies; for example, the isolate shown in Figure \ref{fig:fig1} has three strains, hence eight possible allele frequencies.  The IBD state is defined by the sharing patterns among strains.  For example, with two strains there are only the configurations $\{1,2\}$ and ${1,1}$, corresponding to non-IBD and IBD states respectively.  With three strains there are five states: $\{1,2,3\}$, $\{1,1,2\}$, $\{1,2,1\}$, $\{1,2,2\}$ and $\{1,1,1\}$, four strains have 15 IBD configurations, etc.  We restrict analyses to a maximum of four strains for reasons of computational efficiency, though in practice we have not identified any samples where five distinct strains can be identified.  Recombination breaks up IBD, hence allele frequency patterns, along the genome (Figure \ref{fig:fig1}a), which is not clear from a single genome-wide plot of variant frequencies (Figure \ref{fig:fig1}b).  At this stage of the algorithm, we assume linkage equilibrium between all variants, which speeds up computation, and use a Gamma-Poisson emission model for read counts (see Supplementary Methods).  Allele frequencies are estimated from a panel of reference isolates obtained from a similar geographic region.  Because of the structure of the hidden Markov model, we can compute the likelihood of the strain proportions by integrating over all IBD configurations.  Once the number and strain proportions have been estimated, we can then use posterior decoding to infer the relatedness structure across the genome (Figure 1ref{fig:fig1}a).
 Unlike our previous work, \texttt{DEploidIBD} infers strain structure in two steps.  In the first we estimate the number and proportions of strains using MCMC, allowing for IBD as described above.  In the second, we infer the individual genomes of the strains, using the MCMC methodology of~\citet{Zhu2017}, which can account for linkage disequilibrium (LD) between variants, but without updating strain proportions.
@@ -148,24 +148,22 @@ Unlike our previous work, \texttt{DEploidIBD} infers strain structure in two ste
 
 \subsection{Validation}
 
-We validated \texttt{DEploidIBD} through two experiments.  First, to test consistency with \texttt{DEploid} \citet{Zhu2017}, we re-analysed the 27 experimental mixtures from \citep{Wendler2015}.  This dataset includes 27 samples of various mixtures of four laboratory parasite lines (3D7, Dd2, HB3 and 7G8; Figure \ref{fig:benchmark} – figure supplement 1).  Allowing for mixtures of up to four strains and using optimal reference panels, we found essentially identical performance with the single-step \texttt{DEploid} method, with the exception of three strains of equal proportions where LD info is necessary to achieve accurate deconvolution (Figure \ref{fig:benchmark}).
+We validated \texttt{DEploidIBD} through two experiments.  First, to test consistency with \texttt{DEploid} \citet{Zhu2017}, we re-analysed the 27 experimental mixtures from \citep{Wendler2015}.  This dataset includes 27 samples of various mixtures of four laboratory parasite lines (3D7, Dd2, HB3 and 7G8; Figure \ref{fig:benchmark} – figure supplement 1).  Allowing for mixtures of up to four strains and using optimal reference panels, we found comparable performance with the single-step \texttt{DEploid} method, with the exception of three strains of equal proportions where LD info is necessary to achieve accurate deconvolution (Figure \ref{fig:benchmark}).
 
-To test the performance of \texttt{DEploidIBD} in a more realistic setting, we created {\it in silico} mixtures from 212 clonal samples of Asian origin with two proportions (25/75\% and 45/55\%) for 8071 sites from Chromosome 14.  A further 20 randomly chosen samples were used as the reference panel. In order to compare the performance of the two methods at different levels of relatedness, we set 25\%, 50\% and 75\% of the second haplotype to be the same as the first haplotype to mimic scenarios of low, medium and high relatedness. To simulate data, we used empirical read depths and drew read counts for the two alleles from binomial proportions.  We inferred strain proportions (summarised by the effective number of strains: $1/\sum w_{i}^{2}$), and haplotypes.  Both \texttt{DEploid} and \texttt{DEploidIBD} correctly estimate strain proportions with low to moderate relatedness and high coverage.  However, for samples with closely related strains, particularly at low coverage, only \texttt{DEploidIBD} can identify the correct number of strains and IBD fractions.  Genotype and phase errors are comparable between methods, though decrease with increasing relatedness due to the increased homozygosity.  In summary, joint inference of IBD profiles and strain haplotypes is expected to improve estimates of strain proportions (and hence haplotypes), particularly in regions with high rates of IBD and with low sequencing coverage.
-
-
+To test the performance of \texttt{DEploidIBD} in a more realistic setting, we created {\it in silico} mixtures from 212 clonal samples of Asian origin with two proportions (25/75\% and 45/55\%) for 8071 sites from Chromosome 14.  A further 20 randomly chosen samples were used as the reference panel. In order to compare the performance of the two methods at different levels of relatedness, we set 25\%, 50\% and 75\% of the second haplotype to be the same as the first haplotype to mimic scenarios of low, medium and high relatedness. To simulate data, we used empirical read depths and drew read counts for the two alleles from binomial proportions.  We inferred strain proportions (summarised by the effective number of strains: $1/\sum w_{i}^{2}$), and haplotypes.  Both \texttt{DEploid} and \texttt{DEploidIBD} correctly estimate strain proportions with low to moderate relatedness and high coverage.  However, for samples with closely related strains, particularly at low coverage, only \texttt{DEploidIBD} can identify the correct number of strains and their proportions.  Genotype and phase errors are comparable between methods, though decrease with increasing relatedness due to the increased homozygosity.  In summary, joint inference of IBD profiles and strain haplotypes is expected to improve estimates of strain proportions (and hence haplotypes), particularly in regions with high rates of IBD and with low sequencing coverage.  Moreover, direct estimates of IBD within mixed infections can be used as additional characterization of samples.
 
 
 
 \begin{figure}[htp]
   \begin{center}
   \subfloat[][]{
-  \includegraphics[width = 0.45\textwidth]{diagnositicPlot_of_effK_final.pdf}
+  \includegraphics[width = 0.3\textwidth]{diagnositicPlot_of_effK_final.pdf}
   }
   \subfloat[][]{
-  \includegraphics[width = 0.45\textwidth]{IBDprobs.pdf}
+  \includegraphics[width = 0.3\textwidth]{IBDprobs.pdf}
   }\\
   \subfloat[][]{
-  \includegraphics[width = 0.8\textwidth]{IBDHapError.pdf}
+  \includegraphics[width = 0.5\textwidth]{IBDHapError.pdf}
   }
   \caption{Simulation results. (a)Comparison of effective number of strains between \texttt{DEploid} and \texttt{DEploidIBD}. (b)Expected and inferred percentage of IBD regions for \texttt{DEploid}. (c) Histograms of switch error and genotype error across 76 simulated Pf3k samples for \texttt{DEploid}. In all figures, we excluded eight cases out of the 100 experiments where simulated haplotypes were over 99\% identical, and 16 cases where average coverage was below 20.
 }\label{fig:benchmark}
@@ -185,10 +183,10 @@ To test the performance of \texttt{DEploidIBD} in a more realistic setting, we c
 To investigate how the rate and relatedness structure of mixed infections varies among geographical regions with different epidemiological characteristics, we applied \texttt{DEploidIBD} to 2,512 field samples released by the Pf3k Consortium (REF).  A summary of the samples is presented in Table \ref{tab:Pf3ksamples}.  After filtering, we typed approximately 1M variable SNP positions across all samples, sequenced to an average depth of 86.16 (range 1.02 – 675.57).  See Supplementary Material for details of filters and data availability.  Samples were grouped into four geographical regions within Africa and three within Asia based on genetic similarity (Table \ref{tab:Pf3ksamples}).
 
 \begin{table}[bt]
-  \caption{Data summary of African samples.}\label{tab:Pf3ksamples}
+  \caption{Summary of African samples.}\label{tab:Pf3ksamples}
 \begin{tabular}{l l c c c c c}
 \toprule
-Country & Location & Year & Sample size & Read Depth (s.e.) & Group \\
+Country & Location & Year & Sample size & Mean Read Depth (s.e.) & Group \\
 \midrule
 Malawi          &Chikwawa       &2011 &208  &97   (3.2 )&Africa 1\\
 %                &               &NA   &92   &94   (3.5 )&Africa 1\\
@@ -244,7 +242,7 @@ Source: \url{ftp://ngs.sanger.ac.uk/production/pf3k/release_5/5.1}
 
 \begin{table}[bt]
 \ContinuedFloat
-\caption{Table continued. Data summary of Asia samples.}
+\caption{Table continued.  Summary of Asian samples.}
 \begin{tabular}{l l c c c c c}
 \toprule
 Country & Location & Year & Sample size & Read Depth (s.e.) & Group \\
@@ -290,11 +288,29 @@ Bangladesh      &Ramu           &2012 &50   &53   (4.2 )&Asia 3  \\
 
 Across continents and countries we find substantial variation in the rate and relatedness structure of mixed infections (Figure \ref{fig:Pf3kResults}).  Within Africa, rates of mixed infection vary from 18\% in Senegal to 63\% in Malawi.  In the South East Asian field samples, mixed infection rates are generally lower, though also vary considerably; between 22\% in Thailand to 56\% in Bangladesh.
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 \begin{figure}[htp]
   \centering{}
   \includegraphics[width=\textwidth]{barPlots_by_gil.pdf}
   \caption{tmp}\label{fig:Pf3kResults}
 \end{figure}
+
+
 
 \narrative{3. Summary of findings about relatedness within mixed infections.  Figure 4.  Relatedness structure histogram showing peaks at 0.25, 0.5, etc. and relationship between mixed infection rate and sib-strain.}
 
