@@ -182,7 +182,7 @@ To test the performance of \texttt{DEploidIBD} in a more realistic setting, we c
 
 \subsection{The rate and structure of mixed infection in 2,512 {\it P. falciparum} field samples from 14 countries}
 
-To investigate how the rate and relatedness structure of mixed infections varies among geographical regions with different epidemiological characteristics, we applied \texttt{DEploidIBD} to 2,512 field samples released by the Pf3k Consortium (REF).  A summary of the samples is presented in Table \ref{tab:Pf3ksamples}.  After filtering, we typed approximately 1M variable SNP positions across all samples, sequenced to an average depth of 86.16 (range 1.02 – 675.57).  See Supplementary Material for details of filters and data availability.  Samples were grouped into four geographical regions within Africa and three within Asia based on genetic similarity (Table \ref{tab:Pf3ksamples}).
+To investigate how the rate and relatedness structure of mixed infections varies among geographical regions with different epidemiological characteristics, we applied \texttt{DEploidIBD} to 2,512 field samples of {\it P. falciparum} released by the Pf3k Consortium (REF).  These samples were collected under a wide range of designs, though the majority were taken from individuals seeking treatment for malaria symptoms.  A summary of the data sources is presented in Table \ref{tab:Pf3ksamples}.  After variant calling and filtering, we genotyped approximately 1M variable SNP positions across all samples, sequenced to an average depth of 86 (range 1.0 – 680).  See Supplementary Material for details of filters and data availability.  Samples were grouped into four geographical regions within Africa and three within Asia based on genetic similarity (Table~\ref{tab:Pf3ksamples }).
 
 \begin{table}[bt]
   \caption{Summary of African samples.}\label{tab:Pf3ksamples}
@@ -288,17 +288,12 @@ Bangladesh      &Ramu           &2012 &50   &53   (4.2 )&Asia 3  \\
 \end{tabular}
 \end{table}
 
-Across continents and countries we find substantial variation in the rate and relatedness structure of mixed infections (Figure \ref{fig:Pf3kResults}).  Within Africa, rates of mixed infection vary from 18\% in Senegal to 63\% in Malawi.  In the South East Asian field samples, mixed infection rates are generally lower, though also vary considerably; between 22\% in Thailand to 56\% in Bangladesh.
+Across continents and countries we find substantial variation in the rate and relatedness structure of mixed infections (Figure~\ref{fig:Pf3kResults}).  Within Africa, rates of mixed infection vary from 18\% in Senegal to 63\% in Malawi.  In the South East Asian field samples, mixed infection rates are generally lower, though also vary considerably; between 22\% in Thailand to 56\% in Bangladesh.  Where data for a location is available over multiple years, we find little evidence for substantial fluctuation over time CHECK .  Between 5.1\% (Senegal) and 40\% (Malawi) of individuals have more than two strains present and, at the population level, there is a positive correlation between the rate of dual infection (where two strains are present) and higher levels of infection (linear model P = 0.017, accounting for continental level effects). 
+
+Relatedness between samples and populations also varied substantially (Figure~\ref{fig:Pf3kResults}).  In dual infections, the average fraction of the genome inferred to be IBD ranges from 16\% in Guinea to 55\% in The Gambia and Asian populations show on average a higher level of relatedness (41\%) compared to African populations (30\%).  Similarly, while a minority of triple infections (0\% to 24\% across populations) are estimated to be unrelated in Africa, all triple Asian infections are inferred to contain individuals related at the level of at least siblings.  Overall, 58\% of all mixed infections involve strains with over 30\% of the genome IBD (the 2.5th percentile of IBD expected between true siblings given the recombination rate in {\it P. falciparum}).  
 
 
-
-
-
-
-
-
-
-
+Within both Africa and Asia we find no simple relationship between IBD and rates of mixed infection (Figure~\ref{fig:Pf3kResults}).  In both Africa and Asia, the populations with the highest levels of mixed infection have between 40\% and 60\% of strains with highly related (IBD fraction $\gt 0.3$) strains.  However, similar patterns are observed across all populations.  Moreover, populations with similar rates of mixed infection can have different patterns of inbreeding.  For example, Senegal, which has low rates of mixed infection, has relatively low levels of IBD (VALUE) where mixed infections occur, while The Gambia, which has only slightly higher rates of mixed infection has considerably higher levels of IBD (VALUE).  
 
 
 
