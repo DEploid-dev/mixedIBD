@@ -24,6 +24,10 @@ mainSupplement.pdf: mainSupplement.tex ${supfigures} ${supfigurespdf} ${suptex} 
 	pdflatex mainSupplement.tex
 	pdflatex mainSupplement.tex
 
+otherFigures.pdf: otherFigures.tex ${supfigures} ${supfigurespdf} ${suptex} supplementReset.tex
+	pdflatex otherFigures.tex
+	pdflatex otherFigures.tex
+
 clean:
 	rm -f *.blg *snm *nav *.bbl *.ps *.dvi *.aux *.toc *.idx *.ind *.ilg *.log *.out main.pdf
 
