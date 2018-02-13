@@ -208,17 +208,19 @@ label_size = 2
 
 pdf("hap_post_prob_hap.pdf", height = 6, width = 14)
 par(mar=c(0,0,0,0))
-layout(matrix(c(1,rep(2,10),rep(3,10),rep(13,3),
+layout(matrix(c(14, rep(15,10),rep(16,10),rep(13,3),
                 1,rep(2,10),rep(3,10),rep(13,3),
                 1,rep(2,10),rep(3,10),rep(13,3),
+                1,rep(2,10),rep(3,10),rep(13,3),
                 4, rep(5,10),rep(6,10),rep(13,3),
                 4, rep(5,10),rep(6,10),rep(13,3),
                 4, rep(5,10),rep(6,10),rep(13,3),
                 7, rep(8,10),rep(9,10),rep(13,3),
                 7, rep(8,10),rep(9,10),rep(13,3),
                 7, rep(8,10),rep(9,10),rep(13,3),
+                10, rep(11,10),rep(12,10),rep(13,3),
                 10, rep(11,10),rep(12,10),rep(13,3)
-                ), 10, 24, byrow=T))
+                ), 12, 24, byrow=T))
 
 plot(c(0,0),c(1,1), ylim = c(0,1), type="n", ylab="", xlab="", yaxt="n", xaxt="n", axes=F)
 axis(4, at=c(0,.5,1), labels=c(0,.5,1),line=-.5, cex.axis=tick_size)
@@ -244,7 +246,7 @@ points(hapInfo$POS[hapChrom == name2], expWSAF[hapChrom == name2], col="blue", p
 
 plot(c(0,0),c(1,1), ylim = c(0,1), type="n", ylab="", xlab="", yaxt="n", xaxt="n", axes=F)
 axis(4, at=c(0,.5,1), labels=c(0,.5,1), line = -.5,cex.axis=tick_size)
-mtext("IBD probability", side=4, line=-2, cex = tick_size)
+mtext("IBD state", side=4, line=-2, cex = tick_size)
 
 haplotypePainter <- function (posteriorProbabilities, title = "", labelScaling,
                         numberOfInbreeding = 0){
@@ -281,7 +283,7 @@ hap = hapInfo[hapInfo$CHROM == name1, -c(1,2)]
     xrange = c(0, haplength)
     yrange = c(0, 1)
     plot( xrange, yrange, type= "n", xlim=xrange, ylim = yrange, ylab="", xlab = "", cex.axis=tick_size, yaxt="n", axes=F)
-    axis(1, cex.axis = tick_size)
+    axis(1, cex.axis = tick_size*1.1)
     xleft = 0:(haplength-1)
     xright = xleft+1
 #    ycum = as.numeric(c(0, prop[1], 1))
@@ -304,7 +306,7 @@ hap = hapInfo[hapInfo$CHROM == name2, -c(1,2)]
     xrange = c(0, haplength)
     yrange = c(0, 1)
     plot( xrange, yrange, type= "n", xlim=xrange, ylim = yrange, ylab="", xlab = "", cex.axis=tick_size, yaxt="n", axes=F)
-    axis(1, cex.axis = tick_size)
+    axis(1, cex.axis = tick_size*1.1)
     xleft = 0:(haplength-1)
     xright = xleft+1
 #    ycum = as.numeric(c(0, prop[1], 1))
@@ -326,13 +328,13 @@ hap = hapInfo[hapInfo$CHROM == name1, -c(1,2)]
     haplength = dim(hap)[1]
     nhap = dim(hap)[2]
 plot(c(0,0),c(1,1), xlim = c(0,haplength), type="n", ylab="", xlab="", yaxt="n", xaxt="n", axes=F)
-mtext(paste("SNP Index"), side=3, line=-4.5, cex = label_size)
+mtext(paste("SNP Index"), side=3, line=-5.5, cex = label_size)
 
 hap = hapInfo[hapInfo$CHROM == name2, -c(1,2)]
     haplength = dim(hap)[1]
     nhap = dim(hap)[2]
 plot(c(0,0),c(1,1), xlim = c(0,nhap), type="n", ylab="", xlab="", yaxt="n", xaxt="n", axes=F)
-mtext(paste("SNP Index"), side=3, line=-4.5, cex = label_size)
+mtext(paste("SNP Index"), side=3, line=-5.5, cex = label_size)
 
 plot(c(0,1), c(0,1), type = "n", axes = F, xlab = "", ylab= "")
 
@@ -340,6 +342,12 @@ plot(c(0,1), c(0,1), type = "n", axes = F, xlab = "", ylab= "")
 legend("left", legend = c("No IBD", "All IBD", "1-2 IBD", "1-3 IBD", "2-3 IBD"), col = c("brown1", "chartreuse", "yellow1", "gold", "orange"),
     pch = 15,  bty = "n", cex = label_size*1.2, ncol = 1)
 
+plot(c(0,0),c(1,1), ylim = c(0,1), type="n", ylab="", xlab="", yaxt="n", xaxt="n", axes=F)
+plot(c(0,0),c(1,1), ylim = c(0,1), type="n", ylab="", xlab="", yaxt="n", xaxt="n", axes=F)
+mtext(paste("Chromosome 11"), side=3, line=-2.5, cex = label_size)
+
+plot(c(0,0),c(1,1), ylim = c(0,1), type="n", ylab="", xlab="", yaxt="n", xaxt="n", axes=F)
+mtext(paste("Chromosome 12"), side=3, line=-2.5, cex = label_size)
 dev.off()
 
 
