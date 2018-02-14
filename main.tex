@@ -21,7 +21,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% figure and table %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \usepackage{graphicx}
 \graphicspath{{./figures/}}
-\usepackage{subfig}
+\usepackage[position=top]{subfig}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% layout %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \usepackage{setspace}
@@ -131,20 +131,10 @@ Unlike our previous work, \texttt{DEploidIBD} infers strain structure in two ste
   \begin{center}
   \subfloat[][]{\includegraphics[width=0.3\textwidth]{altVsRef.pdf}}
   \subfloat[][]{\includegraphics[width=0.7\textwidth]{hap_post_prob_hap.pdf}}
-   \caption{{\fontsize{9}{10.8}\selectfont This is font 9} {\fontsize{8}{9.6}\selectfont This is font 8} {\fontsize{6}{7.2}\selectfont This is font 6}
-   Deconvolution of field sample PD0577-C from Thailand.  (a) Summary of allele frequencies observed within the isolate shown as a scatter-plot of the numbers of reads supporting the reference (REF: x-axis) and alternative (ALT: y-axis) alleles. (b) The profile of within-sample allele frequency along chromosomes 11 and 12 (black points) suggests a changing profile of IBD with three distinct strains, estimated to be at frequencies of $22\%$, $52\%$ and $26\%$ respectively (other chromosomes omitted for clarity, see Figure~\ref{fig:fig1}-Supplement~1); blue points indicate expected allele frequencies within the isolate.  However, the strains are inferred to be siblings of each other: green segments identify where all three strains are IBD; yellow, orange and dark orange segments identify the regions where one pair of strains are IBD but the others are not.  In no region are all three strains inferred to be distinct. A graphical description of the modules and work flows for \texttt{DEploidIBD} is given in Figure~\ref{fig:fig1}-Supplement~2.}\label{fig:fig1}
+   \caption{Deconvolution of field sample PD0577-C from Thailand.  (a) Summary of allele frequencies observed within the isolate shown as a scatter-plot of the numbers of reads supporting the reference (REF: x-axis) and alternative (ALT: y-axis) alleles. (b) The profile of within-sample allele frequency along chromosomes 11 and 12 (black points) suggests a changing profile of IBD with three distinct strains, estimated to be at frequencies of $22\%$, $52\%$ and $26\%$ respectively (other chromosomes omitted for clarity, see Figure~\ref{fig:fig1}-Supplement~1); blue points indicate expected allele frequencies within the isolate.  However, the strains are inferred to be siblings of each other: green segments identify where all three strains are IBD; yellow, orange and dark orange segments identify the regions where one pair of strains are IBD but the others are not.  In no region are all three strains inferred to be distinct. A graphical description of the modules and work flows for \texttt{DEploidIBD} is given in Figure~\ref{fig:fig1}-Supplement~2.}\label{fig:fig1}
    \end{center}
    \figsupp{Whole genome deconvolution of field sample PD0577-C is represented in ring figures. The outer ring show expected WSAF (blue) and observed WSAF (red) across the genome. Red and blue points indicate observed and expected allele frequencies within the isolate. This inner ring marks the IBD regions of the three strains: green segments identify where all three strains are IBD; yellow, orange and dark orange segments identify the regions where one pair of strains are IBD but the others are not.  In no region are all three strains inferred to be distinct.}{\includegraphics[width=.7\textwidth]{{myring.ring}.pdf}}
    \figsupp{A graphical description of the modules and work flows for \texttt{DEploidIBD}.}{\includegraphics[width=.8\textwidth]{scheme.pdf}}
-\end{figure}
-
-\begin{figure}[ht]
-  \begin{center}
-  \subfloat[][]{\includegraphics[width=0.6\textwidth]{figure_a.pdf}}
-  \subfloat[][]{\includegraphics[width=.4\textwidth]{figure_b.pdf}}
-   \caption{}\label{fig:fig_unnumberd}
-   \end{center}
-   \figsupp{IBD chunk lengths from crosses.}{\includegraphics[width=\textwidth]{crosses_IBD_length.pdf}}
 \end{figure}
 
 
@@ -182,7 +172,7 @@ To test the performance of \texttt{DEploidIBD} in a more realistic setting, we c
 
 \subsection{The rate and structure of mixed infection in 2,512 {\it P. falciparum} field samples from 14 countries}
 
-To investigate how the rate and relatedness structure of mixed infections varies among geographical regions with different epidemiological characteristics, we applied \texttt{DEploidIBD} to 2,512 field samples of {\it P. falciparum} released by the Pf3k Consortium (REF).  These samples were collected under a wide range of designs, though the majority were taken from individuals seeking treatment for malaria symptoms.  A summary of the data sources is presented in Table \ref{tab:Pf3ksamples}.  After variant calling and filtering, we genotyped approximately 1M variable SNP positions across all samples, sequenced to an average depth of 86 (range 1.0 – 680).  See Supplementary Material for details of filters and data availability.  Samples were grouped into four geographical regions within Africa and three within Asia based on genetic similarity (Table~\ref{tab:Pf3ksamples }).
+To investigate how the rate and relatedness structure of mixed infections varies among geographical regions with different epidemiological characteristics, we applied \texttt{DEploidIBD} to 2,512 field samples of {\it P. falciparum} released by the Pf3k Consortium (REF).  These samples were collected under a wide range of designs, though the majority were taken from individuals seeking treatment for malaria symptoms.  A summary of the data sources is presented in Table \ref{tab:Pf3ksamples}.  After variant calling and filtering, we genotyped approximately 1M variable SNP positions across all samples, sequenced to an average depth of 86 (range 1.0 – 680).  See Supplementary Material for details of filters and data availability.  Samples were grouped into four geographical regions within Africa and three within Asia based on genetic similarity (Table~\ref{tab:Pf3ksamples}).
 
 \begin{table}[bt]
   \caption{Summary of African samples.}\label{tab:Pf3ksamples}
@@ -288,19 +278,30 @@ Bangladesh      &Ramu           &2012 &50   &53   (4.2 )&Asia 3  \\
 \end{tabular}
 \end{table}
 
-Across continents and countries we find substantial variation in the rate and relatedness structure of mixed infections (Figure~\ref{fig:Pf3kResults}).  Within Africa, rates of mixed infection vary from 18\% in Senegal to 63\% in Malawi.  In the South East Asian field samples, mixed infection rates are generally lower, though also vary considerably; between 22\% in Thailand to 56\% in Bangladesh.  Where data for a location is available over multiple years, we find little evidence for substantial fluctuation over time CHECK .  Between 5.1\% (Senegal) and 40\% (Malawi) of individuals have more than two strains present and, at the population level, there is a positive correlation between the rate of dual infection (where two strains are present) and higher levels of infection (linear model P = 0.017, accounting for continental level effects). 
+Across continents and countries we find substantial variation in the rate and relatedness structure of mixed infections (Figure~\ref{fig:Pf3kResults}).  Within Africa, rates of mixed infection vary from 18\% in Senegal to 63\% in Malawi.  In the South East Asian field samples, mixed infection rates are generally lower, though also vary considerably; between 22\% in Thailand to 56\% in Bangladesh.  Where data for a location is available over multiple years, we find little evidence for substantial fluctuation over time CHECK .  Between 5.1\% (Senegal) and 40\% (Malawi) of individuals have more than two strains present and, at the population level, there is a positive correlation between the rate of dual infection (where two strains are present) and higher levels of infection (linear model P = 0.017, accounting for continental level effects).
 
-Relatedness between samples and populations also varied substantially (Figure~\ref{fig:Pf3kResults}).  In dual infections, the average fraction of the genome inferred to be IBD ranges from 16\% in Guinea to 55\% in The Gambia and Asian populations show on average a higher level of relatedness (41\%) compared to African populations (30\%).  Similarly, while a minority of triple infections (0\% to 24\% across populations) are estimated to be unrelated in Africa, all triple Asian infections are inferred to contain individuals related at the level of at least siblings.  Overall, 58\% of all mixed infections involve strains with over 30\% of the genome IBD (the 2.5th percentile of IBD expected between true siblings given the recombination rate in {\it P. falciparum}).  
+Relatedness between samples and populations also varied substantially (Figure~\ref{fig:Pf3kResults}).  In dual infections, the average fraction of the genome inferred to be IBD ranges from 16\% in Guinea to 55\% in The Gambia and Asian populations show on average a higher level of relatedness (41\%) compared to African populations (30\%).  Similarly, while a minority of triple infections (0\% to 24\% across populations) are estimated to be unrelated in Africa, all triple Asian infections are inferred to contain individuals related at the level of at least siblings.  Overall, 58\% of all mixed infections involve strains with over 30\% of the genome IBD (the 2.5th percentile of IBD expected between true siblings given the recombination rate in {\it P. falciparum}).
 
-Within both Africa and Asia we find no simple relationship between IBD and rates of mixed infection (Figure~\ref{fig:Pf3kResults}).  In both Africa and Asia, the populations with the highest levels of mixed infection have between 40\% and 60\% of strains with highly related (IBD fraction $>~0.3$) strains.  However, similar patterns are observed across all populations.  Moreover, populations with similar rates of mixed infection can have different patterns of inbreeding.  For example, Senegal, which has low rates of mixed infection, has relatively low levels of IBD (VALUE) where mixed infections occur, while The Gambia, which has only slightly higher rates of mixed infection has considerably higher levels of IBD (VALUE).  
+Within both Africa and Asia we find no simple relationship between IBD and rates of mixed infection (Figure~\ref{fig:Pf3kResults}).  In both Africa and Asia, the populations with the highest levels of mixed infection have between 40\% and 60\% of strains with highly related (IBD fraction $>~0.3$) strains.  However, similar patterns are observed across all populations.  Moreover, populations with similar rates of mixed infection can have different patterns of inbreeding.  For example, Senegal, which has low rates of mixed infection, has relatively low levels of IBD (VALUE) where mixed infections occur, while The Gambia, which has only slightly higher rates of mixed infection has considerably higher levels of IBD (VALUE).
 
-These results suggest that a substantial fraction of mixed infections involve sibling strains; those related through meiosis from distinct strains within a multiply-infected mosquito.  To further investigate this hypothesis we examined the length distribution of IBD segments within mixed infections.  Figure~\ref{fig:strainIBD.pdf} shows examples of genomic IBD profiles in dual and triple infections.  Previous work on {\it P. falciparum} lab crosses has shown that cross-over events occur typically 200~kb to 1~Mb apart \citet{Miles}, hence IBD tracts are expect to be about half this length in dual sibling infections and one third of this in triple infections (Figure~\ref{fig:strainIBD.pdf}).  By jointly considering IBD fraction and IBD length, we observe bimodal distributions of both variables, which can be used to identify mixed infections related to different degrees.  For example we can identify those likely to be siblings from unrelated parents, siblings from related parents (i.e. with inbreeding) and strains separated by two to three meiosis (Figure~\ref{fig:strainIBD.pdf}).  
+These results suggest that a substantial fraction of mixed infections involve sibling strains; those related through meiosis from distinct strains within a multiply-infected mosquito.  To further investigate this hypothesis we examined the length distribution of IBD segments within mixed infections.  Figure~\ref{fig:strainIBD} shows examples of genomic IBD profiles in dual and triple infections.  Previous work on {\it P. falciparum} lab crosses has shown that cross-over events occur typically 200~kb to 1~Mb apart \citet{Miles}, hence IBD tracts are expect to be about half this length in dual sibling infections and one third of this in triple infections (Figure~\ref{fig:strainIBD}).  By jointly considering IBD fraction and IBD length, we observe bimodal distributions of both variables, which can be used to identify mixed infections related to different degrees.  For example we can identify those likely to be siblings from unrelated parents, siblings from related parents (i.e. with inbreeding) and strains separated by two to three meiosis (Figure~\ref{fig:strainIBD}).
 
 
 \begin{figure}[htp]
   \centering{}
   \includegraphics[width=\textwidth]{barPlots_by_gil.pdf}
   \caption{tmp}\label{fig:Pf3kResults}
+\end{figure}
+
+\begin{figure}[ht]
+  \begin{center}
+  \subfloat[][]{\includegraphics[width=0.6\textwidth]{figure_a.pdf}}
+  \subfloat[][]{\includegraphics[width=.4\textwidth]{figure_b.pdf}}
+   \caption{}\label{fig:strainIBD}
+   \end{center}
+   \figsupp{IBD chunk lengths from crosses.}{\includegraphics[width=0.5\textwidth]{figure_b_asia.pdf}}
+   \figsupp{IBD chunk lengths from crosses.}{\includegraphics[width=0.5\textwidth]{figure_b_africa.pdf}}
+   \figsupp{IBD chunk lengths from crosses.}{\includegraphics[width=\textwidth]{crosses_IBD_length.pdf}}
 \end{figure}
 
 
