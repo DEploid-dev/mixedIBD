@@ -251,7 +251,7 @@ mtext("IBD state", side=4, line=-2, cex = tick_size)
 haplotypePainter <- function (posteriorProbabilities, title = "", labelScaling,
                         numberOfInbreeding = 0){
 #    rainbowColorBin <- 16
-    rainbowColors = rainbowColors = c("brown1", "yellow1", "gold", "chartreuse", "orange")
+    rainbowColors = rainbowColors = c("brown1", "yellow1", "gold", "orange", "chartreuse")
     barplot(t(posteriorProbabilities), beside = F, border = NA,
         col = rainbowColors, space = 0, xlab = "",
         ylab = "", main = title, cex.axis = labelScaling / 5,
