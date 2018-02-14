@@ -22,6 +22,8 @@
 \usepackage{graphicx}
 \graphicspath{{./figures/}}
 \usepackage[label font=bf,labelformat=simple, position = top]{subfig}
+\newdimen\figrasterwd
+\figrasterwd\textwidth
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% layout %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \usepackage{setspace}
@@ -148,20 +150,21 @@ To test the performance of \texttt{DEploidIBD} in a more realistic setting, we c
 
 \begin{figure}[htp]
   \begin{center}
-  \subfloat[][]{
-  \includegraphics[width = 0.3\textwidth]{diagnositicPlot_of_effK_final.pdf}
+  \parbox{.95\figrasterwd}{
+    \parbox{.6\hsize}{%
+      \subfloat[][]{\includegraphics[width=\hsize]{eff_k_both.pdf}}
+    }
+    \hskip1em
+    \parbox{.4\hsize}{%
+      \subfloat[][]{\includegraphics[width=\hsize]{diagnositicPlot_of_effK_final.pdf}}
+      \\
+      %\vskip1em
+      \subfloat[][]{\includegraphics[width=\hsize]{genotype_error_ecdf.pdf}}
+    }
   }
-  \subfloat[][]{
-  \includegraphics[width = 0.3\textwidth]{IBDprobs.pdf}
-  }\\
-  \subfloat[][]{
-  \includegraphics[width = 0.5\textwidth]{IBDHapError.pdf}
-  }
-  \caption{Simulation results. (a)Comparison of effective number of strains between \texttt{DEploid} and \texttt{DEploidIBD}. (b)Expected and inferred percentage of IBD regions for \texttt{DEploid}. (c) Histograms of switch error and genotype error across 76 simulated Pf3k samples for \texttt{DEploid}. In all figures, we excluded eight cases out of the 100 experiments where simulated haplotypes were over 99\% identical, and 16 cases where average coverage was below 20.
+  \caption{Simulation results. (a) Experimental validation and effective number of strains inferred by {\tt DEploidIBD}. We use a reference panel of the laboratory parasite lines (3D7, Dd2, HB3 and 7G8) to deconvolve the same lab-mixed samples, assuming 3 and 4 strains within a sample. Each experiment is repeated without IBD method. Black crosses indicate the true effective number of strains. Purple crosses indicate median values obtained from 30 replicates when using {\tt DEploidIBD} with a panel and assuming that the maximum number of strains is 4. The coloured dots show the inferred effective number of strains across replicates with intensity proportional to fraction. (b) Comparison of effective number of strains between \texttt{DEploid} and \texttt{DEploidIBD}. The effective number of strains is expected to be 1.6 for 25\% and 75\% mixtures. \texttt{DEploidIBD} can correctly recover this value when two strains are highly related, where \texttt{DEploid} fails to do so. (c) Cumulative frequencies of genotype error across 76 simulated Pf3k samples. We find higher genotype error rate in \texttt{DEploid} than \texttt{DEploidIBD}, when inferred proportions are incorrect. In figures (b) and (c), we excluded eight cases out of the 100 experiments where simulated haplotypes were over 99\% identical, and 16 cases where average coverage was below 20.
 }\label{fig:benchmark}
   \end{center}
-  \figsupp{Experimental validation and effective number of strains inferred by {\tt DEploidIBD}. We use a reference panel of the laboratory parasite lines (3D7, Dd2, HB3 and 7G8) to deconvolve the same lab-mixed samples, assuming 3 and 4 strains within a sample. Each experiment is repeated without IBD method. Black crosses indicate the true effective number of strains. Purple crosses indicate median values obtained from 30 replicates when using {\tt DEploidIBD} with a panel and assuming that the maximum number of strains is 4. The coloured dots show the inferred effective number of strains across replicates with intensity proportional to fraction.
-  }{\includegraphics[width = 0.65\textwidth]{eff_k_both.pdf}}
   \figsupp{Comparison of true and inferred haplotypes for Chromosome 14 (2,369 SNPs) in sample PG0396-C before and after haplotype painting using a reference panel of the laboratory parasite lines (3D7, Dd2, HB3 and 7G8). The yellow, cyan and white background label the haplotype segments from strains 7G8, HB3 and Dd2 respectively. The switch errors are obtained by counting the changes of a strain segment mapped to reference strains; the genotype errors are the discordance between the strain and the mapped reference segments. }{\includegraphics[width = 0.8\textwidth]{DEploid_IBD_haps_compare.pdf}}
 \end{figure}
 
