@@ -110,7 +110,7 @@ effk_color = lapply(1:14, function(x){effkColorScale[which( effkGrid > (mean_eff
 
 
 IBDGrid = seq(min(mean_ibd), max(mean_ibd)+0.01, by = 0.01)
-IBDColorScale =  rev(rainbow(length(IBDGrid), start=rgb2hsv(col2rgb('green'))[1], end=rgb2hsv(col2rgb('blue'))[1]))
+IBDColorScale =  rainbow(length(IBDGrid), start=rgb2hsv(col2rgb('yellow'))[1], end=rgb2hsv(col2rgb('green'))[1])
 IBD_color = lapply(1:14, function(x){IBDColorScale[which( IBDGrid > (mean_ibd[x]))[1]]}) %>% unlist
 
 
