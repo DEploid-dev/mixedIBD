@@ -24,6 +24,8 @@
 \usepackage[label font=bf,labelformat=simple, position = top]{subfig}
 \newdimen\figrasterwd
 \figrasterwd\textwidth
+\usepackage{wrapfig}
+\usepackage{lipsum}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% layout %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \usepackage{setspace}
@@ -319,6 +321,10 @@ These results suggest that a substantial fraction of mixed infections involve si
 
 
 We show how the genomes of co-existing strains are related to each other, observing in some cases high levels of genetic relatedness or inbreeding. We see cases where heterozygosity is structured along the genome in a manner that suggests inbreeding, finding multiple cases of strains that are within 1-2 meioses of each other (Fig~\ref{fig:fig1}(a)). We envision that such a signature could be exploited in future micro-epidemiological studies to help in the inference of infection histories and transmission trees.
+\begin{wrapfigure}{h}{.46\textwidth}
+  \includegraphics[width=\hsize]{prevelance_single.pdf}
+\caption{}
+\end{wrapfigure}
 
 At the population level, we explore the malaria epidemic by stacking up all IBD posterior probabilities (Fig~\ref{fig:gambia}(a)). We observe striking variation in inbreeding patterns across populations with a mean inbreeding fraction range of \textcolor{red}{[0.07, 0.54]}. African countries, with the exception of The Gambia and Senegal, seem to have less inbred mixed infections, in agreement with the different levels of genetic diversity observed in each continent. These population-specific differences relate to the epidemiological setting of each region and provide a novel, and potentially important, source of information about local infection dynamics.
 
@@ -350,12 +356,13 @@ Between the mixed samples, we computed pairwise correlation between the IBD-frac
 %#> sum(PA0068.haps$h4 != PA0069.haps$h3)
 %#[1] 438
 
-
+%\lipsum[1-4]
 
 
 \subsection{Malaria prevalence prediction}
 
 We believe that the detailed characterization of mixed infections, in conjunction with localised epidemiological datasets like the ones provided by the Malaria Atlas Project [Bhatt et al., 2015], will improve our understanding of malaria epidemiology across the globe, permitting the identification of the major factors that modulate transmission in different countries. We also foresee that these methods will have important applications on the assessment of on-going interventions via genomic data [Volkman et al., 2012].
+
 
 \textcolor{red}{update the linear model when cluster finishing }
 
@@ -364,15 +371,6 @@ Independence between effective k and IBD fraction (see Figure~.S*).
 \narrative{4. Simulation results to analyse the relationship between prevalence, mixed infection rate and sib-strain rate.  Figure 5 summarising simulations.}
 
 
-\begin{figure}[ht]
-\begin{center}
-  \subfloat[][]{
-  \includegraphics[width=\textwidth]{mymap.pdf}
-}
-\caption{Black dots show African samples for modelling, red dots are the predicted values \textcolor{red}{1. update with vivax, 2. replace Malawi map with Africa map and Asia map}}
-\end{center}
-\figsupp{IBD chunk lengths from crosses.}{\includegraphics[width=\textwidth]{prevelance.pdf}}
-\end{figure}
 
 \begin{figure}[ht]
   \centering{}
