@@ -83,7 +83,7 @@ phi.sim<-0.3;
 ss<-array(0,c(length(nn), 6));
 for (i in 1:length(nn)) ss[i,]<-simulate.epi(I=c(100,0,0), V=c(0.9*nn[i], 0.1*nn[i], 0), phi=phi.sim);
 
-pdf("prev_vs_fractions.pdf")
+#pdf("prev_vs_fractions.pdf")
 par(mar = c(5,5,2,2))
 par(mfrow=c(1,1));
 
@@ -131,13 +131,152 @@ legend( "topright", legend = c("Asia countries", "Africa countries"), pch = c("o
 #text( pfpr$V4[idx], unrelated_frac[idx], labels = paste(pfpr$V1, "(",n.sample,")"), col="blue")
 
 points( pfpr$V4[idx], sib_frac[idx], col="orange", pch = p.pch[idx])
-dev.off()
+#dev.off()
+
+
+
 names(pfpr) = c("group", "year", "pfpr.low", "pfpr", "pfpr.up")
 pfpr$sib_frac = sib_frac
 pfpr$unrelated_frac = unrelated_frac
 pfpr$n.sample = n.sample
 write.table(pfpr, "pfpr_with_sib_unrelated_frac.txt", row.names=F, quote=F, sep="\t")
 #End of script
+
+
+label_size = 2
+tick_size = 1.5
+pdf("prev_vs_fractions.pdf", width = 8, height = 8)
+par(mfrow=c(1,1));
+par(mar = c(5,5,2,2))
+
+plot((ss[,2]+ss[,3])/(ss[,1]+ss[,2]+ss[,3]), ss[,3]/(ss[,2]+ss[,3]), xlab="Prevalence", ylim=c(0,0.5), xlim=c(0,.5), ylab="Fraction", type="l", col="blue", cex.lab = label_size, cex.axis = tick_size);
+lines((ss[,2]+ss[,3])/(ss[,1]+ss[,2]+ss[,3]),(ss[,6]*phi.sim*ss[,1])/(ss[,6]*phi.sim*ss[,1]+(ss[,5]+ss[,6])*ss[,2]), col="orange", type="l");
+legend("topright",legend=c("Mixed infection", "Sib-infection"), bty="n", border=NA, fill=c("blue", "orange"), cex = label_size);
+
+
+load("snap.Rdata")
+
+inferred.k.all.ibd_ld[adjusted.k.all.ibd_ld == 1] = 1
+
+
+pfpr = read.csv("latest_pfpr_summary.txt", header=F, stringsAsFactors=F)
+meta_with_yr = read.csv("pf3k_release_5_metadata_20170728_cleaned.csv", header=T, stringsAsFactors=F)
+unrelated_frac = c()
+sib_frac = c()
+n.sample = c()
+country.list = c()
+for ( i in 1:dim(pfpr)[1] ){
+    country = pfpr$V1[i] %>% gsub(".2.*$","",.)
+    country.list = c(country.list, country)
+#    print(country)
+    year = pfpr$V2[i]
+    a = which(meta_with_yr$country == country & meta_with_yr$year == year)
+    tmpSamples = meta_with_yr$sample_name[a]
+    sampleIdx = which(samples %in% tmpSamples)
+    num_unrelated = sum(ibd.prob.2strain.allIBD[sampleIdx] < .1, na.rm=T) +
+                    sum(ibd.prob.3strain.nonIBD[sampleIdx] > 0.9, na.rm=T)
+    unrelated_frac = c(unrelated_frac, num_unrelated/length(sampleIdx))
+
+    num_sib = sum(ibd.prob.2strain.allIBD[sampleIdx] < .7 & ibd.prob.2strain.allIBD[sampleIdx] > .3, na.rm=T) +
+          sum((ibd.prob.3strain.someIBD[sampleIdx] + ibd.prob.3strain.allIBD[sampleIdx])> 0.9, na.rm=T)
+    sib_frac = c(sib_frac, num_sib/length(sampleIdx))
+    n.sample = c(n.sample, length(sampleIdx))
+}
+
+
+idx = which(n.sample > 15)
+p.pch = rep("x", length(pfpr$V4))
+p.pch[country.list %in% c("Thailand", "Cambodia", "Bangladesh", "Vietnam", "Myanmar", "Laos")] = "o"
+points( pfpr$V4[idx], unrelated_frac[idx], col="blue", pch = p.pch[idx],cex = 1.5)
+legend( "right", legend = c("Asia countries", "Africa countries"), pch = c("o", "x"),bty="n", border=NA, cex = label_size)
+#text( pfpr$V4[idx], unrelated_frac[idx], labels = paste(pfpr$V1, "(",n.sample,")"), col="blue")
+
+points( pfpr$V4[idx], sib_frac[idx], col="orange", pch = p.pch[idx],cex = 1.5)
+
+
+zoom_ylim=c(0,0.3)
+zoom_xlim=c(0,.005)
+
+lines(zoom_xlim, zoom_ylim[c(1,1)], lty = 2)
+lines(zoom_xlim, zoom_ylim[c(2,2)], lty = 2)
+lines(zoom_xlim[c(1,1)], zoom_ylim, lty = 2)
+lines(zoom_xlim[c(2,2)], zoom_ylim, lty = 2)
+
+new_position_xlim = c(0.05, 0.25)
+new_position_ylim = c(0.25, 0.45)
+
+
+xratio = diff(new_position_xlim)/diff(zoom_xlim)
+yratio = diff(new_position_ylim)/diff(zoom_ylim)
+
+transform <- function(old_x, x1, ratio, new_X1, new_X2){
+    return( (old_x - x1) * ratio + new_X1 )
+}
+
+################## blue line
+old_x = (ss[,2]+ss[,3])/(ss[,1]+ss[,2]+ss[,3])
+old_y = ss[,3]/(ss[,2]+ss[,3])
+inrange.idx = which( old_x > zoom_xlim[1] & old_x < zoom_xlim[2] & old_y > zoom_ylim[1] & old_y < zoom_ylim[2])
+new_x = transform(old_x[inrange.idx], zoom_xlim[1], xratio, new_position_xlim[1])
+new_y = transform(old_y[inrange.idx], zoom_ylim[1], yratio, new_position_ylim[1])
+lines(new_x, new_y, col = "blue")
+
+################## orange line
+old_x = (ss[,2]+ss[,3])/(ss[,1]+ss[,2]+ss[,3])
+old_y = (ss[,6]*phi.sim*ss[,1])/(ss[,6]*phi.sim*ss[,1]+(ss[,5]+ss[,6])*ss[,2])
+inrange.idx = which( old_x > zoom_xlim[1] & old_x < zoom_xlim[2] & old_y > zoom_ylim[1] & old_y < zoom_ylim[2])
+new_x = transform(old_x[inrange.idx], zoom_xlim[1], xratio, new_position_xlim[1])
+new_y = transform(old_y[inrange.idx], zoom_ylim[1], yratio, new_position_ylim[1])
+lines(new_x, new_y, col = "orange")
+
+################# blue points
+p.pch = rep("x", length(pfpr$V4))
+p.pch[country.list %in% c("Thailand", "Cambodia", "Bangladesh", "Vietnam", "Myanmar", "Laos")] = "o"
+
+idx = which(n.sample > 15)
+old_x = pfpr$V4[idx]
+old_y = unrelated_frac[idx]
+inrange.idx = which( old_x >= zoom_xlim[1] & old_x < zoom_xlim[2] & old_y >= zoom_ylim[1] & old_y < zoom_ylim[2])
+new_x = transform(old_x[inrange.idx], zoom_xlim[1], xratio, new_position_xlim[1])
+new_y = transform(old_y[inrange.idx], zoom_ylim[1], yratio, new_position_ylim[1])
+points(new_x, new_y, pch = p.pch[idx][inrange.idx], col = "blue",cex = 1.5)
+
+################# orange points
+old_x = pfpr$V4[idx]
+old_y = sib_frac[idx]
+inrange.idx = which( old_x >= zoom_xlim[1] & old_x < zoom_xlim[2] & old_y >= zoom_ylim[1] & old_y < zoom_ylim[2])
+new_x = transform(old_x[inrange.idx], zoom_xlim[1], xratio, new_position_xlim[1])
+new_y = transform(old_y[inrange.idx], zoom_ylim[1], yratio, new_position_ylim[1])
+points(new_x, new_y, pch = p.pch[idx][inrange.idx], col = "orange",cex = 1.5)
+
+
+#
+#p.pch = rep("x", length(pfpr$V4))
+#p.pch[country.list %in% c("Thailand", "Cambodia", "Bangladesh", "Vietnam", "Myanmar", "Laos")] = "o"
+#points( pfpr$V4[idx], unrelated_frac[idx], col="blue", pch = p.pch[idx], cex = 2)
+##legend( "topright", legend = c("Asia countries", "Africa countries"), pch = c("o", "x"),bty="n", border=NA,)
+
+#points( pfpr$V4[idx], sib_frac[idx], col="orange", pch = p.pch[idx], cex = 2)
+
+points(c(new_position_xlim[1], sum(new_position_xlim)/2, new_position_xlim[2]), rep(new_position_ylim[1]-0.01,3), pch = 3)
+text(c(new_position_xlim[1], sum(new_position_xlim)/2, new_position_xlim[2]), rep(new_position_ylim[1]-0.025,3), label = c(0, .005/2, .005))
+
+points(rep(new_position_xlim[1]-0.01,3), c(new_position_ylim[1], sum(new_position_ylim)/2, new_position_ylim[2]), pch = 3)
+text(rep(new_position_xlim[1]-0.025,3), c(new_position_ylim[1], sum(new_position_ylim)/2, new_position_ylim[2]), label = c(0, .3/2, .3))
+
+new_position_xlim = c(0.04, 0.26)
+new_position_ylim = c(0.24, 0.46)
+
+lines(new_position_xlim, new_position_ylim[c(1,1)], lty = 1)
+lines(new_position_xlim, new_position_ylim[c(2,2)], lty = 1)
+lines(new_position_xlim[c(1,1)], new_position_ylim, lty = 1)
+lines(new_position_xlim[c(2,2)], new_position_ylim, lty = 1)
+
+lines(c(zoom_xlim[2], new_position_xlim[1]), c(zoom_ylim[1], new_position_ylim[1]), lty =2)
+lines(c(zoom_xlim[2], new_position_xlim[1]), c(zoom_ylim[2], new_position_ylim[2]), lty =2)
+
+dev.off()
+
 
 
 
@@ -151,7 +290,6 @@ lines((ss[,2]+ss[,3])/(ss[,1]+ss[,2]+ss[,3]),(ss[,6]*phi.sim*ss[,1])/(ss[,6]*phi
 
 
 load("snap.Rdata")
-library(dplyr)
 
 inferred.k.all.ibd_ld[adjusted.k.all.ibd_ld == 1] = 1
 
@@ -192,64 +330,3 @@ dev.off()
 
 
 
-pdf("prev_vs_fractions.pdf")
-par(mfrow=c(1,1));
-par(mar = c(5,5,2,2))
-
-plot((ss[,2]+ss[,3])/(ss[,1]+ss[,2]+ss[,3]), ss[,3]/(ss[,2]+ss[,3]), xlab="Prevalence", ylim=c(0,0.5), xlim=c(0,.5), ylab="Fraction", type="l", col="blue", cex.lab = 1.5);
-lines((ss[,2]+ss[,3])/(ss[,1]+ss[,2]+ss[,3]),(ss[,6]*phi.sim*ss[,1])/(ss[,6]*phi.sim*ss[,1]+(ss[,5]+ss[,6])*ss[,2]), col="orange", type="l");
-legend("top",legend=c("Mixed infection", "Sib-infection"), bty="n", border=NA, fill=c("blue", "orange"));
-
-
-load("snap.Rdata")
-library(dplyr)
-
-inferred.k.all.ibd_ld[adjusted.k.all.ibd_ld == 1] = 1
-
-
-pfpr = read.csv("latest_pfpr_summary.txt", header=F, stringsAsFactors=F)
-meta_with_yr = read.csv("pf3k_release_5_metadata_20170728_cleaned.csv", header=T, stringsAsFactors=F)
-unrelated_frac = c()
-sib_frac = c()
-n.sample = c()
-country.list = c()
-for ( i in 1:dim(pfpr)[1] ){
-    country = pfpr$V1[i] %>% gsub(".2.*$","",.)
-    country.list = c(country.list, country)
-#    print(country)
-    year = pfpr$V2[i]
-    a = which(meta_with_yr$country == country & meta_with_yr$year == year)
-    tmpSamples = meta_with_yr$sample_name[a]
-    sampleIdx = which(samples %in% tmpSamples)
-    num_unrelated = sum(ibd.prob.2strain.allIBD[sampleIdx] < .1, na.rm=T) +
-                    sum(ibd.prob.3strain.nonIBD[sampleIdx] > 0.9, na.rm=T)
-    unrelated_frac = c(unrelated_frac, num_unrelated/length(sampleIdx))
-
-    num_sib = sum(ibd.prob.2strain.allIBD[sampleIdx] < .7 & ibd.prob.2strain.allIBD[sampleIdx] > .3, na.rm=T) +
-          sum((ibd.prob.3strain.someIBD[sampleIdx] + ibd.prob.3strain.allIBD[sampleIdx])> 0.9, na.rm=T)
-    sib_frac = c(sib_frac, num_sib/length(sampleIdx))
-    n.sample = c(n.sample, length(sampleIdx))
-}
-
-
-idx = which(n.sample > 15)
-p.pch = rep("x", length(pfpr$V4))
-p.pch[country.list %in% c("Thailand", "Cambodia", "Bangladesh", "Vietnam", "Myanmar", "Laos")] = "o"
-points( pfpr$V4[idx], unrelated_frac[idx], col="blue", pch = p.pch[idx])
-legend( "topright", legend = c("Asia countries", "Africa countries"), pch = c("o", "x"),bty="n", border=NA,)
-#text( pfpr$V4[idx], unrelated_frac[idx], labels = paste(pfpr$V1, "(",n.sample,")"), col="blue")
-
-points( pfpr$V4[idx], sib_frac[idx], col="orange", pch = p.pch[idx])
-dev.off()
-
-
-#nn<-seq(1, 500, length.out = 100)
-#phi.sim<-0.3;
-#ss<-array(0,c(length(nn), 6));
-#for (i in 1:length(nn)) ss[i,]<-simulate.epi(I=c(100,0,0), V=c(0.9*nn[i], 0.1*nn[i], 0), phi=phi.sim, alpha = .8);
-
-#plot((ss[,2]+ss[,3])/(ss[,1]+ss[,2]+ss[,3]), ss[,3]/(ss[,2]+ss[,3]), xlab="Prevalence", ylim=c(0,0.3), xlim=c(0,.005), ylab="Fraction", type="l", col="blue", cex.lab = 1.5);
-#lines((ss[,2]+ss[,3])/(ss[,1]+ss[,2]+ss[,3]),(ss[,6]*phi.sim*ss[,1])/(ss[,6]*phi.sim*ss[,1]+(ss[,5]+ss[,6])*ss[,2]), col="orange", type="l");
-#legend("top",legend=c("Mixed infection", "Sib-infection"), bty="n", border=NA, fill=c("blue", "orange"));
-
-#points( pfpr$V4[idx], sib_frac[idx], col="orange", pch = p.pch[idx])
