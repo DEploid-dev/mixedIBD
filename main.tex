@@ -177,7 +177,7 @@ To test the performance of \texttt{DEploidIBD} in a more realistic setting, we c
 
 \subsection{The rate and structure of mixed infection in 2,512 {\it P. falciparum} field samples from 14 countries}
 
-To investigate how the rate and relatedness structure of mixed infections varies among geographical regions with different epidemiological characteristics, we applied \texttt{DEploidIBD} to 2,512 field samples of {\it P. falciparum} released by the Pf3k Consortium (REF).  These samples were collected under a wide range of designs, though the majority were taken from individuals seeking treatment for malaria symptoms.  A summary of the data sources is presented in Table \ref{tab:Pf3ksamples}.  After variant calling and filtering, we genotyped approximately 1M variable SNP positions across all samples, sequenced to an average depth of 86 (range 1.0 – 680).  See Supplementary Material for details of filters and data availability.  Samples were grouped into four geographical regions within Africa and three within Asia based on genetic similarity (Table~\ref{tab:Pf3ksamples}).
+To investigate how the rate and relatedness structure of mixed infections varies among geographical regions with different epidemiological characteristics, we applied \texttt{DEploidIBD} to 2,512 field samples of {\it P. falciparum} released by the Pf3k Consortium (REF).  These samples were collected under a wide range of designs, though the majority were taken from individuals seeking treatment for malaria symptoms.  A summary of the data sources is presented in Table \ref{tab:Pf3ksamples}.  After variant calling and filtering, we genotyped approximately 1M variable SNP positions across all samples, sequenced to an average depth of 86 (range 1.0 – 680).  See Supplementary Material for details of filters and data availability.  For deconvolution, samples were grouped into four geographical regions within Africa and three within Asia based on genetic similarity (Table~\ref{tab:Pf3ksamples}).  Diagnostic plots for all samples can be found in XXX.  Inferred genome sequences are available from XXX.  
 
 \begin{table}[bt]
   \caption{Summary of African samples.}\label{tab:Pf3ksamples}
@@ -231,10 +231,8 @@ Guinea          &Nzerekore      &2011 &100  &75   (4.5 )&Africa 4\\
 \bottomrule
 \end{tabular}
 
-\medskip
-Source: \url{ftp://ngs.sanger.ac.uk/production/pf3k/release_5/5.1}
 
-\tabledata{Pf3k data release 5.1 contains a set of {\em de novo} genotypes for the 5.0 sample set. The genotyping, including both indel and SNP variants, was performed using a pipeline based on GATK best practices.}
+\tabledata{Pf3k data release 5.1.  Genotyping, including both indel and SNP variants, was performed using a pipeline based on GATK best practices.}
 \end{table}
 
 \begin{table}[bt]
@@ -281,6 +279,10 @@ Myanmar         &Bago Division  &2011 &12   &59   (7.1 )&Asia 3  \\
 Bangladesh      &Ramu           &2012 &50   &53   (4.2 )&Asia 3  \\
 \bottomrule
 \end{tabular}
+
+\medskip
+Source: \url{ftp://ngs.sanger.ac.uk/production/pf3k/release_5/5.1}
+
 \end{table}
 
 Across continents and countries we find substantial variation in the rate and relatedness structure of mixed infections (Figure~\ref{fig:Pf3kResults}).  Within Africa, rates of mixed infection vary from 19\% in Senegal to 68\% in Malawi.  In the South East Asian field samples, mixed infection rates are generally lower, though also vary considerably; between 30\% in Thailand to 56\% in Bangladesh.  Where data for a location is available over multiple years, we find little evidence for substantial fluctuation over time CHECK .  Between 5.1\% (Senegal) and 40\% (Malawi) of individuals have more than two strains present and, at the population level, there is a positive correlation between the rate of dual infection (where two strains are present) and higher levels of infection (linear model P = 0.017, accounting for continental level effects).
