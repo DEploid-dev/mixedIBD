@@ -287,9 +287,9 @@ Across continents and countries we find substantial variation in the rate and re
 
 Relatedness between samples and populations also varied substantially (Figure~\ref{fig:Pf3kResults}).  In dual infections, the average fraction of the genome inferred to be IBD ranges from 16\% in Guinea to 55\% in The Gambia and Asian populations show on average a higher level of relatedness (41\%) compared to African populations (30\%).  Similarly, while a minority of triple infections (0\% to 24\% across populations) are estimated to be unrelated in Africa, all triple Asian infections are inferred to contain individuals related at the level of at least siblings.  Overall, 58\% of all mixed infections involve strains with over 30\% of the genome IBD (the 2.5th percentile of IBD expected between true siblings given the recombination rate in {\it P. falciparum}).
 
-Within both Africa and Asia we find no simple relationship between IBD and rates of mixed infection (Figure~\ref{fig:Pf3kResults}).  In both Africa and Asia, the populations with the highest levels of mixed infection have between 40\% and 60\% of strains with highly related (IBD fraction $>~0.3$) strains.  However, similar patterns are observed across all populations.  Moreover, populations with similar rates of mixed infection can have different patterns of inbreeding.  For example, Senegal, which has low rates of mixed infection, has relatively low levels of IBD (0.43) where mixed infections occur, while The Gambia, which has only slightly higher rates of mixed infection has considerably higher levels of IBD (0.59).
+Within both Africa and Asia we find no simple relationship between IBD and rates of mixed infection (Figure~\ref{fig:Pf3kResults}).  In both Africa and Asia, the populations with the highest levels of mixed infection have between 40\% and 60\% of strains with highly related (IBD fraction $>~0.3$) strains.  However, similar patterns are observed across all populations.  Moreover, populations with similar rates of mixed infection can have different patterns of inbreeding.  For example, Senegal, which has low rates of mixed infection, has relatively low levels of IBD (mean IBD = 0.43) where mixed infections occur, while The Gambia, which has only slightly higher rates of mixed infection has considerably higher levels of IBD (mean IBD = 0.59).
 
-These results suggest that a substantial fraction of mixed infections involve sibling strains; those related through meiosis from distinct strains within a multiply-infected mosquito.  To further investigate this hypothesis we examined the length distribution of IBD segments within mixed infections.  Figure~\ref{fig:strainIBD} shows examples of genomic IBD profiles in dual and triple infections.  Previous work on {\it P. falciparum} lab crosses has shown that cross-over events occur typically 200~kb to 1~Mb apart \citet{Miles2016}, hence IBD tracts are expect to be about half this length in dual sibling infections and one third of this in triple infections (Figure~\ref{fig:strainIBD}).  By jointly considering IBD fraction and IBD length, we observe bimodal distributions of both variables, which can be used to identify mixed infections related to different degrees.  For example we can identify those likely to be siblings from unrelated parents, siblings from related parents (i.e. with inbreeding) and strains separated by two to three meiosis (Figure~\ref{fig:strainIBD}).
+These results suggest that a substantial fraction of mixed infections involve sibling strains; those related through meiosis from distinct strains within a multiply-infected mosquito.  To further investigate this hypothesis we examined the length distribution of IBD segments within mixed infections.  Figure~\ref{fig:strainIBD} shows examples of genomic IBD profiles in dual and triple infections.  Previous work on {\it P. falciparum} lab crosses has shown that cross-over events occur typically 200~kb to 1~Mb apart \citet{Miles2016}, hence IBD tracts are expect to be about half this length in dual sibling infections and one third of this in triple infections (Figure~\ref{fig:strainIBD}).  By jointly considering IBD fraction and IBD length, we observe bimodal distributions of both variables, which can be used to identify mixed infections related to different degrees.  For example we can identify those likely to be siblings from unrelated parents, siblings from related parents (i.e. with inbreeding) and strains separated by two to three meiosis (Figure~\ref{fig:strainIBD}).  For example, GIVE NUMBERS. Something about low quality samples.  
 
 
 \begin{figure}[ht]
@@ -302,13 +302,15 @@ These results suggest that a substantial fraction of mixed infections involve si
 \end{figure}
 
 
-
-
-
-\subsection{Characterising genealogical relationships at the population level}
-
-
 \subsection{Characteristics of mixed infection correlate with local pathogen prevalence}
+
+To assess how characteristics of mixed infection relate to local infection intensity, we obtained estimates of {\it P. falciparum} prevalence from the Malaria Atlas Project [REF], matched to year and 5km square matching the centre of the reported sampling for each genomic data set.  We analysed data from Asia and Africa separately, due to very different prevalence (mean of XX\% in Africa and XX\% in Asia).  
+
+For levels of mixed infection, within Africa we find XXX.  Within Asia we find XX.
+
+For levels of inbreeding we find XX.
+
+
 
 
 \subsection{A mathematical model of mixed infection}
@@ -317,73 +319,12 @@ These results suggest that a substantial fraction of mixed infections involve si
 
 
 
-\subsection{Monitoring malaria epidemic from the IBD configuration probabilities}
-
-
-We show how the genomes of co-existing strains are related to each other, observing in some cases high levels of genetic relatedness or inbreeding. We see cases where heterozygosity is structured along the genome in a manner that suggests inbreeding, finding multiple cases of strains that are within 1-2 meioses of each other (Fig~\ref{fig:fig1}(a)). We envision that such a signature could be exploited in future micro-epidemiological studies to help in the inference of infection histories and transmission trees.
-\begin{wrapfigure}{h}{.46\textwidth}
-  \includegraphics[width=\hsize]{prevelance_single.pdf}
-\caption{}
-\end{wrapfigure}
-
-At the population level, we explore the malaria epidemic by stacking up all IBD posterior probabilities (Fig~\ref{fig:gambia}(a)). We observe striking variation in inbreeding patterns across populations with a mean inbreeding fraction range of \textcolor{red}{[0.07, 0.54]}. African countries, with the exception of The Gambia and Senegal, seem to have less inbred mixed infections, in agreement with the different levels of genetic diversity observed in each continent. These population-specific differences relate to the epidemiological setting of each region and provide a novel, and potentially important, source of information about local infection dynamics.
-
-Between the mixed samples, we computed pairwise correlation between the IBD-fraction across genome. As expected, we observe high correlations in IBD profiles from 22 Malawi samples that had been sequenced twice through the MalariaGEN pipeline. We also observe similar high correlations between unique samples in Vietnam, Gambia, Cambodia and Bangladesh. We used threshold of 0.8 correlation to identify related infections. For example, in Figure~\ref{fig:gambia}(b), two pairs of sample, PA0068-C and PA0069-C, PA0021-C and PA0027-C show very strong correlations between the IBD-fraction across the genome. Samples PA0021-C and PA0027-C show very little evidence of inbreeding. On the other hand, we observe a strong negative correlation between the WSAF, which we speculate that both infections are caused by two mosquito carrying single strain of parasite, but the infection times are different; or one patent had been treated but the effect of drug appear differently, because the dominate strain in PA0021-C is the minor strain of PA0027-C, and vice versa. In the other case, parasite strains within samples PA0068-C and PA0069-C show strong evidence of IBD sharing, which can only happen when two people were bitten by the same mosquito, which is carrying two strains that have recombined within the mosquito. Interestingly, we observe the third strain in PA0068-C, which could mean that recombination is already happening again. Or we just don't observe it in PA0069-C.
-
-%These samples are mixtures of two, with proportions of
-%==> PA0021-C_newFilter_seed1_IBD.log <==
-  %0.747591    3.23594e-09      0.252409    3.42703e-09
-
-%==> PA0027-C_newFilter_seed1_IBD.log <==
-  %0.860842    2.3895e-09      0.139158    2.52997e-09
-
-%==> PA0068-C_newFilter_seed1_IBD.log <==
-  %0.783381     0.0387533    4.0773e-05      0.177825
-
-%==> PA0069-C_newFilter_seed1_IBD.log <==
-  %0.665359    4.58131e-09      0.334641    4.92958e-09
-
-%On average, two unrelated strains differ at 8000 places, and I found
-%#> sum(PA0021.haps$h1 != PA0027.haps$h3)
-%#[1] 380
-%#> sum(PA0021.haps$h3 != PA0027.haps$h1)
-%#[1] 119
-
-%#> sum(PA0068.haps$h1 != PA0068.haps$h4)
-%#[1] 820
-%#> sum(PA0068.haps$h1 != PA0069.haps$h1)
-%#[1] 368
-%#> sum(PA0068.haps$h4 != PA0069.haps$h3)
-%#[1] 438
-
-%\lipsum[1-4]
-
-
-\subsection{Malaria prevalence prediction}
-
-We believe that the detailed characterization of mixed infections, in conjunction with localised epidemiological datasets like the ones provided by the Malaria Atlas Project [Bhatt et al., 2015], will improve our understanding of malaria epidemiology across the globe, permitting the identification of the major factors that modulate transmission in different countries. We also foresee that these methods will have important applications on the assessment of on-going interventions via genomic data [Volkman et al., 2012].
-
-
-\textcolor{red}{update the linear model when cluster finishing }
-
-Independence between effective k and IBD fraction (see Figure~.S*).
-
-\narrative{4. Simulation results to analyse the relationship between prevalence, mixed infection rate and sib-strain rate.  Figure 5 summarising simulations.}
+\subsection{Characterising genealogical relationships at the population level}
 
 
 
-\begin{figure}[ht]
-  \centering{}
-  \includegraphics[width=\textwidth]{Fig5.pdf}
-  \caption{PLACE HOLDER! NEEDS IMPROVEMENT!}
-\end{figure}
 
 
-\begin{figure}[ht]
-  \centering{}
-  \includegraphics[width=\textwidth]{cam_samples_by_year.pdf}
-  \caption{PLACE HOLDER! NEEDS IMPROVEMENT!}
-\end{figure}
 
 
 \section{Discussion}
