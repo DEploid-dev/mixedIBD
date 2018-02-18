@@ -20,9 +20,16 @@ main.aux: main.tex
 main.bbl: main.aux
 	bibtex main.aux
 
-mainSupplement.pdf: mainSupplement.tex ${supfigures} ${supfigurespdf} ${suptex} supplementReset.tex
+mainSupplement.pdf: mainSupplement.tex ${supfigures} ${supfigurespdf} ${suptex} supplementReset.tex mainSupplement.bbl
 	pdflatex mainSupplement.tex
 	pdflatex mainSupplement.tex
+
+mainSupplement.aux: mainSupplement.tex
+	pdflatex mainSupplement.tex
+
+mainSupplement.bbl: mainSupplement.aux
+	bibtex mainSupplement.aux
+
 
 otherFigures.pdf: otherFigures.tex ${supfigures} ${supfigurespdf} ${suptex} supplementReset.tex
 	pdflatex otherFigures.tex
