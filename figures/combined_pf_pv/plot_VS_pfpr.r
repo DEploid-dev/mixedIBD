@@ -15,6 +15,9 @@ ibd.prob.all.case = ifelse(is.na(ibd.prob.all.case), ibd.prob.4, ibd.prob.all.ca
 mean_ibd = c()
 mean_ibd.2 = c()
 n.sample = c()
+sib_frac = c()
+unrelated_frac = c()
+
 for ( i in 1:dim(pfpr)[1] ){
 
     country = pfpr$V1[i] %>% gsub(".2.*$","",.)
@@ -27,6 +30,13 @@ for ( i in 1:dim(pfpr)[1] ){
     mean_ibd = c(mean_ibd, ibd.prob.all.case[sampleIdx] %>% mean(., na.rm = T))
     mean_ibd.2 = c(mean_ibd.2, ibd.prob.2[sampleIdx] %>% mean(., na.rm = T))
     n.sample = c(n.sample, length(sampleIdx))
+    num_unrelated = sum(ibd.prob.2strain.allIBD[sampleIdx] < .1, na.rm=T) +
+                    sum(ibd.prob.3strain.nonIBD[sampleIdx] > 0.9, na.rm=T)
+    unrelated_frac = c(unrelated_frac, num_unrelated/length(sampleIdx))
+
+    num_sib = sum(ibd.prob.2strain.allIBD[sampleIdx] < .7 & ibd.prob.2strain.allIBD[sampleIdx] > .3, na.rm=T) +
+          sum((ibd.prob.3strain.someIBD[sampleIdx] + ibd.prob.3strain.allIBD[sampleIdx])> 0.9, na.rm=T)
+    sib_frac = c(sib_frac, num_sib/length(sampleIdx))
 
 }
 country.list = pfpr$V1 %>% gsub(".2.*$","",.)
@@ -148,8 +158,23 @@ legend("bottomright", legend = levels(country.factor), pch = 1:14, bty = "n")
 legend("topleft",legend=c("Relatedness", "[0, 0.375)", "[0.375, 0.525)", "[0.525, 0.675)", "[0.675, 1)"), bty="n", border=NA, fill=c(NA, "red", "orange", "yellow", "green"), cex = 1.5);
 legend("left", legend = c("Asia", "Africa"), lty = 1, lwd = c(7,2), cex = tick_size, bty="n")
 
+
+new.data = data.frame(population = pfpr$V1)
+new.data$year = pfpr$V2
+new.data$pfpr = pfpr$V4
+new.data$idx.bool = idx.bool
+new.data$mean_eff_k = mean_eff_k
+new.data$mean_relatedness = mean_ibd
+new.data$n.sample = n.sample
+new.data$unrelated_frac = unrelated_frac
+new.data$sib_frac = sib_frac
+save(new.data, file = "data_for_pfpr_MAP.Rdata")
+
 idx = which(!is.na(mean_ibd) & n.sample > 15)
 idx.bool = (!is.na(mean_ibd) & n.sample > 15)
+
+
+
 #plot(mean_ibd, pfpr$V4, type = "n", main = paste("Prevalence vs IBD fraction, correlation: ", round(cor(mean_ibd[idx], pfpr$V4[idx]), digits = 2 )),  xlim=c(0.2,0.7), ylim = c(0,0.5), ylab="Pf Parasite Rate", xlab = "IBD fraction", cex.lab = 1.5)
 ##text(mean_ibd, pfpr$V2, labels = paste(pfpr$V1, "(",n.sample,")", sep=""))
 ##abline(lm(pfpr$V2~mean_ibd))
