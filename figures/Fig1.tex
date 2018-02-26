@@ -1,0 +1,21 @@
+\documentclass[preview]{standalone}
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{ulem}
+
+%\usepackage{floatrow}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage[label font=bf,labelformat=simple, position = top, justification=RaggedRight,singlelinecheck=false]{subfig}
+%\floatsetup[figure]{style=plain,subcapbesideposition=top}
+\newsubfloat{figure}
+
+
+\begin{document}
+\begin{figure}
+\centering
+  \subfloat[][]{\includegraphics[width=0.3\textwidth]{altVsRef.pdf}}
+  \subfloat[][]{\includegraphics[width=0.7\textwidth]{hap_post_prob_hap.pdf}}
+\end{figure}
+\end{document}
+
