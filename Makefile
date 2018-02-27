@@ -1,4 +1,4 @@
-.PHONY: all clean
+.PHONY: all clean pdfFigures
 all: clean main.pdf
 
 mainfiguresPng = $(shell grep png main.tex | sed -e "s/^.*{/figures\//g" -e "s/\}//g" )
@@ -10,7 +10,7 @@ suptex = $(shell grep "\.tex" mainSupplement.tex | sed -e "s/^.*{//g" -e "s/\}//
 coverLetter.pdf: coverLetter.tex
 	pdflatex coverLetter.tex
 
-main.pdf: main.tex ${mainfiguresPng} ${mainfiguresPdf} main.bbl
+main.pdf: main.tex ${mainfiguresPng} ${mainfiguresPdf} main.bbl pdfFigures
 	pdflatex main.tex
 	pdflatex main.tex
 
@@ -34,6 +34,14 @@ mainSupplement.bbl: mainSupplement.aux
 otherFigures.pdf: otherFigures.tex ${supfigures} ${supfigurespdf} ${suptex} supplementReset.tex
 	pdflatex otherFigures.tex
 	pdflatex otherFigures.tex
+
+pdfFigures:
+	cd figures/; pdflatex Fig1.tex
+	cd figures/; pdflatex Fig2.tex
+	cd figures/; pdflatex Fig3.tex
+	cd figures/; pdflatex Fig4.tex
+	cd figures/; pdflatex Fig5.tex
+	cd figures/; pdflatex Fig6.tex
 
 clean:
 	rm -f *.blg *snm *nav *.bbl *.ps *.dvi *.aux *.toc *.idx *.ind *.ilg *.log *.out main.pdf

@@ -133,10 +133,9 @@ Unlike our previous work, \texttt{DEploidIBD} infers strain structure in two ste
 
 \begin{figure}[ht]
   \begin{center}
-  \subfloat[][]{\includegraphics[width=0.3\textwidth]{altVsRef.pdf}}
-  \subfloat[][]{\includegraphics[width=0.7\textwidth]{hap_post_prob_hap.pdf}}
-   \caption{Deconvolution of field sample PD0577-C from Thailand.  (a) Summary of allele frequencies observed within the isolate shown as a scatter-plot of the numbers of reads supporting the reference (REF: x-axis) and alternative (ALT: y-axis) alleles. (b) The profile of within-sample allele frequency along chromosomes 11 and 12 (black points) suggests a changing profile of IBD with three distinct strains, estimated to be at frequencies of $22\%$, $52\%$ and $26\%$ respectively (other chromosomes omitted for clarity, see Figure~\ref{fig:fig1}-Supplement~1); blue points indicate expected allele frequencies within the isolate.  However, the strains are inferred to be siblings of each other: green segments identify where all three strains are IBD; yellow, orange and dark orange segments identify the regions where one pair of strains are IBD but the others are not.  In no region are all three strains inferred to be distinct. A graphical description of the modules and work flows for \texttt{DEploidIBD} is given in Figure~\ref{fig:fig1}-Supplement~2.}\label{fig:fig1}
-   \end{center}
+    \includegraphics[width=\textwidth]{Fig1.pdf}
+    \caption{Deconvolution of field sample PD0577-C from Thailand.  (a) Summary of allele frequencies observed within the isolate shown as a scatter-plot of the numbers of reads supporting the reference (REF: x-axis) and alternative (ALT: y-axis) alleles. (b) The profile of within-sample allele frequency along chromosomes 11 and 12 (black points) suggests a changing profile of IBD with three distinct strains, estimated to be at frequencies of $22\%$, $52\%$ and $26\%$ respectively (other chromosomes omitted for clarity, see Figure~\ref{fig:fig1}-Supplement~1); blue points indicate expected allele frequencies within the isolate.  However, the strains are inferred to be siblings of each other: green segments identify where all three strains are IBD; yellow, orange and dark orange segments identify the regions where one pair of strains are IBD but the others are not.  In no region are all three strains inferred to be distinct. A graphical description of the modules and work flows for \texttt{DEploidIBD} is given in Figure~\ref{fig:fig1}-Supplement~2.}\label{fig:fig1}
+  \end{center}
    \figsupp{Whole genome deconvolution of field sample PD0577-C is represented in ring figures. The outer ring show expected WSAF (blue) and observed WSAF (red) across the genome. Red and blue points indicate observed and expected allele frequencies within the isolate. This inner ring marks the IBD regions of the three strains: green segments identify where all three strains are IBD; yellow, orange and dark orange segments identify the regions where one pair of strains are IBD but the others are not.  In no region are all three strains inferred to be distinct.}{\includegraphics[width=.7\textwidth]{{myring.ring}.pdf}}
    \figsupp{A graphical description of the modules and work flows for \texttt{DEploidIBD}.}{\includegraphics[width=.8\textwidth]{scheme.pdf}}
 \end{figure}
@@ -152,18 +151,7 @@ To test the performance of \texttt{DEploidIBD} in a more realistic setting, we c
 
 \begin{figure}[htp]
   \begin{center}
-  \parbox{.95\figrasterwd}{
-    \parbox{.6\hsize}{%
-      \subfloat[][]{\includegraphics[width=\hsize]{eff_k_both.pdf}}
-    }
-    \hskip1em
-    \parbox{.4\hsize}{%
-      \subfloat[][]{\includegraphics[width=\hsize]{diagnositicPlot_of_effK_final.pdf}}
-      \\
-      %\vskip1em
-      \subfloat[][]{\includegraphics[width=\hsize]{genotype_error_ecdf.pdf}}
-    }
-  }
+  \includegraphics[width=\textwidth]{Fig2.pdf}
   \caption{Simulation results. (a) Experimental validation and effective number of strains inferred by {\tt DEploidIBD}. We use a reference panel of the laboratory parasite lines (3D7, Dd2, HB3 and 7G8) to deconvolve the same lab-mixed samples, assuming 3 and 4 strains within a sample. Each experiment is repeated without IBD method. Black crosses indicate the true effective number of strains. Purple crosses indicate median values obtained from 30 replicates when using {\tt DEploidIBD} with a panel and assuming that the maximum number of strains is 4. The coloured dots show the inferred effective number of strains across replicates with intensity proportional to fraction. (b) Comparison of effective number of strains between \texttt{DEploid} and \texttt{DEploidIBD}. The effective number of strains is expected to be 1.6 for 25\% and 75\% mixtures. \texttt{DEploidIBD} can correctly recover this value when two strains are highly related, where \texttt{DEploid} fails to do so. (c) Cumulative frequencies of genotype error across 76 simulated Pf3k samples. We find higher genotype error rate in \texttt{DEploid} than \texttt{DEploidIBD}, when inferred proportions are incorrect. In figures (b) and (c), we excluded eight cases out of the 100 experiments where simulated haplotypes were over 99\% identical, and 16 cases where average coverage was below 20.
 }\label{fig:benchmark}
   \end{center}
@@ -296,8 +284,7 @@ These results suggest that a substantial fraction of mixed infections involve si
 
 \begin{figure}[ht]
   \begin{center}
-  \subfloat[][]{\includegraphics[width=0.6\textwidth]{figure_a.pdf}}
-  \subfloat[][]{\includegraphics[width=.4\textwidth]{figure_b_viterbi.pdf}}
+  \includegraphics[width=\textwidth]{Fig3.pdf}
    \caption{}\label{fig:strainIBD}
    \end{center}
    \figsupp{IBD chunk lengths from crosses.}{\includegraphics[width=\textwidth]{Fig3Sup.pdf}}
@@ -315,7 +302,7 @@ For levels of inbreeding we find XX.
 
 \begin{figure}[ht]
   \centering{}
-  \includegraphics[width=.5\textwidth]{prevelance_single.pdf}
+    \includegraphics[width=.5\textwidth]{Fig4.pdf}
   \caption{PLACE HOLDER! NEEDS IMPROVEMENT!}
 \end{figure}
 
@@ -330,7 +317,7 @@ For levels of inbreeding we find XX.
 
 \begin{figure}[ht]
   \centering{}
-  \includegraphics[width=\textwidth]{cam_samples_by_year.pdf}
+  \includegraphics[width=\textwidth]{Fig6.pdf}
   \caption{PLACE HOLDER! NEEDS IMPROVEMENT!}
 \end{figure}
 
