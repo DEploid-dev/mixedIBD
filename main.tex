@@ -154,7 +154,7 @@ To test the performance of \texttt{DEploidIBD} in a more realistic setting, we c
 \begin{figure}[htp]
   \begin{center}
   \includegraphics[width=\textwidth]{Fig2.pdf}
-  \caption{Simulation results. (a) Experimental validation and effective number of strains inferred by {\tt DEploidIBD}. We use a reference panel of the laboratory parasite lines (3D7, Dd2, HB3 and 7G8) to deconvolve the same lab-mixed samples, assuming 3 and 4 strains within a sample. Each experiment is performed with and without IBD inference. Black crosses indicate the true effective number of strains. Purple crosses indicate median values obtained from 30 replicates when using {\tt DEploidIBD} with a panel and assuming that the maximum number of strains is 4. The coloured dots show the inferred effective number of strains across replicates with intensity proportional to fraction. Note one sample (indicated by an asterisk) where balanced proportions of three strains results in the LD-free approach underfitting the data as a mixture of two strains with proportions of $\tfrac{1}/{3}$ and $\tfrac{2}/{3}$.  (b) Comparison of effective number of strains between \texttt{DEploid} and \texttt{DEploidIBD}. The effective number of strains is expected to be 1.6 for 25/75 mixtures and 1.98 for 45/55 mixtures. \texttt{DEploidIBD} can correctly recover this value when two strains are highly related, where \texttt{DEploid} fails to do so. (c) Cumulative frequencies of average per site genotype error across 76 simulated mixtures with three levels of IBD (25\%, 50\% and 75\%) using empirical data from clonal samples. We find higher genotype error rate in \texttt{DEploid} than \texttt{DEploidIBD}, when inferred proportions are incorrect. In figures (b) and (c), we excluded eight cases out of the 100 experiments where simulated haplotypes were over 99\% identical, and 16 cases where average coverage was below 20.
+  \caption{Simulation results. (a) Experimental validation and effective number of strains inferred by {\tt DEploidIBD}. We use a reference panel of the laboratory parasite lines (3D7, Dd2, HB3 and 7G8) to deconvolve the same lab-mixed samples, assuming 3 and 4 strains within a sample. Each experiment is performed with and without IBD inference. Black crosses indicate the true effective number of strains. Purple crosses indicate median values obtained from 30 replicates when using {\tt DEploidIBD} with a panel and assuming that the maximum number of strains is 4. The coloured dots show the inferred effective number of strains across replicates with intensity proportional to fraction. Note one sample (indicated by an asterisk) where balanced proportions of three strains results in the LD-free approach underfitting the data as a mixture of two strains with proportions of $\tfrac{1}{3}$ and $\tfrac{2}{3}$.\\  (b) Comparison of effective number of strains between \texttt{DEploid} and \texttt{DEploidIBD}. The effective number of strains is expected to be 1.6 for 25/75 mixtures and 1.98 for 45/55 mixtures. \texttt{DEploidIBD} can correctly recover this value when two strains are highly related, where \texttt{DEploid} fails to do so. (c) Cumulative frequencies of average per site genotype error across 76 simulated mixtures with three levels of IBD (25\%, 50\% and 75\%) using empirical data from clonal samples. We find higher genotype error rate in \texttt{DEploid} than \texttt{DEploidIBD}, when inferred proportions are incorrect. In figures (b) and (c), we excluded eight cases out of the 100 experiments where simulated haplotypes were over 99\% identical, and 16 cases where average coverage was below 20.
 }\label{fig:benchmark}
   \end{center}
   \figsupp{Comparison of true and inferred haplotypes for Chromosome 14 (2,369 SNPs) in sample PG0396-C before and after haplotype painting using a reference panel of the laboratory parasite lines (3D7, Dd2, HB3 and 7G8). The yellow, cyan and white background label the haplotype segments from strains 7G8, HB3 and Dd2 respectively. The switch errors are obtained by counting the changes of a strain segment mapped to reference strains; the genotype errors are the discordance between the strain and the mapped reference segments. }{\includegraphics[width = 0.8\textwidth]{DEploid_IBD_haps_compare.pdf}}
@@ -176,23 +176,18 @@ To investigate how the rate and relatedness structure of mixed infections varies
 Country & Location & Year & Sample size & Mean Read Depth (s.e.) & Group \\
 \midrule
 Malawi          &Chikwawa       &2011 &208  &97   (3.2 )&Africa 1\\
-%                &               &NA   &92   &94   (3.5 )&Africa 1\\
                 &               &2012 &10   &133  (9.7 )&Africa 1\\
                 &               &2014 &7    &128  (3.1 )&Africa 1\\
                 &Zomba          &2011 &34   &88   (9.4 )&Africa 1\\
-%                &               &NA   &17   &50   (7.5 )&Africa 1\\
-%                &               &2012 &1    &91   (NA  )&Africa 1\\
  \hline
 DR of the Congo &Kinshasa       &2013 &113  &49   (3.2 )&Africa 1\\
  \hline
 Ghana           &Kassena        &2009 &121  &82   (5.5 )&Africa 2\\
-%                &               &NA   &28   &218  (34.5)&Africa 2\\
                 &               &2010 &173  &103  (8.6 )&Africa 2\\
                 &               &2011 &96   &72   (4.3 )&Africa 2\\
                 &               &2012 &39   &110  (4.4 )&Africa 2\\
                 &               &2013 &92   &114  (4.5 )&Africa 2\\
                 &Kintampo       &2011 &7    &86   (11.8)&Africa 4\\
- %               &               &NA   &20   &107  (17  )&Africa 4\\
                 &               &2012 &38   &143  (9.5 )&Africa 4\\
                 &               &2013 &3    &165  (53.4)&Africa 4\\
  \hline
@@ -200,13 +195,10 @@ Mali            &Kolle          &2007 &51   &82   (10.5)&Africa 3\\
                 &Faladje        &2007 &36   &75   (10.1)&Africa 3\\
                 &Bandiagara     &2007 &9    &95   (25.2)&Africa 3\\
  \hline
-Nigeria         &               &2012 &4    &51   (20.9)&Africa 3\\
-%               &Ilorin         &2011 &1    &39   (NA  )&Africa 3\\
-
+Nigeria         &Ilorin         &2012 &4    &51   (20.9)&Africa 3\\
  \hline
 Senegal         &Thies          &2002 &5    &60   (7.8 )&Africa 3\\
                 &               &2004 &2    &130  (68.2)&Africa 3\\
-%                &               &2001 &1    &59   (NA  )&Africa 3\\
                 &               &2008 &22   &94   (4.9 )&Africa 3\\
                 &               &2011 &32   &97   (6   )&Africa 3\\
                 &               &2007 &4    &83   (9   )&Africa 3\\
@@ -242,7 +234,6 @@ Thailand        &Sisakhet       &2011 &5    &112  (25.4)&Asia 1  \\
  \hline
 Cambodia        &Pursat         &2009 &18   &75   (9.3 )&Asia 1  \\
                 &               &2010 &101  &91   (5.2 )&Asia 1  \\
-%                &               &NA   &5    &181  (97.2)&Asia 1  \\
                 &               &2011 &104  &48   (3   )&Asia 1  \\
                 &               &2012 &7    &37   (19.1)&Asia 1  \\
                 &Pailin         &2011 &50   &53   (4.1 )&Asia 1  \\
@@ -257,14 +248,12 @@ Vietnam         &Phuoc Long     &2011 &27   &68   (7.2 )&Asia 2  \\
                 &               &2012 &5    &107  (6.3 )&Asia 2  \\
                 &Bu Gia Map     &2011 &44   &66   (5   )&Asia 2  \\
                 &               &2012 &20   &110  (8.7 )&Asia 2  \\
-%                &Bu Dang        &2011 &1    &94   (NA  )&Asia 2  \\
  \hline
 Laos            &Attapeu        &2011 &59   &71   (4.2 )&Asia 2  \\
                 &               &2012 &26   &77   (7   )&Asia 2  \\
  \hline
 Myanmar         &Bago Division  &2011 &12   &59   (7.1 )&Asia 3  \\
                 &               &2012 &47   &62   (5.2 )&Asia 3  \\
-%                &               &2013 &1    &27   (NA  )&Asia 3  \\
  \hline
 Bangladesh      &Ramu           &2012 &50   &53   (4.2 )&Asia 3  \\
 \bottomrule
@@ -275,11 +264,11 @@ Source: \url{ftp://ngs.sanger.ac.uk/production/pf3k/release_5/5.1}
 
 \end{table}
 
-Across continents and countries we find substantial variation in the rate and relatedness structure of mixed infections (Figure~\ref{fig:Pf3kResults}).  Within Africa, rates of mixed infection vary from 19\% in Senegal to 68\% in Malawi.  In the South East Asian field samples, mixed infection rates are generally lower, though also vary considerably; between 30\% in Thailand to 56\% in Bangladesh.  Where data for a location is available over multiple years, we find little evidence for substantial fluctuation over time CHECK .  Between 5.1\% (Senegal) and 40\% (Malawi) of individuals have more than two strains present and, at the population level, there is a positive correlation between the rate of dual infection (where two strains are present) and higher levels of infection (linear model P = 0.017, accounting for continental level effects).
+Across continents and countries we find substantial variation in the rate and relatedness structure of mixed infections.  Within Africa, rates of mixed infection vary from 19\% in Senegal to 68\% in Malawi.  In the South East Asian field samples, mixed infection rates are generally lower, though also vary considerably; between 30\% in Thailand to 56\% in Bangladesh.  Where data for a location is available over multiple years, we find little evidence for substantial fluctuation over time.  Between 5.1\% (Senegal) and 40\% (Malawi) of individuals have more than two strains present and, at the population level, there is a positive correlation between the rate of dual infection (where two strains are present) and higher levels of infection (linear model P = 0.017, accounting for continental level effects).
 
-Relatedness between samples and populations also varied substantially (Figure~\ref{fig:Pf3kResults}).  In dual infections, the average fraction of the genome inferred to be IBD ranges from 16\% in Guinea to 55\% in The Gambia.   Asian populations show on average a higher level of relatedness (41\%) compared to African populations (30\%).  Similarly, while a minority of triple infections (0\% to 24\% across populations) are estimated to be unrelated in Africa, all triple Asian infections are inferred to contain individuals related at the level of at least siblings.  Overall, 58\% of all mixed infections involve strains with over 30\% of the genome IBD (the 2.5th percentile of IBD expected between true siblings given the recombination rate in {\it P. falciparum}).
+Relatedness between samples and populations also varied substantially.  In dual infections, the average fraction of the genome inferred to be IBD ranges from 16\% in Guinea to 55\% in The Gambia.   Asian populations show on average a higher level of relatedness (41\%) compared to African populations (30\%).  Similarly, while a minority of triple infections (0\% to 24\% across populations) are estimated to be unrelated in Africa, all triple Asian infections are inferred to contain individuals related at the level of at least siblings.  Overall, 58\% of all mixed infections involve strains with over 30\% of the genome IBD (the 2.5th percentile of IBD expected between true siblings given the recombination rate in {\it P. falciparum}).
 
-Within both Africa and Asia we find no simple relationship between IBD and rates of mixed infection (Figure~\ref{fig:Pf3kResults}).  In both Africa and Asia, the populations with the highest levels of mixed infection have between 40\% and 60\% of strains with highly related (IBD fraction $>~0.3$) strains.  However, similar patterns are observed across all populations.  Moreover, populations with similar rates of mixed infection can have different patterns of inbreeding.  For example, Senegal, which has low rates of mixed infection, has relatively low levels of IBD (mean IBD = 0.43) where mixed infections occur, while The Gambia, which has only slightly higher rates of mixed infection has considerably higher levels of IBD (mean IBD = 0.59).
+Within both Africa and Asia we find no simple relationship between IBD and rates of mixed infection.  In both Africa and Asia, the populations with the highest levels of mixed infection have between 40\% and 60\% of strains with highly related (IBD fraction $>~0.3$) strains.  However, similar patterns are observed across all populations.  Moreover, populations with similar rates of mixed infection can have different patterns of inbreeding.  For example, Senegal, which has low rates of mixed infection, has relatively low levels of IBD (mean IBD = 0.43) where mixed infections occur, while The Gambia, which has only slightly higher rates of mixed infection has considerably higher levels of IBD (mean IBD = 0.59).
 
 These results suggest that a substantial fraction of mixed infections involve sibling strains; those related through meiosis from distinct parental strains within a multiply-infected mosquito.  To further investigate this hypothesis we examined the length distribution of IBD segments within mixed infections.  Figure~\ref{fig:strainIBD} shows examples of genomic IBD profiles in dual and triple infections.  Previous work on {\it P. falciparum} lab crosses has shown that cross-over events occur typically 200~kb to 1~Mb apart \citet{Miles2016}, hence IBD tracts are expect to be about half this length in dual sibling infections and one third of this in triple infections (Figure~\ref{fig:strainIBD}).  By jointly considering IBD fraction and IBD length, we observe bimodal distributions of both variables, which can be used to identify mixed infections related to different degrees.  For example we can identify those likely to be siblings from unrelated parents, siblings from related parents (i.e. with inbreeding) and strains separated by two to three meioses (Figure~\ref{fig:strainIBD}).  For example, GIVE NUMBERS. Something about low quality samples.
 
