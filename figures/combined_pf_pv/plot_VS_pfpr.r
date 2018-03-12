@@ -3,7 +3,7 @@ library(dplyr)
 library(ggplot2)
 load("snap.Rdata")
 pfpr = read.csv("latest_pfpr_summary.txt", header=F, stringsAsFactors=F)
-meta_with_yr = read.csv("pf3k_release_5_metadata_20170728_cleaned.csv", header=T, stringsAsFactors=F)
+meta_with_yr = read.table("pf3k_release_5_metadata_20170804.txt", header=T, stringsAsFactors=F, sep = "\t")
 mean_eff_k = c()
 
 ibd.prob.2 = ibd.prob.2strain.allIBD
@@ -23,7 +23,7 @@ for ( i in 1:dim(pfpr)[1] ){
     country = pfpr$V1[i] %>% gsub(".2.*$","",.)
 #    print(country)
     year = pfpr$V2[i]
-    tmpSamples = meta_with_yr$sample_name[meta_with_yr$country == country & meta_with_yr$year == year]
+    tmpSamples = meta_with_yr$sample[meta_with_yr$country == country & meta_with_yr$collection_year == year]
     sampleIdx = which(samples %in% tmpSamples)
     mean_eff_k = c(mean_eff_k, adjusted.k.all.ibd_ld[sampleIdx] %>% mean(.))
 
