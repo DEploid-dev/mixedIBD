@@ -18,8 +18,8 @@ rm(list=ls())
 #nsamp = number of samples to take
 #samp.rate = rate at which to take samples
 
-simulate.epi<-function(I, V, gamma=0.05, lambda.per.mos=0.1, pi=0.5, nu=1, alpha=0.2,
-	phi=0.5, eta=0.1, beta=0.5, theta=0.2, dt=0.1, nsamp=200, samp.rate=10, plot=FALSE) {
+simulate.epi<-function(I, V, gamma=0.05, lambda.per.mos=0.1, pi=0.5, nu=1, alpha=0.17,
+	phi=0.5, eta=0.1, beta=0.5, theta=0.4, dt=0.1, nsamp=200, samp.rate=50, plot=FALSE) {
 
 	#Rescale biting rate to per mosquito per host
 	lambda<-lambda.per.mos/sum(I);
@@ -79,7 +79,7 @@ simulate.epi(I=c(100,0,0), V=c(900,100,0));
 
 #nn<-c(10,50,100,150, 200,300, 400, 500,750,1000,2000);
 nn<-seq(1, 500, length.out = 100)
-phi.sim<-0.3;
+phi.sim<-0.5;
 ss<-array(0,c(length(nn), 6));
 for (i in 1:length(nn)) ss[i,]<-simulate.epi(I=c(100,0,0), V=c(0.9*nn[i], 0.1*nn[i], 0), phi=phi.sim);
 
@@ -92,14 +92,16 @@ lines((ss[,2]+ss[,3])/(ss[,1]+ss[,2]+ss[,3]),(ss[,6]*phi.sim*ss[,1])/(ss[,6]*phi
 legend("top",legend=c("Mixed infection", "Sib-infection"), bty="n", border=NA, fill=c("blue", "orange"));
 
 
-load("snap.Rdata")
+#load("snap.Rdata")
 library(dplyr)
+load("~/Dropbox/Joe/MixedIBD/fig3_data/compiled_data.Rdata")
+samples = as.character(new.data$ID)
 
-inferred.k.all.ibd_ld[adjusted.k.all.ibd_ld == 1] = 1
+#inferred.k.all.ibd_ld[adjusted.k.all.ibd_ld == 1] = 1
 
 
 pfpr = read.csv("latest_pfpr_summary.txt", header=F, stringsAsFactors=F)
-meta_with_yr = read.csv("pf3k_release_5_metadata_20170728_cleaned.csv", header=T, stringsAsFactors=F)
+meta_with_yr = read.table("pf3k_release_5_metadata_20170804.txt", header=T, stringsAsFactors=F, sep = "\t")
 unrelated_frac = c()
 sib_frac = c()
 n.sample = c()
@@ -109,15 +111,14 @@ for ( i in 1:dim(pfpr)[1] ){
     country.list = c(country.list, country)
 #    print(country)
     year = pfpr$V2[i]
-    a = which(meta_with_yr$country == country & meta_with_yr$year == year)
-    tmpSamples = meta_with_yr$sample_name[a]
+    a = which(meta_with_yr$country == country & meta_with_yr$collection_year == year)
+    tmpSamples = meta_with_yr$sample[a]
     sampleIdx = which(samples %in% tmpSamples)
-    num_unrelated = sum(ibd.prob.2strain.allIBD[sampleIdx] < .1, na.rm=T) +
-                    sum(ibd.prob.3strain.nonIBD[sampleIdx] > 0.9, na.rm=T)
+    num_unrelated = sum(new.data$cluster[sampleIdx] %in% "Unrelated")
     unrelated_frac = c(unrelated_frac, num_unrelated/length(sampleIdx))
-
-    num_sib = sum(ibd.prob.2strain.allIBD[sampleIdx] < .7 & ibd.prob.2strain.allIBD[sampleIdx] > .3, na.rm=T) +
-          sum((ibd.prob.3strain.someIBD[sampleIdx] + ibd.prob.3strain.allIBD[sampleIdx])> 0.9, na.rm=T)
+    num_sib = sum(new.data$cluster[sampleIdx] %in% c("Sib", "HighSib"))
+#    num_sib = sum(ibd.prob.2strain.allIBD[sampleIdx] < .7 & ibd.prob.2strain.allIBD[sampleIdx] > .3, na.rm=T) +
+#          sum((ibd.prob.3strain.someIBD[sampleIdx] + ibd.prob.3strain.allIBD[sampleIdx])> 0.9, na.rm=T)
     sib_frac = c(sib_frac, num_sib/length(sampleIdx))
     n.sample = c(n.sample, length(sampleIdx))
 }
@@ -149,18 +150,19 @@ pdf("prev_vs_fractions.pdf", width = 8, height = 8)
 par(mfrow=c(1,1));
 par(mar = c(5,5,2,2))
 
-plot((ss[,2]+ss[,3])/(ss[,1]+ss[,2]+ss[,3]), ss[,3]/(ss[,2]+ss[,3]), xlab="Prevalence", ylim=c(0,0.5), xlim=c(0,.5), ylab="Fraction", type="l", col="blue", cex.lab = label_size, cex.axis = tick_size);
+plot((ss[,2]+ss[,3])/(ss[,1]+ss[,2]+ss[,3]), ss[,3]/(ss[,2]+ss[,3]), xlab="Prevalence", ylim=c(0,0.5), xlim=c(0,.5),
+    ylab="Fraction", type="l", col="blue", cex.lab = label_size, cex.axis = tick_size);
 lines((ss[,2]+ss[,3])/(ss[,1]+ss[,2]+ss[,3]),(ss[,6]*phi.sim*ss[,1])/(ss[,6]*phi.sim*ss[,1]+(ss[,5]+ss[,6])*ss[,2]), col="orange", type="l");
 legend("topright",legend=c("Mixed infection", "Sib-infection"), bty="n", border=NA, fill=c("blue", "orange"), cex = label_size);
 
 
-load("snap.Rdata")
-
-inferred.k.all.ibd_ld[adjusted.k.all.ibd_ld == 1] = 1
-
+#load("snap.Rdata")
+load("~/Dropbox/Joe/MixedIBD/fig3_data/compiled_data.Rdata")
+#inferred.k.all.ibd_ld[adjusted.k.all.ibd_ld == 1] = 1
+samples = as.character(new.data$ID)
 
 pfpr = read.csv("latest_pfpr_summary.txt", header=F, stringsAsFactors=F)
-meta_with_yr = read.csv("pf3k_release_5_metadata_20170728_cleaned.csv", header=T, stringsAsFactors=F)
+meta_with_yr = read.table("pf3k_release_5_metadata_20170804.txt", header=T, stringsAsFactors=F, sep = "\t")
 unrelated_frac = c()
 sib_frac = c()
 n.sample = c()
@@ -170,28 +172,31 @@ for ( i in 1:dim(pfpr)[1] ){
     country.list = c(country.list, country)
 #    print(country)
     year = pfpr$V2[i]
-    a = which(meta_with_yr$country == country & meta_with_yr$year == year)
-    tmpSamples = meta_with_yr$sample_name[a]
+    a = which(meta_with_yr$country == country & meta_with_yr$collection_year == year)
+    tmpSamples = meta_with_yr$sample[a]
     sampleIdx = which(samples %in% tmpSamples)
-    num_unrelated = sum(ibd.prob.2strain.allIBD[sampleIdx] < .1, na.rm=T) +
-                    sum(ibd.prob.3strain.nonIBD[sampleIdx] > 0.9, na.rm=T)
+#    num_unrelated = sum(ibd.prob.2strain.allIBD[sampleIdx] < .1, na.rm=T) +
+#                    sum(ibd.prob.3strain.nonIBD[sampleIdx] > 0.9, na.rm=T)
+    num_unrelated = sum(new.data$cluster[sampleIdx] %in% "Unrelated")
     unrelated_frac = c(unrelated_frac, num_unrelated/length(sampleIdx))
-
-    num_sib = sum(ibd.prob.2strain.allIBD[sampleIdx] < .7 & ibd.prob.2strain.allIBD[sampleIdx] > .3, na.rm=T) +
-          sum((ibd.prob.3strain.someIBD[sampleIdx] + ibd.prob.3strain.allIBD[sampleIdx])> 0.9, na.rm=T)
+    num_sib = sum(new.data$cluster[sampleIdx] %in% c("Sib", "HighSib"))
+#    num_sib = sum(ibd.prob.2strain.allIBD[sampleIdx] < .7 & ibd.prob.2strain.allIBD[sampleIdx] > .3, na.rm=T) +
+#          sum((ibd.prob.3strain.someIBD[sampleIdx] + ibd.prob.3strain.allIBD[sampleIdx])> 0.9, na.rm=T)
     sib_frac = c(sib_frac, num_sib/length(sampleIdx))
     n.sample = c(n.sample, length(sampleIdx))
 }
 
 
 idx = which(n.sample > 15)
+#idx = which(n.sample > 10)
 p.pch = rep("x", length(pfpr$V4))
 p.pch[country.list %in% c("Thailand", "Cambodia", "Bangladesh", "Vietnam", "Myanmar", "Laos")] = "o"
 points( pfpr$V4[idx], unrelated_frac[idx], col="blue", pch = p.pch[idx],cex = 1.5)
 legend( "right", legend = c("Asia countries", "Africa countries"), pch = c("o", "x"),bty="n", border=NA, cex = label_size)
-#text( pfpr$V4[idx], unrelated_frac[idx], labels = paste(pfpr$V1, "(",n.sample,")"), col="blue")
 
 points( pfpr$V4[idx], sib_frac[idx], col="orange", pch = p.pch[idx],cex = 1.5)
+#text( pfpr$V4[idx], unrelated_frac[idx], labels = paste(pfpr$V1[idx], "(",n.sample[idx],")"), col="blue", cex = .4)
+#text( pfpr$V4[idx], sib_frac[idx], labels = paste(pfpr$V1[idx], "(",n.sample[idx],")"), col="orange", cex = .4)
 
 
 zoom_ylim=c(0,0.3)
@@ -280,53 +285,53 @@ dev.off()
 
 
 
-pdf("prev_vs_fractions_blowup.pdf")
-par(mfrow=c(1,1));
-#par(mar = c(5,5,2,2))
+#pdf("prev_vs_fractions_blowup.pdf")
+#par(mfrow=c(1,1));
+##par(mar = c(5,5,2,2))
 
-plot((ss[,2]+ss[,3])/(ss[,1]+ss[,2]+ss[,3]), ss[,3]/(ss[,2]+ss[,3]), xlab="", ylim=c(0,0.3), xlim=c(0,.005), ylab="", type="l", col="blue", cex.axis = 2);
-lines((ss[,2]+ss[,3])/(ss[,1]+ss[,2]+ss[,3]),(ss[,6]*phi.sim*ss[,1])/(ss[,6]*phi.sim*ss[,1]+(ss[,5]+ss[,6])*ss[,2]), col="orange", type="l");
-#legend("top",legend=c("Mixed infection", "Sib-infection"), bty="n", border=NA, fill=c("blue", "orange"));
-
-
-load("snap.Rdata")
-
-inferred.k.all.ibd_ld[adjusted.k.all.ibd_ld == 1] = 1
+#plot((ss[,2]+ss[,3])/(ss[,1]+ss[,2]+ss[,3]), ss[,3]/(ss[,2]+ss[,3]), xlab="", ylim=c(0,0.3), xlim=c(0,.005), ylab="", type="l", col="blue", cex.axis = 2);
+#lines((ss[,2]+ss[,3])/(ss[,1]+ss[,2]+ss[,3]),(ss[,6]*phi.sim*ss[,1])/(ss[,6]*phi.sim*ss[,1]+(ss[,5]+ss[,6])*ss[,2]), col="orange", type="l");
+##legend("top",legend=c("Mixed infection", "Sib-infection"), bty="n", border=NA, fill=c("blue", "orange"));
 
 
-pfpr = read.csv("latest_pfpr_summary.txt", header=F, stringsAsFactors=F)
-meta_with_yr = read.csv("pf3k_release_5_metadata_20170728_cleaned.csv", header=T, stringsAsFactors=F)
-unrelated_frac = c()
-sib_frac = c()
-n.sample = c()
-country.list = c()
-for ( i in 1:dim(pfpr)[1] ){
-    country = pfpr$V1[i] %>% gsub(".2.*$","",.)
-    country.list = c(country.list, country)
-#    print(country)
-    year = pfpr$V2[i]
-    a = which(meta_with_yr$country == country & meta_with_yr$year == year)
-    tmpSamples = meta_with_yr$sample_name[a]
-    sampleIdx = which(samples %in% tmpSamples)
-    num_unrelated = sum(ibd.prob.2strain.allIBD[sampleIdx] < .1, na.rm=T) +
-                    sum(ibd.prob.3strain.nonIBD[sampleIdx] > 0.9, na.rm=T)
-    unrelated_frac = c(unrelated_frac, num_unrelated/length(sampleIdx))
+##load("snap.Rdata")
+#load("~/Dropbox/Joe/MixedIBD/fig3_data/compiled_data.Rdata")
+##inferred.k.all.ibd_ld[adjusted.k.all.ibd_ld == 1] = 1
+#samples = as.character(new.data$ID)
 
-    num_sib = sum(ibd.prob.2strain.allIBD[sampleIdx] < .7 & ibd.prob.2strain.allIBD[sampleIdx] > .3, na.rm=T) +
-          sum((ibd.prob.3strain.someIBD[sampleIdx] + ibd.prob.3strain.allIBD[sampleIdx])> 0.9, na.rm=T)
-    sib_frac = c(sib_frac, num_sib/length(sampleIdx))
-    n.sample = c(n.sample, length(sampleIdx))
-}
+#pfpr = read.csv("latest_pfpr_summary.txt", header=F, stringsAsFactors=F)
+#meta_with_yr = read.table("pf3k_release_5_metadata_20170804.txt", header=T, stringsAsFactors=F, sep = "\t")
+#unrelated_frac = c()
+#sib_frac = c()
+#n.sample = c()
+#country.list = c()
+#for ( i in 1:dim(pfpr)[1] ){
+#    country = pfpr$V1[i] %>% gsub(".2.*$","",.)
+#    country.list = c(country.list, country)
+##    print(country)
+#    year = pfpr$V2[i]
+#    a = which(meta_with_yr$country == country & meta_with_yr$collection_year == year)
+#    tmpSamples = meta_with_yr$sample[a]
+#    sampleIdx = which(samples %in% tmpSamples)
+##    num_unrelated = sum(ibd.prob.2strain.allIBD[sampleIdx] < .1, na.rm=T) +
+##                    sum(ibd.prob.3strain.nonIBD[sampleIdx] > 0.9, na.rm=T)
+##    unrelated_frac = c(unrelated_frac, num_unrelated/length(sampleIdx))
+
+##    num_sib = sum(ibd.prob.2strain.allIBD[sampleIdx] < .7 & ibd.prob.2strain.allIBD[sampleIdx] > .3, na.rm=T) +
+##          sum((ibd.prob.3strain.someIBD[sampleIdx] + ibd.prob.3strain.allIBD[sampleIdx])> 0.9, na.rm=T)
+##    sib_frac = c(sib_frac, num_sib/length(sampleIdx))
+#    n.sample = c(n.sample, length(sampleIdx))
+#}
 
 
-idx = which(n.sample > 15)
-p.pch = rep("x", length(pfpr$V4))
-p.pch[country.list %in% c("Thailand", "Cambodia", "Bangladesh", "Vietnam", "Myanmar", "Laos")] = "o"
-points( pfpr$V4[idx], unrelated_frac[idx], col="blue", pch = p.pch[idx], cex = 2)
-#legend( "topright", legend = c("Asia countries", "Africa countries"), pch = c("o", "x"),bty="n", border=NA,)
+#idx = which(n.sample > 15)
+#p.pch = rep("x", length(pfpr$V4))
+#p.pch[country.list %in% c("Thailand", "Cambodia", "Bangladesh", "Vietnam", "Myanmar", "Laos")] = "o"
+#points( pfpr$V4[idx], unrelated_frac[idx], col="blue", pch = p.pch[idx], cex = 2)
+##legend( "topright", legend = c("Asia countries", "Africa countries"), pch = c("o", "x"),bty="n", border=NA,)
 
-points( pfpr$V4[idx], sib_frac[idx], col="orange", pch = p.pch[idx], cex = 2)
-dev.off()
+#points( pfpr$V4[idx], sib_frac[idx], col="orange", pch = p.pch[idx], cex = 2)
+#dev.off()
 
 
 

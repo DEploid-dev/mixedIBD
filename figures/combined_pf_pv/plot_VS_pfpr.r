@@ -21,6 +21,7 @@ unrelated_frac = c()
 for ( i in 1:dim(pfpr)[1] ){
 
     country = pfpr$V1[i] %>% gsub(".2.*$","",.)
+    print(country)
 #    print(country)
     year = pfpr$V2[i]
     tmpSamples = meta_with_yr$sample[meta_with_yr$country == country & meta_with_yr$collection_year == year]
@@ -116,8 +117,9 @@ label_size = 2
 pdf("prevelance_single.pdf", width = 8, height = 8)
 #par(mfrow = c(1,2))
 par(mar =c(5,5,5,2))
-idx = which(!is.na(mean_eff_k) & n.sample > 15)
-idx.bool = (!is.na(mean_eff_k) & n.sample > 15)
+n.threshold = 15
+idx = which(!is.na(mean_eff_k) & n.sample > n.threshold)
+idx.bool = (!is.na(mean_eff_k) & n.sample > n.threshold)
 #idx = which(!is.na(mean_eff_k) )
 plot(mean_eff_k, pfpr$V4, type = "n", main = paste("Correlation: ", round(cor(mean_eff_k[idx], pfpr$V4[idx]), digits = 2)),  xlim=c(1,1.8), ylim = c(0.0001,0.5), ylab="Pf Parasite Rate", xlab = "Effective number of strains", cex.lab = label_size, cex.main = label_size)
 x = mean_eff_k[idx]
