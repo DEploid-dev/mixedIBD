@@ -276,7 +276,7 @@ Relatedness between samples and populations also varies substantially.  In dual 
 
 Overall, we find that populations with higher rates of mixed infection tend to have lower levels of IBD in mixed infections (weighted linear model P = 0.037 after accounting for a continental level difference).  However, the continental level effect is driven by Senegal, which has an unusual combination of low mixed infections, but also low IBD.  Excluding this population (see below for addition discussion), we find a consistent pattern across populations (Figure~\ref{fig:mixInfPlot}c), with a strong negative effect of mixed infection rate on level of IBD (P = $4.2\times10^{-7}$).
 
-The observed levels of IBD suggest that a substantial fraction of mixed infections involve sibling strains; those related through meiosis from distinct parental strains within a multiply-infected mosquito.  To further investigate this hypothesis we examined the length distribution of IBD segments within mixed infections and compared these to observations from sibling strains generated through experimental lab crosses.  Figure~\ref{fig:strainIBD} shows examples of genomic IBD profiles in dual and triple infections.  In lab crosses cross-over events occur typically 200~kb to 1~Mb apart \citet{Miles2016}, hence IBD tracts are expect to be about half this length in dual sibling infections and one third of this in triple infections (Figure~\ref{fig:strainIBD}).  By jointly considering IBD fraction and IBD length, we observe bimodal distributions of both variables, which can be used to identify mixed infections related to different degrees.  For example we can identify those likely to be siblings from unrelated parents, siblings from related parents (i.e. with inbreeding) and strains separated by two to three meioses (Figure~\ref{fig:strainIBD}).  For example,within dual infections, we estimated that 27\% are sib infections in Africa and 43\% are sib infections in Asia.
+The observed levels of IBD suggest that a substantial fraction of mixed infections involve sibling strains; those related through meiosis from distinct parental strains within a multiply-infected mosquito.  To further investigate this hypothesis we examined the length distribution of IBD segments within mixed infections and compared these to observations from sibling strains generated through experimental lab crosses.  Figure~\ref{fig:strainIBD} shows examples of genomic IBD profiles in dual and triple infections.  In lab crosses cross-over events occur typically 200~kb to 1~Mb apart \citet{Miles2016}, hence IBD tracts are expect to be about half this length in dual sibling infections and one third of this in triple infections (Figure~\ref{fig:strainIBD}).  By jointly considering IBD fraction and IBD length, we observe bimodal distributions of both variables, which can be used to identify mixed infections related to different degrees.  For example we can identify those likely to be siblings from unrelated parents, siblings from related parents (i.e. with inbreeding) and strains separated by two to three meioses (Figure~\ref{fig:strainIBD}).  For example, within dual infections, we estimated that 27\% are sib infections in Africa and 43\% are sib infections in Asia.
 
 
 \begin{figure}[ht]
@@ -296,25 +296,35 @@ To assess how characteristics of mixed infection relate to local infection inten
 \begin{figure}[ht]
   \centering{}
     \includegraphics[width=.5\textwidth]{Fig4.pdf}
-  \caption{The relationship between {\it P. falciparum} prevalence and characteristics of mixed infection.  The scatterplot shows, for each sampling location and year, the relationship between the average effective number of strains, given by $\sum f_i^2)^{-1}$, where $f_i$ is the proportion of the $i$th strain, and the estimated country-wide average prevalence of malaria infection from the Malaria Atlas Project [REF].  Point shape indicates country and colour indicates the average level of IBD observed within mixed infections. }
+  \caption{The relationship between {\it P. falciparum} prevalence and characteristics of mixed infection.  The scatterplot shows, for each sampling location and year, the relationship between the average effective number of strains, given by $(\sum f_i^2)^{-1}$, where $f_i$ is the proportion of the $i$th strain, and the estimated country-wide average prevalence of malaria infection from the Malaria Atlas Project [REF].  Point shape indicates country and colour indicates the average level of IBD observed within mixed infections. }
   \label{fig:pfpr}
 \end{figure}
 
 Two features stand out from this analysis.  First, despite having orders of magnitude difference in {\it P. falciparum} prevalence at the country level, rates of mixed infection in Asian populations are typically within a factor of two of those in African populations.  This observation is particularly surprising given the association between mixed infection rate and prevalence within African populations and could point to either substantial heterogeneity in local transmission rates within Asian populations or an unexpected consequence of malaria epidemiology.  Second, given the (negative) association between mixed infection rate and levels of IBD, it seems unexpected that levels of IBD do not correlate with prevalence at the country level.
 
-To better understand the expected relationships between pathogen prevalence and statistics of infection, we developed a simple extension of the classic Ross-MacDonald model [REF] of malaria transmission to include mixed infection within both hosts and vectors (Figure~\ref{fig:model}).  
+To better understand the expected relationships between pathogen prevalence and statistics of infection, we developed a simple extension of the classic Ross-MacDonald model [REF] of malaria transmission to include mixed infection within both hosts and vectors (Figure~\ref{fig:model}). In this deterministic model, we assume a fixed number of hosts and vectors, that infection status does not affect probability of transmission or sampling and that the bottlenecks at transmission to host or vector can be approximated as a single parameter that determines the probability that a multiply-infected host (or vector) transmits more than one strain (if they are themselves multiply-infected.  See Supplementary Material for model details.  At equilibrium, this model recovers the standard relationship between vector density and/or biting rate and local prevalence: $P = (a b+c d)/(a b-c d)$.  However, in addition, we  can predict how mixed infection rates covary with prevalence by changing the size of the vector population (hence biting rate) and approximate the relative contribution of sib-infections by comparing the contribution to novel mixed infections, at equilibrium, from previously uninfected hosts (hence infected by a single multiply-infected mosquito, assumed to transmit sibling strains) and from previously singly-infected strains (hence carrying at least two distinct strains).  This model has several limitations, for example not being able to model background levels of relatedness, but nevertheless serves as a useful indicator of how more complex and realistic models might behave.
+
+Numerical analysis of the model reveals two features.  First, by altering the vector population, the rate of mixed infection tracks prevalence in a largely linear manner, though at high prevalence, there is a somewhat greater than linear relationship, see Figure~\ref{fig:model}c.  Second, the relative contribution of sibling strains (compared to unrelated strains) in mixed infections is relatively constant across varying prevalence, with the exception of a  high contribution at very low prevalence (Figure~\ref{fig:model}c).  These observations are consistent with the genomic data presented here (Figure~\ref{fig:model}), where we see significant correlation between prevalence and mixed infection, but no significant correlation with relatedness in mixed infections.  Figure~\ref{fig:model}c shows a choice of parameter values that broadly match the empirical data.  These results suggest that rates of mixed infection are likely to be highly informative about the local intensity of {\it P. falciparum} transmission.  In contrast, the relative contribution of sibling infecton to mixed infections reflects fundamental parameters relating to transmission events.
 
 
 \begin{figure}[ht]
   \centering{}
   \includegraphics[width=\textwidth]{Fig5.pdf}
-  \caption{Deterministic model for mixed infection.  (a) }
+  \caption{Deterministic model for mixed infection.  (a) Summary of the dynamical system used to model mixed infection rates in the host (left hand side) and vector (right hand side).  Quantities in circles (diamonds) refer to numbers of uninfected (subscript 0), singly infected (subscript 1) and multiply infected (subscript M) hosts (vectors).  Bold circles indicate where samples are taken from (assumed to be independent of multiplicity of infection).  Parameters governing the rate of transition are indicated along arrows: $\lambda_H$ = number of bites per individual vector per day that could result in a host infection event; $\phi$ = probability that an infectious bite from a multiply-infected vector establishes a multiple infection in a host; $\alpha$ = rate, per day, at which a multiply-infected host clears to a singly infected host; $\gamma$ = rate at which a host clears all infections present; $\lambda_V$ = number of times an individual vector bites a given host per day in which the vector could become infected by pathogen present in the host; $\theta$ = probability that a vector, when being infected through biting a multiply-infected host, becomes multiply-infected; $\xi$ = rate, per day, at which vectors clear pathogen (equivalent to the rate of vector replacement per day).  (b) Comparison of model predictions to empirical data for prevalence against mixed infection rate (blue) and contribution of sib-infection to mixed infections (orange).  Point shape distinguishes African (crosses) and Asian (circles) populations.  The sib-infection fraction is approximated by the relative contribution to the multiply-infected host state (per unit time), at equilibrium, from uninfected hosts relative to singly-infected hosts.  Parameter values (GIVE PARAM VALUES) were chosen to fit with empirical observations.}
   \label{fig:model}
 \end{figure}
 
 
-\subsection{Characterising genealogical relationships at the population level}
+\section{Discussion}
 
+1. Summary of advances and why important.
+2. Surprising finding of high sibling infection rate and why important.
+3. Findings from model - informal explanation.  Why are Asia and Africa so different?
+4. Wider implications of IBD - networks within populations revealing transmission chains.
+5. Open problems (impact of sampling strategy, other metrics of diversity, more realistic models).
+
+
+Genomic data of malaria parasites obtained from human hosts has revealed many striking features of malaria evolution and epidemiology, such as the repeated origin of artemesinin resistance mutations in South East Asia [REF], high levels of population differentiation [REF] and the presence of many loci that show evidence for adaptive evolution or long-term balancing selection [REF].  However, the extent to which such data can give high resolution information about malaria epidemiology, in both space and time, and thus inform control strategies, is largely unknown.  Here, we have focused on the problem of learning about mixed infections from genome-sequencing data.  Mixed infections have been reported previously REFS].  However, the tools developed here enable estimates, not only of the presence of multiple strains, but their proportions, relatedness and haplotypes.  We have shown that, in the populations studied here, that between 16\% and 63\% of isolates have multiple infections, and up to 54\% have more than two.  Perhaps most unexpected, we have also shown that over half of all mixed infections include strains related at the level of siblings, with chromosomal patterns of IBD that indicate progeny from a single infected mosquito.  
 
 
 \begin{figure}[ht]
@@ -326,17 +336,6 @@ To better understand the expected relationships between pathogen prevalence and 
 
 
 
-
-
-
-
-
-
-
-\section{Discussion}
-
-
-orders of magnitude difference in prevalence but weak difference in MI pointing to extreme heterogeneity
 
 \section{Acknowledgements}
 We thank the Pf3k consortium for valuable insights. The project is funded by  Wellcome (100956/Z/13/Z to GM, \ldots).
