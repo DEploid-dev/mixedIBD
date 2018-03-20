@@ -82,14 +82,17 @@
 
 \newpage
 %\input{supplementReset.tex}
-\section{Deconvoltion IBD methods}
 
-%Overall we use mcmc methods.
+
+
+\section{Deconvolution in the presence of IBD}
+
 
 
 %\todo{expand methods}
 
-\subsection{Deconvolving mixed infection}
+\subsection{Deconvolution of mixed infection}
+
 \subsubsection{Notations}
 We use the same notations as \citet{Zhu2017} (see Table~\ref{tab:notation}). Our data, $D$, are the allele read counts of sample $j$ at a given site $i$, denoted as $r_{j,i}$ and $a_{j,i}$ for reference (REF) and alternative (ALT) alleles respectively.  These are assigned values of $0$ and $1$ respectively. Here we consider only bi-allelic loci, though future extension to include multi-allelic sites is simple.  The empirical allele frequencies within a sample (WSAF) $p_{j,i}$ and at population level (PLAF) $f_i$ are calculated by $ \frac{a_{j,i}}{a_{j,i} + r_{j,i}}$ and $ \frac{\sum_j a_{j,i}}{\sum_j a_{j,i} + \sum_j r_{j,i}}$ respectively. Since all data in this section refers to the same sample, we drop the subscript $j$ from now on.
 
@@ -462,6 +465,10 @@ For the {\it P. vivax} data, we have the geographical groups as
 
 \section{IBD state posterior probabilities of all population}
 \subsection{Monitoring malaria epidemic from the IBD posterior probability}
+
+
+
+\section{A deterministic model for mixed infections}
 
 
 \bibliography{mixedIBD.bib}
