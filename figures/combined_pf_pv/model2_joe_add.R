@@ -150,7 +150,7 @@ pdf("prev_vs_fractions.pdf", width = 8, height = 8)
 par(mfrow=c(1,1));
 par(mar = c(5,5,2,2))
 
-plot((ss[,2]+ss[,3])/(ss[,1]+ss[,2]+ss[,3]), ss[,3]/(ss[,2]+ss[,3]), xlab="Prevalence", ylim=c(0,0.5), xlim=c(0,.5),
+plot((ss[,2]+ss[,3])/(ss[,1]+ss[,2]+ss[,3]), ss[,3]/(ss[,2]+ss[,3]), xlab="Prevalence", ylim=c(0,0.55), xlim=c(0,.5),
     ylab="Fraction", type="l", col="blue", cex.lab = label_size, cex.axis = tick_size);
 lines((ss[,2]+ss[,3])/(ss[,1]+ss[,2]+ss[,3]),(ss[,6]*phi.sim*ss[,1])/(ss[,6]*phi.sim*ss[,1]+(ss[,5]+ss[,6])*ss[,2]), col="orange", type="l");
 legend("topright",legend=c("Mixed infection", "Sib-infection"), bty="n", border=NA, fill=c("blue", "orange"), cex = label_size);
@@ -192,7 +192,7 @@ idx = which(n.sample > 15)
 p.pch = rep("x", length(pfpr$V4))
 p.pch[country.list %in% c("Thailand", "Cambodia", "Bangladesh", "Vietnam", "Myanmar", "Laos")] = "o"
 points( pfpr$V4[idx], unrelated_frac[idx], col="blue", pch = p.pch[idx],cex = 1.5)
-legend( "right", legend = c("Asia countries", "Africa countries"), pch = c("o", "x"),bty="n", border=NA, cex = label_size)
+legend( "topleft", legend = c("Asia countries", "Africa countries"), pch = c("o", "x"),bty="n", border=NA, cex = label_size)
 
 points( pfpr$V4[idx], sib_frac[idx], col="orange", pch = p.pch[idx],cex = 1.5)
 #text( pfpr$V4[idx], unrelated_frac[idx], labels = paste(pfpr$V1[idx], "(",n.sample[idx],")"), col="blue", cex = .4)
