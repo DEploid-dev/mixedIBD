@@ -139,8 +139,10 @@ for (i in 1:14){
   if ( length(good) > 1){
     mymodel = loess( pfpr ~ good.year, span = 1 )
     lines(good.year, predict(mymodel, good.year), col = colors[i], lwd=2)
-    year = 2007:2014
+    year = 1985:2014
     mytable = rbind(mytable, data.frame(label = paste(country, ".", year, sep=""), year = year, pfpr = predict(mymodel, year)))
+  } else {
+    mytable = rbind(mytable, data.frame(label = paste(country, ".", good.year, sep=""), year = good.year, pfpr = pfpr))
   }
 #
 }
