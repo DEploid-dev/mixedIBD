@@ -21,6 +21,7 @@ unrelated_frac = c()
 for ( i in 1:dim(pfpr)[1] ){
 
     country = pfpr$V1[i] %>% gsub(".2.*$","",.)
+    if (country=="Vietnam"){country ="Viet Nam"}
     print(country)
 #    print(country)
     year = pfpr$V2[i]
@@ -142,8 +143,8 @@ p.pch = country.factor %>% as.numeric
 
 my.lwd = rep(0, length(mean_eff_k))
 #p.color[idx] = "black"
-my.lwd[idx.bool & asia.idx.bool] = 7
-my.lwd[idx.bool & africa.idx.bool] = 2
+my.lwd[idx.bool & asia.idx.bool] = 2
+my.lwd[idx.bool & africa.idx.bool] = 5
 
 grid = c(.375, .525, .675, 1)
 
@@ -158,7 +159,7 @@ points(mean_eff_k[idx.bool], pfpr$V4[idx.bool], col = col.array[idx.bool], pch =
 #}
 legend("bottomright", legend = levels(country.factor), pch = 1:14, bty = "n")
 legend("topleft",legend=c("Relatedness", "[0, 0.375)", "[0.375, 0.525)", "[0.525, 0.675)", "[0.675, 1)"), bty="n", border=NA, fill=c(NA, "red", "orange", "yellow", "green"), cex = 1.5);
-legend("left", legend = c("Asia", "Africa"), lty = 1, lwd = c(7,2), cex = tick_size, bty="n")
+legend("left", legend = c("Asia", "Africa"), lty = 1, lwd = c(2,5), cex = tick_size, bty="n")
 
 
 new.data = data.frame(population = pfpr$V1)
