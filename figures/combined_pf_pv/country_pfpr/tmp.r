@@ -34,29 +34,26 @@ for (country in unique(country_site[,1])){
     } else{
       map('world', c(country), fill=T, col = "grey95")
     }
-    points(a$long, a$latitude, cex = 1, col="grey80", pch = 1)
+    points(a$long, a$latitude, cex = 1, col="grey85", pch = 21, lwd = .3)
 
     tmpTab = country_site[country_site$country == country,]
     years = sort(unique(a$year_end))
     years = years[years > 2006]
-    colors = 1:20
+    colors = c("blue", "red", "purple", "green", "yellow", "brown")
     year_i = 0
     for ( year in years ){
         year_i = year_i + 1
         a.groupby.year = a[a$year_end == year,]
-#            idx = which(getDistanceFromLatLonInKm(tmpTab$lat[i], tmpTab$long[i], a.groupby.year$latitude, a.groupby.year$longitude)<sampling_radius)
-        points(a.groupby.year$long, a.groupby.year$latitude, cex = 1, col=colors[year_i], pch = 16)
-#cat(year, tmpTab$site[i], "(", length(a.groupby.year$pf_pr), ")", " mean pfpr = ", sum(a.groupby.year$pf_pr, na.rm=T) / length(a.groupby.year$pf_pr) , ", mean nonzero pfpr = ", mean(a.groupby.year$pf_pr[a.groupby.year$pf_pr>0], na.rm=T),"\n")
-
+        col.pfpr = ifelse(is.na(a.groupby.year$pf_pr), 0, a.groupby.year$pf_pr)
+        points(a.groupby.year$long, a.groupby.year$latitude, cex = 1, col = "grey85", lwd = .3, bg = lapply(col.pfpr, function(x){adjustcolor(colors[year_i], alpha.f = x)}) %>% unlist, pch = 21)
     }
 
 
     for ( i in 1:dim(tmpTab)[1] ){
         lines(tmpTab$long[i]+unit.circle[,1], tmpTab$lat[i]+unit.circle[,2], lty= 2)
-#        points(tmpTab$long[i], tmpTab$lat[i], pch = "x", col = "black", cex = 3)
         text(tmpTab$long[i], tmpTab$lat[i], labels = tmpTab$site[i], col = "black", cex = 2)
     }
-    legend("topright", legend=years, col = colors[1:length(years)], pch = 16)
+    legend("topleft", legend=years, col = colors[1:length(years)], pch = 16)
     dev.off()
 }
 
