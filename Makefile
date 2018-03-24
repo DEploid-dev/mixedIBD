@@ -3,8 +3,8 @@ all: clean main.pdf
 
 mainfiguresPng = $(shell grep png main.tex | sed -e "s/^.*{/figures\//g" -e "s/\}//g" )
 mainfiguresPdf = $(shell grep pdf main.tex | sed -e "s/^.*{/figures\//g" -e "s/\}//g" )
-supfigures = $(shell grep png mainSupplement.tex | sed -e "s/^.*{/figures\/otherFigures\//g" -e "s/\}//g" )
-supfigurespdf = $(shell grep pdf mainSupplement.tex | sed -e "s/^.*{/figures\/otherFigures\//g" -e "s/\}//g" )
+#supfigures = $(shell grep png mainSupplement.tex | sed -e "s/^.*{/figures\/otherFigures\//g" -e "s/\}//g" )
+#supfigurespdf = $(shell grep pdf mainSupplement.tex | sed -e "s/^.*{/figures\/otherFigures\//g" -e "s/\}//g" )
 suptex = $(shell grep "\.tex" mainSupplement.tex | sed -e "s/^.*{//g" -e "s/\}//g" )
 
 coverLetter.pdf: coverLetter.tex
