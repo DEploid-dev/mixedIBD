@@ -91,6 +91,8 @@ filter(new_table, grepl("Asia", group))$pfpr_nonzero %>% mean(., na.rm=T) %>% ca
 
 filter(new_table, grepl("Africa", group))$pfpr_nonzero %>% mean(., na.rm=T) %>% cat("Africa prevalence", ., "\n")
 
+print("page 10 correlations")
+!!!!!!!!!!!!!!!
 good_table = filter(new_table, nsam > 15)
 as = filter(good_table, grepl("Asia", group))
 af = filter(new_table, grepl("Africa", group))
@@ -102,5 +104,17 @@ cor.test(af$pfpr_nonzero, af$eff_k)
 cor.test(good_table$pfpr_nonzero, good_table$relatedness)
 cor.test(as$pfpr_nonzero, as$relatedness)
 cor.test(af$pfpr_nonzero, af$relatedness)
+
+
+############################### Discussion
+summarise(groupByCountry, sum(Est_K>1)/length(Est_K))[,2] %>% range %>% cat("range",., "\n")
+print(sum(new.data$Est_K>2)/sum(new.data$Est_K>1))
+
+vietnam = filter(new.data, Population=="Vietnam")
+
+ sum(vietnam$Est_K>1) / 97
+sum(vietnam$cluster=="Sib") /sum(vietnam$Est_K>1)
+print("include high sib???")
+sum(vietnam$cluster %in% c("Sib", "HighSib")) /sum(vietnam$Est_K>1)
 
 
