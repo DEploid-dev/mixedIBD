@@ -24,7 +24,7 @@ country_site = read.table("site_coord.txt.csv", header=T, stringsAsFactors=F, se
 sampling_radius = 150
 segments = 40
 angles <- ((-segments):segments)  * pi/segments
-unit.circle <- cbind(cos(angles), sin(angles)) * sampling_radius/6371*60
+unit.circle <- cbind(cos(angles), sin(angles)) * sampling_radius/6371*5
 
 for (country in unique(country_site[,1])){
     a = read.csv(paste("PfPR_Data_", country, ".csv", sep=""))
@@ -39,13 +39,14 @@ for (country in unique(country_site[,1])){
     tmpTab = country_site[country_site$country == country,]
     years = sort(unique(a$year_end))
     years = years[years > 2006]
-    colors = c("blue", "red", "purple", "green", "yellow", "brown")
+    colors = c("yellow", "green", "purple", "blue", "pink", "brown", "red")
     year_i = 0
     for ( year in years ){
         year_i = year_i + 1
         a.groupby.year = a[a$year_end == year,]
         col.pfpr = ifelse(is.na(a.groupby.year$pf_pr), 0, a.groupby.year$pf_pr)
-        points(a.groupby.year$long, a.groupby.year$latitude, cex = 1, col = "grey85", lwd = .3, bg = lapply(col.pfpr, function(x){adjustcolor(colors[year_i], alpha.f = x)}) %>% unlist, pch = 21)
+#        points(a.groupby.year$long, a.groupby.year$latitude, cex = 1, col = "grey85", lwd = .3, bg = lapply(col.pfpr, function(x){adjustcolor(colors[year_i], alpha.f = x)}) %>% unlist, pch = 21)
+        points(a.groupby.year$long, a.groupby.year$latitude, cex = 1, col = "grey85", lwd = .3, bg = lapply(col.pfpr, function(x){adjustcolor(colors[year_i], alpha.f = 1)}) %>% unlist, pch = 21)
     }
 
 
@@ -91,7 +92,7 @@ for (country in unique(country_site[,1])){
 
 
 new.data = data.frame( country=character(), year=character(), n.sample=numeric(),
-                        mean_pfpr=numeric(), mean_nonzero_pfpr=numeric())
+                        mean_pfpr=numeric(), mean_nonzero_pfpr=numeric(), wt_mean_pfpr = numeric())
 
 #                        mn.post.pi = numeric(), mn.post.c = numeric(), mn.post.wt.pi = numeric())
 
@@ -116,7 +117,8 @@ for (country in unique(country_site[,1])){
         new.data = rbind(new.data,
           data.frame( country=country, year=year, n.sample = n.sample,
             mean_pfpr=sum(a.groupby.year$pf_pr, na.rm=T) / n.sample,
-            mean_nonzero_pfpr=mean(a.groupby.year$pf_pr[a.groupby.year$pf_pr>0], na.rm=T)
+            mean_nonzero_pfpr=mean(a.groupby.year$pf_pr[a.groupby.year$pf_pr>0], na.rm=T),
+            wt_mean_pfpr = weighted.mean(a.groupby.year$pf_pr, w = a.groupby.year$examined, na.rm = T)
 #            mn.post.pi = tmp.fit$mn.post.pi,
 #            mn.post.c = tmp.fit$mn.post.c,
 #            mn.post.wt.pi = tmp.fit$mn.post.wt.pi
