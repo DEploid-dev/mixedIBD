@@ -237,7 +237,7 @@ Laos            &2011           &0.17  &Attapeu&59   &71   (4.2 )&0.37 &1.4  &\\
 \end{tabular}
 }
 
-\tabledata{Summary of Pf3k samples in data release 5.1.  Genotyping, including both indel and SNP variants, was performed using a pipeline based on GATK best practices, see Methods. Data available from \url{ftp://ngs.sanger.ac.uk/production/pf3k/release_5/5.1}. $D$ mean read depth $\rho$ relatedness, $K$ effective k, $ss$ sample size}
+\tabledata{Summary of Pf3k samples in data release 5.1, where $D$ denotes mean read depth and $ss$ is sample size.  Genotyping, including both indel and SNP variants, was performed using a pipeline based on GATK best practices, see Methods. Data available from \url{ftp://ngs.sanger.ac.uk/production/pf3k/release_5/5.1}. $PfPr$ is the inferred parasite prevalence (see Figure~\ref{fig:pfpr}(a)); Relatedness $\rho$ and effective number of strains $K$ are summary metrics from {\tt DEploidIBD} output.}
 \end{table}
 
 
@@ -278,7 +278,9 @@ After accounting for between-continent differences in prevalence, the effective 
 \begin{figure}[h]
   \centering{}
     \includegraphics[width=\textwidth]{Fig5.pdf}
-  \caption{The relationship between {\it P. falciparum} prevalence and characteristics of mixed infection.  The scatterplot shows, for each sampling location and year, the relationship between the average effective number of strains, given by $(\sum f_i^2)^{-1}$, where $f_i$ is the proportion of the $i$th strain, and the estimated country-wide average prevalence of malaria infection from the Malaria Atlas Project \citep{MAP2017}.  Point shape indicates country and colour indicates the average level of IBD observed within mixed infections. }
+  \caption{The relationship between {\it P. falciparum} prevalence and characteristics of mixed infection.
+(a)~Estimated country-wide average prevalence of malaria infection from the Malaria Atlas Project \citep{MAP2017} over time.
+(b)~The scatterplot shows, for each sampling location and year, the relationship between the average effective number of strains, given by $(\sum f_i^2)^{-1}$, where $f_i$ is the proportion of the $i$th strain and the estimated prevalence.  Point shape indicates country and colour indicates the average level of IBD observed within mixed infections. Point size is proportional to Pf3k sample size.}
   \label{fig:pfpr}
 \end{figure}
 
@@ -310,7 +312,7 @@ While many individuals with malaria carry mixed infections, in the majority of c
 \begin{figure}[h]
   \centering{}
   \includegraphics[width=\textwidth]{Fig7.pdf}
-  \caption{Identification of clusters of related samples within two populations from Western Cambodia.  NEED TO SPELL MEANING OF OUT COLOURS, SHAPES, LINES, etc.}
+  \caption{Identification of clusters of related samples within two populations from Western Cambodia. Points represent deconvolved haplotypes. Point shape indicates infection type, and color indicates the collection year. Dashed lines represent haplotype ties between isolates, and solid lines show similarities between haplotypes within isolate.}
   \label{fig:NNplot}
 \end{figure}
 
