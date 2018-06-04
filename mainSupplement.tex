@@ -459,6 +459,68 @@ Exact steps include: 1. create an array of angles between -pi:pi; 2. compute cos
 \end{figure}
 
 
+\subsection{Haplotype quality assessment}
+
+We noticed that DEploid-IBD produced chimeric haplotypes when faced with difficult mixtures. For instance, mixed infections in which the co-existing strains have the same relative proportion (e.g. $k=4$ with each strain having a proportion of 25\%), or samples in which proportions are very unbalanced (e.g. k=2 with the marginal strain at 2\%). These artefactual haplotypes show a significant deficit or excess of alternative calls that cannot be explained in terms of their genetic relationship to the reference genome used for mapping and assembly (3D7). To discard problematic haplotypes, we devised a stringent filtering strategy based on $z$-scores. For each population, we computed the distribution of alternative calls observed within the subset of clonal samples ($k=1$). Using this distribution as reference, we computed a $z$-score for each haplotype in a population following
+
+$$z_i = \frac{a_i - \bar{a_r}}{\sigma_r},$$ where $a_i$ denotes the number of alternative calls in the haplotype $i$, and $\bar{a}_r$ and $\sigma_r$ are, respectively, the mean and standard deviation of observed alternative calls in the clonal set of samples from the population of origin. We only retain haplotypes with a $z$-score in the range $(-3,3)$, thus discarding any strain that is three or more standard deviations away, in terms of alternative calls, from the mean observed for clonal samples. By using the set of clonal samples as the reference distribution, we approximate the number of alternative calls expected in a genome belonging to that population. Supp. Figure \ref{fig:ghana-filtering} shows an example of this filtering process for the most problematic population in the dataset (Ghana). Supp. Table \ref{table:haps-discarded-by-country} lists the number of haplotypes discarded by population while Supp. Table \ref{table:haps-discarded-by-COI} describes the number of haplotypes discarded by COI level.
+
+
+\begin{figure}[ht]
+  \centering
+    \includegraphics[width=1\textwidth]{figures/qualityGhana.pdf}
+  \caption{Diagnostic plots showing the distribution of haplotype quality ($z$-scores) for the Ghanian samples. Left. Scatterplot showing the relationship between haplotype $z$-score and strain proportion. The top axis shows the number of alternative calls below/above the mean of the subset of clonal samples that correspond to a given $z$-score. The vertical red line denotes a $z$-score of $0$ whereas the red-shaded area indicate the haplotypes we retain Point colors show the COI level of the sample. Right. Four views of the same plot in which the samples have been highlighted according to their COI level.}
+    \label{fig:ghana-filtering}
+\end{figure}
+
+
+
+\begin{table}
+\centering
+\begin{tabular}{r|r|r|r}
+\textbf{Country}  & \textbf{Discarded} & \textbf{Retained} &\textbf{ \% Discarded} \\
+\hline
+Bangladesh & 25 & 70 & 26 \\
+Cambodia & 107 & 719 & 13 \\
+DR. of Congo & 72 & 152 & 32 \\
+Ghana & 505 & 754 & 40 \\
+Guinea & 86 & 90 & 49 \\
+Laos & 28 & 113 & 20 \\
+Malawi & 339 & 467 & 42 \\
+Mali & 40 & 140 & 22 \\
+Myanmar & 7 & 74 & 9 \\
+Nigeria & 1 & 8 & 11\\
+Senegal & 2 & 167 & 1\\
+Thailand & 30 & 173 & 15 \\
+The Gambia & 22 & 73 & 23 \\
+Vietnam & 23 & 122 & 16\\
+\hline
+\textbf{Total} & 1287 & 3122 & 29
+\end{tabular}
+\vspace{10}
+\caption{Number of haplotypes discarded and retained for each population in the Pf3k dataset.}
+\label{table:haps-discarded-by-country}
+\end{table}
+
+
+\begin{table}
+\centering
+\begin{tabular}{r|r|r|r|r|r|r}
+\textbf{COI}  & \textbf{Retained} & \textbf{1 hap} &\textbf{2 haps} & \textbf{3 haps} & \textbf{4 haps} & \textbf{Total} \\
+\hline
+1 & 1367 & 34 & & & & 1401 \\
+2 & 277 & 205 & 35 & & & 517 \\
+3 & 70 & 169 & 142 & 21 & & 402 \\
+4 & 11 & 21 & 63 & 73 & 24 & 192 \\
+\hline
+\textbf{Total} & 1725 & 429 & 240 & 94 & 24 & 2512 \\
+\hline
+\textbf{Fraction} & 0.69 & 0.17 & 0.1 & 0.04 & 0.01 & \\
+\end{tabular}
+\vspace{10}
+\caption{Number of haplotypes retained and discarded stratified by COI level.}
+\label{table:haps-discarded-by-COI}
+\end{table}
 
 
 
