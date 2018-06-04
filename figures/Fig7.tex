@@ -17,7 +17,18 @@
 \begin{document}
 \begin{figure}
 \centering
-  \includegraphics[width=\textwidth]{cam_samples_by_year.pdf}
+  \parbox{.95\figrasterwd}{
+    \parbox{.62\hsize}{%
+      \subfloat[][]{\includegraphics[width=\hsize]{Senegal_samples_by_year.pdf}}
+    }
+    \hskip1em
+    \parbox{.34\hsize}{%
+      \subfloat[][]{\includegraphics[width=\hsize]{net_work_summary_mean_vs_sd.pdf}}
+      \\
+      %\vskip1em
+      \subfloat[][]{\includegraphics[width=\hsize]{genotype_error_ecdf.pdf}}
+    }
+  }
 \end{figure}
 \end{document}
 
