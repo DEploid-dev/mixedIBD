@@ -41,7 +41,6 @@ pdfFigures:
 	cd figures/; pdflatex Fig3.tex
 	cd figures/; pdflatex Fig4.tex
 	cd figures/; pdflatex Fig5.tex
-	cd figures/; pdflatex Fig7.tex
 
 clean:
 	rm -f *.blg *snm *nav *.bbl *.ps *.dvi *.aux *.toc *.idx *.ind *.ilg *.log *.out main.pdf
