@@ -1,0 +1,25 @@
+\documentclass[preview]{standalone}
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{ulem}
+
+%\usepackage{floatrow}
+\usepackage{graphicx}
+\graphicspath{{./otherFigures/}}
+\usepackage{caption}
+\usepackage[label font=bf,labelformat=simple, position = top, justification=RaggedRight,singlelinecheck=false]{subfig}
+\newdimen\figrasterwd
+\figrasterwd\textwidth
+%\floatsetup[figure]{style=plain,subcapbesideposition=top}
+\newsubfloat{figure}
+
+
+\begin{document}
+\begin{figure}
+\centering
+  \subfloat[][]{\includegraphics[width=0.33\textwidth]{3dEffk.pdf}}
+  \subfloat[][]{\includegraphics[width=0.33\textwidth]{diagnositicPlot_of_effK_final_for3_newlook.pdf}}
+  \subfloat[][]{\includegraphics[width=0.33\textwidth]{ibdValidationOfMixedOf3s.pdf}}
+\end{figure}
+\end{document}
+
