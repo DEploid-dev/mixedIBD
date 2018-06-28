@@ -158,7 +158,7 @@ To test the accuracy of \texttt{DEploidIBD} in a more realistic setting, we crea
   \figsupp{{\it In vitro} validation and simulation results. Experimental validation and effective number of strains inferred by {\tt DEploidIBD}. We use a reference panel of the laboratory parasite lines (3D7, Dd2, HB3 and 7G8) to deconvolve the same lab-mixed samples, assuming 3 and 4 strains within a sample. Each experiment is performed with and without IBD inference. Black crosses indicate the true effective number of strains. Purple crosses indicate median values obtained from 30 replicates when using {\tt DEploidIBD} with a panel and assuming that the maximum number of strains is 4. The coloured dots show the inferred effective number of strains across replicates with intensity proportional to fraction. Note one sample (indicated by an asterisk) where balanced proportions of three strains results in the LD-free approach underfitting the data as a mixture of two strains with proportions of $1/3$ and $2/3$.}{\includegraphics[width = 0.6\textwidth]{eff_k_both.pdf}}
   \figsupp{Comparison of true and inferred haplotypes for Chromosome 14 (2,369 SNPs) in sample PG0396-C before and after haplotype painting using a reference panel of the laboratory parasite lines (3D7, Dd2, HB3 and 7G8). The yellow, cyan and white background label the haplotype segments from strains 7G8, HB3 and Dd2 respectively. The switch errors are obtained by counting the changes of a strain segment mapped to reference strains; the genotype errors are the discordance between the strain and the mapped reference segments. }{\includegraphics[width = 0.8\textwidth]{DEploid_IBD_haps_compare.pdf}}
   \figsupp{Cumulative frequencies of switch error across 76 simulated mixtures with three levels of IBD (25\%, 50\% and 75\%) using empirical data
-from clonal samples with mixing proportion of 25∕75\%.}{\includegraphics[width = 0.8\textwidth]{switch_error_ecdf.pdf}}
+from clonal samples with mixing proportion of 25∕75\%.}{\includegraphics[width = 0.8\textwidth]{Fig2SupSwitch.pdf}}
 \end{figure}
 
 
@@ -294,7 +294,7 @@ Analysis of the model reveals two features.  First, by altering the vector popul
 
 \begin{figure}[h]
   \centering{}
-  \includegraphics[width=\textwidth]{Fig5.pdf}
+  \includegraphics[width=.6\textwidth]{Fig5.pdf}
   \caption{The relationship between {\it P. falciparum} prevalence and characteristics of mixed infection. For each sampling country and year, the relationship between the average effective number of strains, given by $(\sum f_i^2)^{-1}$, where $f_i$ is the proportion of the $i$th strain and the estimated prevalence.  Point shape indicates country and colour indicates the average level of IBD observed within mixed infections. Point size is proportional to Pf3k sample size.}
   \label{fig:model}
 \end{figure}
