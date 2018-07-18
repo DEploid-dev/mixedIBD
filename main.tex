@@ -98,7 +98,7 @@
 \maketitle{}
 
 \begin{abstract}
-{\it Plasmodium falciparum} infections can be caused by multiple strains with a distinct genetic makeup. Within mixed infections, these genetic types can exhibit different levels of relatedness. However, how the rate and relatedness of such infections influence local epidemiological parameters remains unclear.  Here, we develop an enhanced method for strain deconvolution from genome sequencing data, which estimates the number of strains, their proportions, relatedness profiles and individual haplotypes.  We validate the method via simulations and controlled experiments, and apply it to Pf3k data set, consisting of 2,344 isolates from 13 countries.  Rates of mixed infection vary from 18\% to 63\% across countries and correlate with independent estimates of parasite prevalence (Pearson $r = 0.59$, P$=3.8e-6$).  51\% of mixed infections involve more than two strains whereas 47\% include sibling strains likely to have been co-transmitted from a single mosquito. We found that relatedness among strains decreases with prevalence ($r = -0.43$, P$=3.0e-3$) and differs between continents, with Asian isolates typically showing higher relatedness than their African counterparts.Capitalising on \textit{in silico} simulations, we classify isolates carrying two strains according to the most likely number of meiosis that separate them. We conclude that monitoring spatial and temporal patterns of mixed infection and relatedness between strains will be highly informative in pathogen surveillance and assessment of interventions.
+{\it Plasmodium falciparum} infections can be caused by multiple strains with a distinct genetic makeup. Within mixed infections, these genetic types can exhibit different levels of relatedness. However, how the rate and relatedness of such infections influence local epidemiological parameters remains unclear.  Here, we develop an enhanced method for strain deconvolution from genome sequencing data, which estimates the number of strains, their proportions, relatedness profiles and individual haplotypes.  We validate the method via simulations and controlled experiments, and apply it to Pf3k data set, consisting of 2,344 isolates from 13 countries.  Rates of mixed infection vary from 18\% to 63\% across countries and correlate with independent estimates of parasite prevalence (Pearson $r = 0.59$, P$=3.8e-6$).  51\% of mixed infections involve more than two strains whereas 47\% include sibling strains likely to have been co-transmitted from a single mosquito. We found that relatedness among strains decreases with prevalence ($r = -0.43$, P$=3.0e-3$) and differs between continents, with Asian isolates typically showing higher relatedness than their African counterparts. Capitalising on \textit{in silico} simulations, we classify isolates carrying two strains according to the most likely number of meiosis that separate them. We conclude that monitoring spatial and temporal patterns of mixed infection and relatedness between strains will be highly informative in pathogen surveillance and assessment of interventions.
 \end{abstract}
 
 \keywords{Malaria, genome, epidemiology, relatedness}
@@ -157,14 +157,11 @@ To test the accuracy of \texttt{DEploidIBD} in a more realistic setting, we crea
 
 \begin{figure}[htp]
   \begin{center}
-  \includegraphics[width=\textwidth]{Fig2.pdf}
-  \caption{(A) Relative differences of inferred effective number of strains using \texttt{DEploid} and \texttt{DEploidIBD}. The relative difference is calculated as the difference between inferred and expected effective number of strains divided by the expected value. For example, the effective number of strains is expected to be 1.6 for $25/75$ mixtures and 1.98 for $45/55$ mixtures. \texttt{DEploidIBD} can correctly recover this value when two strains are highly related, where \texttt{DEploid} fails to do so. (B) Inferred pairwise relatedness and N50 IBD block length using \texttt{DEploidIBD}. Dotted lines mark parameters used in the simulation. Our inference correctly recovers the pairwise relatedness, as well as correctly identifying IBD regions. (C) Cumulative frequencies of average per site genotype error across 76 simulated mixtures with three levels of IBD (25\%, 50\% and 75\%) using empirical data from clonal samples with mixing proportion of $25/75\%$. We find higher genotype error rate in \texttt{DEploid} than \texttt{DEploidIBD}, when inferred proportions are incorrect. In all figures, we excluded eight cases out of the 100 experiments where simulated haplotypes were over 99\% identical and another 16 cases where average coverage was below 20.
-}\label{fig:benchmark}
+  \includegraphics[width=.9\textwidth]{Fig2.pdf}
+  \caption{(A) Relative differences of inferred effective number of strains using \texttt{DEploid} and \texttt{DEploidIBD}. The relative difference is calculated as the difference between inferred and expected effective number of strains divided by the expected value. For example, the effective number of strains is expected to be 1.6 for $25/75$ mixtures and 1.98 for $45/55$ mixtures. \texttt{DEploidIBD} can correctly recover this value when two strains are highly related, where \texttt{DEploid} fails to do so. (B) Inferred pairwise relatedness and N50 IBD block length using \texttt{DEploidIBD}. Dotted lines mark parameters used in the simulation. Our inference correctly recovers the pairwise relatedness, as well as correctly identifying IBD regions. (C) Cumulative frequencies of average per site genotype error across 76 simulated mixtures with three levels of IBD (25\%, 50\% and 75\%) using empirical data from clonal samples with mixing proportion of $25/75\%$. We find higher genotype error rate in \texttt{DEploid} than \texttt{DEploidIBD}, when inferred proportions are incorrect. In all figures, we excluded eight cases out of the 100 experiments where simulated haplotypes were over 99\% identical and another 16 cases where average coverage was below 20.(D) Cumulative frequencies of switch error across 76 simulated mixtures with three levels of IBD (25\%, 50\% and 75\%) using empirical data from clonal samples with mixing proportion of 25$\slash$75\%.
+  }\label{fig:benchmark}
   \end{center}
-  \figsupp{{\it In vitro} validation and simulation results. Experimental validation and effective number of strains inferred by {\tt DEploidIBD}. We use a reference panel of the laboratory parasite lines (3D7, Dd2, HB3 and 7G8) to deconvolve the same lab-mixed samples, assuming 3 and 4 strains within a sample. Each experiment is performed with and without IBD inference. Black crosses indicate the true effective number of strains. Purple crosses indicate median values obtained from 30 replicates when using {\tt DEploidIBD} with a panel and assuming that the maximum number of strains is 4. The coloured dots show the inferred effective number of strains across replicates with intensity proportional to fraction. Note one sample (indicated by an asterisk) where balanced proportions of three strains results in the LD-free approach underfitting the data as a mixture of two strains with proportions of $1\slash3$ and $2\slash3$.}{\includegraphics[width = 0.6\textwidth]{eff_k_both.pdf}}
-  \figsupp{Comparison of true and inferred haplotypes for Chromosome 14 (2,369 SNPs) in sample PG0396-C before and after haplotype painting using a reference panel of the laboratory parasite lines (3D7, Dd2, HB3 and 7G8). The yellow, cyan and white background label the haplotype segments from strains 7G8, HB3 and Dd2 respectively. The switch errors are obtained by counting the changes of a strain segment mapped to reference strains; the genotype errors are the discordance between the strain and the mapped reference segments. }{\includegraphics[width = 0.8\textwidth]{DEploid_IBD_haps_compare.pdf}}
-  \figsupp{Cumulative frequencies of switch error across 76 simulated mixtures with three levels of IBD (25\%, 50\% and 75\%) using empirical data
-from clonal samples with mixing proportion of 25$\slash$75\%.}{\includegraphics[width = 0.6\textwidth]{Fig2SupSwitch.pdf}}
+  \figsupp{}{\includegraphics[width = \textwidth]{Fig2Africa.pdf}}
   \figsupp{}{\includegraphics[width = \textwidth]{Fig2SupMix3.pdf}}
 \end{figure}
 
@@ -252,7 +249,7 @@ Laos & 2011 & Attapeu & 0.0094 & 59 & 71 ( 4.2 )& 0.37 & 1.4 &\\
 \end{tabular}
 }
 
-\tabledata{Summary of Pf3k samples in data release 5.1, where $D$ denotes mean read depth and $ss$ is sample size.  Genotyping, including both indel and SNP variants, was performed using a pipeline based on GATK best practices, see Methods. Data available from \url{ftp://ngs.sanger.ac.uk/production/pf3k/release_5/5.1}. $PfPr$ is the inferred parasite prevalence extracted from the MAP project \citep{MAP2017}; Relatedness $\rho$ and effective number of strains $K$ are summary metrics from {\tt DEploidIBD} output.}
+\tabledata{Summary of Pf3k samples in data release 5.1, where $D$ denotes mean read depth and $ss$ is sample size.  Genotyping, including both indel and SNP variants, was performed using a pipeline based on GATK best practices, see Methods. Data available from \url{ftp://ngs.sanger.ac.uk/production/pf3k/release_5/5.1}. $PfPr$ is the inferred parasite prevalence rate in a 5 × 5 km resolution grid from the MAP project, centred at the Pf3k sample collection sites; Relatedness $\rho$ and effective number of strains $K$ are summary metrics from {\tt DEploidIBD} output.}
 \end{table}
 
 \subsection{Mixed infection rate and relatedness varies by geography}
@@ -353,6 +350,24 @@ None declared.
 
 
 \bibliography{mixedIBD.bib}
+
+\appendix
+\begin{appendixbox}
+\label{first:app}
+
+\begin{center}
+\includegraphics[width=0.6\textwidth]{eff_k_both.pdf}
+\captionof{figure}{{\it In vitro} validation and simulation results. Experimental validation and effective number of strains inferred by {\tt DEploidIBD}. We use a reference panel of the laboratory parasite lines (3D7, Dd2, HB3 and 7G8) to deconvolve the same lab-mixed samples, assuming 3 and 4 strains within a sample. Each experiment is performed with and without IBD inference. Black crosses indicate the true effective number of strains. Purple crosses indicate median values obtained from 30 replicates when using {\tt DEploidIBD} with a panel and assuming that the maximum number of strains is 4. The coloured dots show the inferred effective number of strains across replicates with intensity proportional to fraction. Note one sample (indicated by an asterisk) where balanced proportions of three strains results in the LD-free approach underfitting the data as a mixture of two strains with proportions of $1\slash3$ and $2\slash3$.}
+\end{center}
+
+\begin{center}
+  \includegraphics[width = 0.8\textwidth]{DEploid_IBD_haps_compare.pdf}
+  \captionof{figure}{Comparison of true and inferred haplotypes for Chromosome 14 (2,369 SNPs) in sample PG0396-C before and after haplotype painting using a reference panel of the laboratory parasite lines (3D7, Dd2, HB3 and 7G8). The yellow, cyan and white background label the haplotype segments from strains 7G8, HB3 and Dd2 respectively. The switch errors are obtained by counting the changes of a strain segment mapped to reference strains; the genotype errors are the discordance between the strain and the mapped reference segments.}
+\end{center}
+
+
+\end{appendixbox}
+
 
 
 \end{document}

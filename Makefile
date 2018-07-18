@@ -41,7 +41,7 @@ pdfFigures:
 	cd figures/; pdflatex Fig3.tex
 	cd figures/; pdflatex Fig4.tex
 	cd figures/; pdflatex Fig5.tex
-	cd figures/; pdflatex Fig2SupSwitch.tex
+	cd figures/; pdflatex Fig2Africa.tex
 	cd figures/; pdflatex Fig2SupMix3.tex
 
 clean:
