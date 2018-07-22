@@ -142,12 +142,37 @@ $\mathcal{G}$ & genotype state at site $i$ \\
 
 \subsection{Model with the IBD state}
 
-We describe the mixed infection problem by considering the number of strains, $n$, the relative abundance of each strain, $\mathbf{w}$, and their allelic states, $\mathbf{h}_{i}$. In addition to \citet{Zhu2017}, we also infer the IBD-state $\mathcal{S}_{i}$, which describes the strain relationships at each site $i$. For example, for three strains, the IBD-state could be one of the five cases: (1) all strains are IBD; (2) all strains are not IBD; (3)(4)(5) only two strains are IBD. To simplify our problem, we assume independence between each marker, and drop the subscript $i$ from now on. Similar to \citet{Jack2016}, we use a Bayesian approach and define the posterior probabilities of $n$, $\mathbf{w}$, $\mathbf{h}$ and $\mathcal{S}$,  as:
+We describe the mixed infection problem by considering the number of strains, $n$, the relative abundance of each strain, $\mathbf{w}$, and their allelic states, $\mathbf{h}_{i}$. In addition to \citet{Zhu2017}, we also infer the IBD-state $\mathcal{S}_{i}$, which describes the strain relationships at each site $i$. For example, for three strains, the IBD-state could be one of the five cases: (1) all strains are not IBD; (2)(3)(4) only two strains are IBD; (5) all strains are IBD (see Table~\ref{tab:encode}). To simplify our problem, we assume independence between each marker, and drop the subscript $i$ from now on. Similar to \citet{Jack2016}, we use a Bayesian approach and define the posterior probabilities of $n$, $\mathbf{w}$, $\mathbf{h}$ and $\mathcal{S}$,  as:
 
 \begin{equation}
 P(n, \mathbf{w}, \mathbf{h}, \mathcal{S}| e, D) \propto L(n, \mathbf{w}, \mathbf{h}, \mathcal{S} | e, D) \times P(n, \mathbf{w}, \mathbf{h}, \mathcal{S}), \label{eqn:post}
 \end{equation}
 where $e$ is the read error rate.
+
+\begin{table}
+\centering
+\begin{tabular}{c|ccc}
+  Index / & \multicolumn{3}{c}{IBD state} \\
+viterbi state    & k = 2& k = 3 & k = 4 \\ \hline
+1	  &1-2	&	1-2-3	&1-2-3-4	\\
+2	  &2-2	&	2-2-3	&2-2-3-4	\\
+3	  &	  	&	3-2-3	&3-2-3-4	\\
+4	  &		  &	1-3-3	&4-2-3-4	\\
+5	  &		  &	3-3-3	&1-3-3-4	\\
+6	  &	  	&		    &3-3-3-4	\\
+7	  &	  	&		    &4-3-3-4	\\
+8	  &	  	&	    	&1-4-3-4	\\
+9	  &	  	&		    &4-4-3-4	\\
+10	&	  	&		    &3-4-3-4	\\
+11	&	  	&		    &1-2-4-4	\\
+12	&		  &		    &2-2-4-4	\\
+13	&	  	&		    &4-2-4-4	\\
+14	&	  	&	    	&1-4-4-4	\\
+15	&	  	&		    &4-4-4-4	\\
+\end{tabular}
+\caption{IBD configurations of number of strains are 2, 3 and 4.}\label{tab:encode}
+\end{table}
+
 
 \noindent We assume a prior in which the haplotypes of the $n$ strains are independent of each other and dependent only on the IBD state. Let $\mathcal{G}$ be the genotype state that is derived from the IBD state $\mathcal{S}$. We assume uniform prior on $\mathcal{G}|\mathcal{S}$. For example, if $n=3$ and only strains 1 and 2 are IBD, the genotype state at site $i$ $\mathcal{G}$ could be $\{0,0,0\}$; $\{0,0,1\}$; $\{1,1,0\}$ and $\{1,1,1\}$. Therefore, we can decompose the joint prior as:
 \begin{equation}
@@ -278,28 +303,6 @@ $\{\frac{1}{5},\frac{1}{5}, \frac{1}{5}, \frac{2}{5}\}$. We advise users to appl
 \subsection{Viterbi path mean {\textcolor{red}{TODO: EXPAND}}}
 Viterbi path encoding
 
-\begin{table}
-\centering
-\begin{tabular}{c|ccc}
-viterbi  & \multicolumn{3}{c}{IBD state} \\
-state    & k = 2& k = 3 & k = 4 \\ \hline
-1	  &1-2	&	1-2-3	&1-2-3-4	\\
-2	  &2-2	&	2-2-3	&2-2-3-4	\\
-3	  &	  	&	3-2-3	&3-2-3-4	\\
-4	  &		  &	1-3-3	&4-2-3-4	\\
-5	  &		  &	3-3-3	&1-3-3-4	\\
-6	  &	  	&		    &3-3-3-4	\\
-7	  &	  	&		    &4-3-3-4	\\
-8	  &	  	&	    	&1-4-3-4	\\
-9	  &	  	&		    &4-4-3-4	\\
-10	&	  	&		    &3-4-3-4	\\
-11	&	  	&		    &1-2-4-4	\\
-12	&		  &		    &2-2-4-4	\\
-13	&	  	&		    &4-2-4-4	\\
-14	&	  	&	    	&1-4-4-4	\\
-15	&	  	&		    &4-4-4-4	\\
-\end{tabular}
-\end{table}
 
 %\linespread{1}
 %\begin{lstlisting}
@@ -389,7 +392,7 @@ Where viverbi path encode for
 
 \section{Pf3k field sample analysis}
 \subsection{Sample choice}
-Out of the 2,512 Pf3k field samples, only 5 Nigeria samples are available, which are not representative for a malaria high-transmission country \textcolor{red}{TODO:REF}. Hence we have excluded Nigeria samples for any downstream analysis. We discard continent mismatched samples and mixed malaria species. We also exclude samples of which both sequence depth below 30 and callable site below 30\%. Finally, we exclude all lab strains (include reference strains, artificial mixtures, crosses samples) and duplicated samples for population level analysis.
+Out of the 2,512 Pf3k field samples, only 5 Nigeria samples are available, which are not representative for a malaria high-transmission country \citep{who2017profileNigeria}. Hence we have excluded Nigeria samples for any downstream analysis. We discard continent mismatched samples and mixed malaria species. We also exclude samples of which both sequence depth below 30 and callable site below 30\%. Finally, we exclude all lab strains (include reference strains, artificial mixtures, crosses samples) and duplicated samples for population level analysis.
 
 
 \subsection{Data filtering}
