@@ -136,7 +136,7 @@ $\mathcal{S}_{i}$ & IBD state at site $i$ \\
 $\mathcal{G}$ & genotype state at site $i$ \\
 \hline
 \end{tabular}
-\vspace{.3cm}
+\vspace{.2cm}
 \caption{Table summarising the notation used in this article.}\label{tab:notation}
 \end{table}
 
@@ -170,7 +170,7 @@ viterbi state    & k = 2& k = 3 & k = 4 \\ \hline
 14	&	  	&	    	&1-4-4-4	\\
 15	&	  	&		    &4-4-4-4	\\
 \end{tabular}
-\caption{IBD configurations of number of strains are 2, 3 and 4.}\label{tab:encode}
+\caption{IBD configurations of number of strains are 2, 3 and 4. The state 1-2 denotes that strains 1 and 2 are non-IBD; The state 2-2 denotes that strain 1 is IBD with strain 2. The state 2-2-3 denotes that strain 1 is IBD with strain 2, but not strain 3. }\label{tab:encode}
 \end{table}
 
 
@@ -275,6 +275,12 @@ L(q_{i}| e, D) \propto \frac{\Gamma(a_i + c\cdot \pi_{i}) \Gamma(r_i + c\cdot (1
 
 
 
+\noindent{\bf Caveat: identifiability with balanced mixing}\\
+Since we use panel free, for equal proportions it is difficult to identify.
+Without a reference panel, we assume independence between loci, it is difficult to identify cases between $\{\frac{1}{3},\frac{1}{3},\frac{1}{3}\}$ and $\{\frac{1}{3},\frac{2}{3}\}$, or
+$\{\frac{1}{4},\frac{1}{4}, \frac{1}{4}, \frac{1}{4}\}$ and $\{\frac{1}{4},\frac{1}{4}, \frac{1}{2}\}$, or $\{\frac{1}{5},\frac{1}{5}, \frac{1}{5}, \frac{1}{5}, \frac{1}{5}\}$ and $\{\frac{1}{5},\frac{1}{5}, \frac{3}{5}\}$, $\{\frac{1}{5},\frac{2}{5}, \frac{2}{5}\}$ and
+$\{\frac{1}{5},\frac{1}{5}, \frac{1}{5}, \frac{2}{5}\}$. We advise users to apply {\tt DEploid} with multiple runs with and without the `-ibd' flag and see if such problem occurs.
+
 
 \subsection{Commands}
 
@@ -292,32 +298,27 @@ interpretDEploid.r -ref ${ref} -alt ${alt} -plaf ${plaf} -o ${prefix} -dEprefix 
 \end{lstlisting}
 
 
-\noindent{\bf Caveat: identifiability with balanced mixing}\\
-Since we use panel free, for equal proportions it is difficult to identify.
-Without a reference panel, we assume independence between loci, it is difficult to identify cases between $\{\frac{1}{3},\frac{1}{3},\frac{1}{3}\}$ and $\{\frac{1}{3},\frac{2}{3}\}$, or
-$\{\frac{1}{4},\frac{1}{4}, \frac{1}{4}, \frac{1}{4}\}$ and $\{\frac{1}{4},\frac{1}{4}, \frac{1}{2}\}$, or $\{\frac{1}{5},\frac{1}{5}, \frac{1}{5}, \frac{1}{5}, \frac{1}{5}\}$ and $\{\frac{1}{5},\frac{1}{5}, \frac{3}{5}\}$, $\{\frac{1}{5},\frac{2}{5}, \frac{2}{5}\}$ and
-$\{\frac{1}{5},\frac{1}{5}, \frac{1}{5}, \frac{2}{5}\}$. We advise users to apply {\tt DEploid} with multiple runs with and without the `-ibd' flag and see if such problem occurs.
 
 
+%\subsection{Viterbi path mean {\textcolor{red}{TODO: EXPAND}}}
+%Viterbi path encoding
 
-\subsection{Viterbi path mean {\textcolor{red}{TODO: EXPAND}}}
-Viterbi path encoding
 
+%%\linespread{1}
+%%\begin{lstlisting}
+%%CHROM   POS     viterbi
+%%Pf3D7_01_v3     96764   5
+%%Pf3D7_01_v3     102584  5
+%%Pf3D7_01_v3     102647  5
+%%Pf3D7_01_v3     102858  5
+%%\end{lstlisting}
+%Where viverbi path encode for
 
-%\linespread{1}
-%\begin{lstlisting}
-%CHROM   POS     viterbi
-%Pf3D7_01_v3     96764   5
-%Pf3D7_01_v3     102584  5
-%Pf3D7_01_v3     102647  5
-%Pf3D7_01_v3     102858  5
-%\end{lstlisting}
-Where viverbi path encode for
-
-\begin{figure}
-  \centering
-  \includegraphics[width = \textwidth]{supFigures/PD0577-Cviterbi.png}
-\end{figure}
+%\begin{figure}
+  %\centering
+  %\includegraphics[width = .9\textwidth]{supFigures/PD0577-Cviterbi.png}
+  %\caption{}\label{fig:viterbi}
+%\end{figure}
 
 %To estimate COI, relative proportions and strain haplotypes we use DEploid [Zhu et al., 2017] on high quality biallelic SNP data (both coding and non-coding variants tagged with PASS at the QUAL column in the VCF file). In order to improve the accuracy of the deconvolution process and improve efficiency, we first split the Pf3k data into groups, based on genetic similarity. We compute genetic distances between two samples following
 
@@ -443,15 +444,15 @@ d(x, y) = \sum_{l}^{L}\textrm{WSAF}_{x,l} * (1-\textrm{WSAF}_{y,l}) + \textrm{WS
 \end{equation}
 where $l$ represents an arbitrary locus, $L$ denotes the total number of loci, and $\textrm{WSAF}_{s,l}$ indicates the non-reference within-sample allele frequency for sample $s$ at locus $l$. $\textrm{WSAF}_{s,l}$ is then given by $\textrm{WSAF}_{s,l} = \frac{a_{s,l}}{r_{s,l}+a_{s,l}}$ where $a_{s,l}$ is the number of read counts supporting the alternative allele in sample $s$ at locus $l$, and $r_{s,l}$ is the number of read counts supporting the reference allele in sample $s$ at locus $l$.
 
-We find that samples from the same geographical region differentiate into clear clusters. We use this initial grouping as the base for defining the reference panels that assist the deconvolution procedure. Our definition of geographical groups is
+We find that samples from the same geographical region differentiate into clear clusters. We use this initial grouping as the base for defining the reference panels that assist the deconvolution procedure. Our definition of geographical groups are as follows, with different number of SNPs:
 \begin{enumerate}
-  \item Malawi, Congo.
-  \item Ghana (Kassena).
-  \item Nigeria, Senegal, Mali.
-  \item The Gambia, Guinea, Ghana (Kintampo).
-  \item Cambodia (Pursat), Cambodia (Pailin), Thailand (Sisakhet).
-  \item Vietnam, Laos, Cambodia (Ratanakiri), Cambodia (Preah Vihear).
-  \item Bangladesh, Myanmar, Thailand (Mae Sot), Thailand (Ranong).
+  \item Malawi, Congo, with 349,243 sites.
+  \item Ghana (Kassena), with 508,607 sites.
+  \item Nigeria, Senegal, Mali, with 210,820 sites.
+  \item The Gambia, Guinea, Ghana (Kintampo), with 250,828 sites.
+  \item Cambodia (Pursat), Cambodia (Pailin), Thailand (Sisakhet), with 44,318 sites.
+  \item Vietnam, Laos, Cambodia (Ratanakiri), Cambodia (Preah Vihear), with 88,411 sites.
+  \item Bangladesh, Myanmar, Thailand (Mae Sot), Thailand (Ranong), with 84,869 sites.
 \end{enumerate}
 
 
@@ -472,12 +473,6 @@ We find that samples from the same geographical region differentiate into clear 
 %\end{figure}
 
 
-
-%\subsection{Pf3k IBD figure circles}
-%Exact steps include: 1. create an array of angles between -pi:pi; 2. compute cos and sin values of angles to get the x and y for the unit circle, i.e. standard deviation of 1. 3, stretch the unit circle to ellipse according the correlation, standard deviation of xs and ys are still 1, but correlation has been introduced. 4. scale xs and ys by twice of the standard deviation of input x, and input y. to create the 95\% regions for the points. 5. centre the ellipse, at means of input x and y
-
-
-
 \subsection{Haplotype quality assessment}
 
 We noticed that DEploid-IBD produced chimeric haplotypes when faced with difficult mixtures. For instance, mixed infections in which the co-existing strains have the same relative proportion (e.g. $k=4$ with each strain having a proportion of 25\%), or samples in which proportions are very unbalanced (e.g. k=2 with the marginal strain at 2\%). These artefactual haplotypes show a significant deficit or excess of alternative calls that cannot be explained in terms of their genetic relationship to the reference genome used for mapping and assembly (3D7). To discard problematic haplotypes, we devised a stringent filtering strategy based on $z$-scores. For each population, we computed the distribution of alternative calls observed within the subset of clonal samples ($k=1$). Using this distribution as reference, we computed a $z$-score for each haplotype in a population following
@@ -494,7 +489,7 @@ $$z_i = \frac{a_i - \bar{a_r}}{\sigma_r},$$ where $a_i$ denotes the number of al
 
 
 
-\begin{table}
+\begin{table}[ht]
 \centering
 \begin{tabular}{r|r|r|r}
 \textbf{Country}  & \textbf{Discarded} & \textbf{Retained} &\textbf{ \% Discarded} \\
@@ -516,13 +511,13 @@ Vietnam & 23 & 122 & 16\\
 \hline
 \textbf{Total} & 1287 & 3122 & 29
 \end{tabular}
-\vspace{.3cm}
+\vspace{.2cm}
 \caption{Number of haplotypes discarded and retained for each population in the Pf3k dataset.}
 \label{table:haps-discarded-by-country}
 \end{table}
 
 
-\begin{table}
+\begin{table}[ht]
 \centering
 \begin{tabular}{r|r|r|r|r|r|r}
 \textbf{COI}  & \textbf{Retained} & \textbf{1 hap} &\textbf{2 haps} & \textbf{3 haps} & \textbf{4 haps} & \textbf{Total} \\
@@ -536,36 +531,22 @@ Vietnam & 23 & 122 & 16\\
 \hline
 \textbf{Fraction} & 0.69 & 0.17 & 0.1 & 0.04 & 0.01 & \\
 \end{tabular}
-\vspace{.3cm}
+\vspace{.2cm}
 \caption{Number of haplotypes retained and discarded stratified by COI level.}
 \label{table:haps-discarded-by-COI}
 \end{table}
 
 
-
-%\section{IBD state posterior probabilities of all population}
-%\subsection{Monitoring malaria epidemic from the IBD posterior probability}
-
-
-%\section{MAP {\it Plasmodium falcipruim} parasite rate (PfPr)}
+\subsection{Combining clonal sample pairs for background IBD computation}
+In order to construct the background IBD profile for classification, we combine clonal sample pairs to create artificial mixture at each sampling site to study the background IBD distribution. We assume artificial mixtures mimic infections from independent mosquito bites. The strain relative abundance is proportional to the median of sequence depth. The artificial mixture sample coverage is then obtained by accumulating the reference and alternative allele counts of two clonal samples. Similar to {\tt DEploidIBD} deconvolution, high allele count SNPs causes high leverage in the model. By combining allele counts from two samples, it creates artificial high leverage SNPs again. In addition, the sample sequence depth and skewness are heterogeneous due to different sample preparation and sequencing protocols. We change the {\tt DEploidIBD} filtering threshold from 99.5\% to 80\%, and use low recombination probabilities to avoid false IBD break detections. We validate our method using lab crosses \citep{Miles2016}, and compare the IBD block detections using \citet{Li2003}'s painting with parental strains and {\tt DEploidIBD} algorithm (Figure~\ref{fig:bgibd}).
 
 
-%\begin{figure}[ht]
-  %\centering
-    %\includegraphics[width=0.7\textwidth]{supFigures/Cambodia.png}
-  %\caption{We observe a small number of heterozygous sites with high coverage (marked as crosses above), which can potentially mislead our model to over-fit the data with additional strains.
-  %}
-  %%\label{fig:fitering}
-%\end{figure}
-
-%\section{A deterministic model for mixed infections}
-
-
-\subsection{Combining clonal samples to make artificial mixtures}
-\subsubsection{Filtering SNPs}
-\begin{figure}
-  \centering
-  \includegraphics[width = \textwidth]{bgIBDvalidation/bgIBD.pdf}
+\begin{figure}[ht]
+  \centering{}
+  \includegraphics[width = .85\textwidth]{bgIBDvalidation/bgIBD.pdf}
+  %\subfloat[]{\includegraphics[width = .85\textwidth]{bgIBDvalidation/bgIBD.pdf}}\\
+  %\subfloat[]{\includegraphics[width = .85\textwidth]{bgIBDvalidation/IBDtracklengthVsPercentage_data_clean.pdf}}
+  \caption{Comparison of IBD block detection of {\tt DEploidIBD} using artificial mixtures of lab crosses PG0071-C and PG0058-C (last track) with IBD block detection from ancestral state inference from \citet{Li2003}.}\label{fig:bgibd}
 \end{figure}
 
 

@@ -1,7 +1,7 @@
 rm(list=ls())
 library(dplyr)
 #sample pair of PG0055-C PG0054-C
-source("src.r")
+#source("src.r")
 source("~/DEploid/utilities/dEploidTools.r")
 computeNx <- function (x, threshold){
     if (length(x) > 0 ){
@@ -45,15 +45,15 @@ plotting.mat = all.together[plot.at, -c(2)]
 
 pdf("bgIBD.pdf", width = 14, height = 8)
 
-layout(matrix(c(1, rep(2,20), rep(10,4),
-                1, rep(2,20), rep(10,4),
-                3, rep(4,20), rep(10,4),
-                3, rep(4,20), rep(10,4),
-                5, rep(6,20), rep(10,4),
-                5, rep(6,20), rep(10,4),
-                7, rep(8,20), rep(10,4),
-                7, rep(8,20), rep(10,4),
-                11, rep(9,20), rep(10, 4)), 9, 25, byrow=T))
+layout(matrix(c(1, rep(2,20), rep(10,5),
+                1, rep(2,20), rep(10,5),
+                3, rep(4,20), rep(10,5),
+                3, rep(4,20), rep(10,5),
+                5, rep(6,20), rep(10,5),
+                5, rep(6,20), rep(10,5),
+                7, rep(8,20), rep(10,5),
+                7, rep(8,20), rep(10,5),
+                11, rep(9,20), rep(10, 5)), 9, 26, byrow=T))
 
 par(mar=c(0,0,0,0))
 plot(c(0,0),c(1,1), ylim = c(0,1), type="n", ylab="", xlab="", yaxt="n", xaxt="n", axes=F)
@@ -85,7 +85,7 @@ tmp.tab = table(plotting.mat[,1])
 text(cumsum(tmp.tab) - round( tmp.tab / 2), .5, labels = 1:14, cex = 2)
 
 plot(c(0,0),c(1,1), ylim = c(0,1), type="n", ylab="", xlab="", yaxt="n", xaxt="n", axes=F)
-legend("right", legend = c("3D7 ancestry", "Dd2 ancestry", "DEploid painting", "DEploidIBD", "non-IBD"), cex = 2, bty = "n",
+legend("right", legend = c("3D7 ancestry", "HB3 ancestry", "Compare ancestry", "DEploidIBD", "non-IBD"), cex = 2, bty = "n",
                    fill = c("red", "blue", "grey80", "grey50", "white"))
 dev.off()
 #block.length.by.posterior.all = c()
