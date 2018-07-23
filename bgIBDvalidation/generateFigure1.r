@@ -1,7 +1,7 @@
 rm(list=ls())
 library(dplyr)
 #sample pair of PG0055-C PG0054-C
-#source("src.r")
+source("src.r")
 source("~/DEploid/utilities/dEploidTools.r")
 computeNx <- function (x, threshold){
     if (length(x) > 0 ){
@@ -88,36 +88,65 @@ plot(c(0,0),c(1,1), ylim = c(0,1), type="n", ylab="", xlab="", yaxt="n", xaxt="n
 legend("right", legend = c("3D7 ancestry", "HB3 ancestry", "Compare ancestry", "DEploidIBD", "non-IBD"), cex = 2, bty = "n",
                    fill = c("red", "blue", "grey80", "grey50", "white"))
 dev.off()
-#block.length.by.posterior.all = c()
-#block.length.by.posterior.chrom = c()
 
-#block.length.by.viterbi.all = c()
-#block.length.by.viterbi.chrom = c()
+computeNx <- function (x, threshold){
+    if (length(x) > 0 ){
+        sort.x = sort(x)
+        sum.x = sum(x)
+        cumsum.x = cumsum(sort.x/sum.x)
+        idx = which(cumsum.x > threshold)[1]
+        return (sort.x[idx])
+    } else {
+        return (NA)
+    }
+}
 
-#for ( chrom in unique(sample1.single0$CHROM)){
+
+block.length.by.posterior.all = c()
+block.length.by.posterior.chrom = c()
+
+block.length.by.viterbi.all = c()
+block.length.by.viterbi.chrom = c()
+
+for ( chrom in unique(sample1.single0$CHROM)){
 
 #    png(paste(sample1, "-", sample2, "-", chrom, ".png", sep =""), width = 2000, height = 600)
-#    chromBlock_i = 1*(sample1.single0[sample1.single0$CHROM == chrom,3] > threshold)
-#    chromBlock_j = 1*(sample2.single0[sample2.single0$CHROM == chrom,3] > threshold)
+    chromBlock_i = 1*(sample1.single0[sample1.single0$CHROM == chrom,3] > threshold)
+    chromBlock_j = 1*(sample2.single0[sample2.single0$CHROM == chrom,3] > threshold)
 
-#    blocks = exact_chunk_length_vec(sample1.single0[sample1.single0$CHROM == chrom,2], 1*(chromBlock_i==chromBlock_j),T)
-#    block.length.by.posterior.chrom = c(block.length.by.posterior.chrom, computeNx(blocks, .5))
-#    block.length.by.posterior.all = c(block.length.by.posterior.all, blocks)
+    blocks = exact_chunk_length_vec(sample1.single0[sample1.single0$CHROM == chrom,2], 1*(chromBlock_i==chromBlock_j),T)
+    block.length.by.posterior.chrom = c(block.length.by.posterior.chrom, computeNx(blocks, .5))
+    block.length.by.posterior.all = c(block.length.by.posterior.all, blocks)
 
-#    subseq = round(seq(1, length(chromBlock_i), length.out = 1000))
+    subseq = round(seq(1, length(chromBlock_i), length.out = 1000))
 #    par(mfrow = c(4,1))
 #    barplot(t(sample1.single0[sample1.single0$CHROM == chrom,-c(1,2)][subseq,]), main = paste(sample1, "posterior prob"), col = c("red", "blue"), border=F)
 #    barplot(t(sample2.single0[sample2.single0$CHROM == chrom,-c(1,2)][subseq,]), main = paste(sample2, "posterior prob"), col = c("red", "blue"), border=F)
 #    barplot(t(chromBlock_j == chromBlock_i), main = paste(sample1, sample2, "IBD"))
 
-#    viterbi.block = sample1.sample2.viterbi[sample1.sample2.viterbi$CHROM == chrom, ]
+    viterbi.block = sample1.sample2.viterbi[sample1.sample2.viterbi$CHROM == chrom, ]
 #    barplot(t(viterbi.block[,3]-1), main = paste(sample1, sample2, "viterbi"))
 
-#    block.viterbi = exact_chunk_length_vec(viterbi.block$POS, 1*(viterbi.block[,3] == 2))
-#    block.length.by.viterbi.all = c(block.length.by.viterbi.all, block.viterbi)
-#    block.length.by.viterbi.chrom = c(block.length.by.viterbi.chrom, computeNx( block.viterbi, .5))
+    block.viterbi = exact_chunk_length_vec(viterbi.block$POS, 1*(viterbi.block[,3] == 2))
+    block.length.by.viterbi.all = c(block.length.by.viterbi.all, block.viterbi)
+    block.length.by.viterbi.chrom = c(block.length.by.viterbi.chrom, computeNx( block.viterbi, .5))
 
 #    dev.off()
-#}
+}
+
+pdf("bgN50.pdf", width = 8, height = 8)
+par(mar = c(5,5,5,3))
+x = lapply(seq(0, .9, by = .1), function(x){computeNx(block.length.by.posterior.all, x)}) %>% unlist
+y = lapply(seq(0, .9, by = .1), function(x){computeNx(block.length.by.viterbi.all, x)}) %>% unlist
+plot(x/1000,y/1000, xlim=c(0, 1.2e3), ylim=c(0,1.2e3), xlab = "Compare ancestry IBD block NX (kb)", ylab = "DEploidIBD IBD block NX (kb)", cex.lab = 1.5, cex.axis = 1.5, cex.main = 2, main = paste("Correlation: ", round(cor(x,y), digits = 2)))
+abline(0,1)
+dev.off()
+
+
+
+
+
+
+
 
 

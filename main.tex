@@ -164,6 +164,8 @@ To test the accuracy of \texttt{DEploidIBD} in a more realistic setting, we crea
   \figsupp{\texttt{DEploidIBD} output diagnostics of {\it in silico} 2-mixes from Africa. (A) Relative differences of inferred effective number of strains. (B) Inferred pairwise relatedness and N50 IBD block length. Dotted lines mark parameters used in the simulation. (C) and (D) show the cumulative frequencies of average per site genotype error and total number of switch error across 81 simulated mixtures over 92,780 sites from Chromosome 14.}{\includegraphics[width = \textwidth]{Fig2Africa.pdf}}
   \figsupp{\texttt{DEploidIBD} and \texttt{DEploid} output diagnostics of {\it in silico} 3-mixes from Asia. (A) Illustration of the mixture proportion profile over the effective $K$ surface. (B) Relative differences of inferred effective number of strains using \texttt{DEploid} and \texttt{DEploidIBD}.
   (C) Inferred pairwise relatedness and N50 IBD block length. Dashed in indicate the block lengths of the first and the second 50\% of the SNPs.}{\includegraphics[width = \textwidth]{Fig2SupMix3.pdf}}
+  \figsupp{{\it In vitro} validation and simulation results. Experimental validation and effective number of strains inferred by {\tt DEploidIBD}. We use a reference panel of the laboratory parasite lines (3D7, Dd2, HB3 and 7G8) to deconvolve the same lab-mixed samples, assuming 3 and 4 strains within a sample. Each experiment is performed with and without IBD inference. Black crosses indicate the true effective number of strains. Purple crosses indicate median values obtained from 30 replicates when using {\tt DEploidIBD} with a panel and assuming that the maximum number of strains is 4. The coloured dots show the inferred effective number of strains across replicates with intensity proportional to fraction. Note one sample (indicated by an asterisk) where balanced proportions of three strains results in the LD-free approach underfitting the data as a mixture of two strains with proportions of $1\slash3$ and $2\slash3$.}{\includegraphics[width=0.6\textwidth]{eff_k_both.pdf}}
+  %\captionof{figure}{}\label{fig:labMixEffk}
 \end{figure}
 
 We repeat this experiment with {\it in silico} mixtures from 197 clonal African samples, with mixing proportions of 10/90\%, 25/75\% and 45/55\% for 92,780 sites from Chromosome 14. \texttt{DEploidIBD} provides correct estimates for proportions at all relatedness levels (Figure~\ref{fig:benchmark}--Supplement~1) in Africa {\it in silico} mixtures, although with a greater relative difference in effective $K$ compare to Asia ($\sim$ 2\% vs. $\sim$ 1\%). \texttt{DEploidIBD} recovers correct level of relatedness as well as robust N50 estimates. Due to low background relatedness, pairwise relatedness show less variation in Africa compare to Asia. Given that we have used 11 times more SNPs in African {\it in silico} mixtures, both genotype and switch errors are greater than Asian mixtures in count numbers. However, African mixtures have lower error rate per nucleotide, for example, genotype errors below 1\%.
@@ -308,10 +310,19 @@ After accounting for between-continent differences in prevalence, the effective 
 
 \begin{figure}[ht]
   \centering{}
-  \includegraphics[width=.6\textwidth]{Fig5.pdf}
+  \includegraphics[width=\textwidth]{Fig5.pdf}
   \caption{The relationship between {\it P. falciparum} prevalence and characteristics of mixed infection. Each point consist with a row in Table~1 from different sampling locations and years. The relationship between the average effective number of strains, given by $(\sum w_i^2)^{-1}$, where $f_i$ is the proportion of the $i$th strain and the estimated prevalence.  Point shape indicates country and colour indicates the average level of IBD observed within mixed infections. Point size is proportional to Pf3k sample size.}
   \label{fig:model}
 \end{figure}
+
+
+\begin{figure}[ht]
+  \centering{}
+  \includegraphics[width=\textwidth]{Fig5logpfpr.pdf}
+  \caption{The relationship between {\it P. falciparum} prevalence and characteristics of mixed infection. Each point consist with a row in Table~1 from different sampling locations and years. The relationship between the average effective number of strains, given by $(\sum w_i^2)^{-1}$, where $f_i$ is the proportion of the $i$th strain and the estimated prevalence.  Point shape indicates country and colour indicates the average level of IBD observed within mixed infections. Point size is proportional to Pf3k sample size.}
+  \label{fig:model}
+\end{figure}
+
 
 %One feature stands out from this analysis: Given the (negative) association between mixed infection rate and levels of IBD, it seems unexpected that levels of IBD do not correlate with prevalence in Asia but this could be partially explained by the marked differences in the distribution of background IBD among countries (i.e. relatedness between strains found in different isolates).
 
@@ -370,41 +381,40 @@ None declared.
 
 \bibliography{mixedIBD.bib}
 
-\appendix
-\begin{appendixbox}
-\label{first:app}
+%\appendix
+%\begin{appendixbox}
+%\label{first:app}
 
-\begin{center}
-\includegraphics[width=0.6\textwidth]{eff_k_both.pdf}
-\captionof{figure}{{\it In vitro} validation and simulation results. Experimental validation and effective number of strains inferred by {\tt DEploidIBD}. We use a reference panel of the laboratory parasite lines (3D7, Dd2, HB3 and 7G8) to deconvolve the same lab-mixed samples, assuming 3 and 4 strains within a sample. Each experiment is performed with and without IBD inference. Black crosses indicate the true effective number of strains. Purple crosses indicate median values obtained from 30 replicates when using {\tt DEploidIBD} with a panel and assuming that the maximum number of strains is 4. The coloured dots show the inferred effective number of strains across replicates with intensity proportional to fraction. Note one sample (indicated by an asterisk) where balanced proportions of three strains results in the LD-free approach underfitting the data as a mixture of two strains with proportions of $1\slash3$ and $2\slash3$.}\label{fig:labMixEffk}
-\end{center}
+%\begin{center}
 
-\begin{center}
-  \includegraphics[width = 0.8\textwidth]{DEploid_IBD_haps_compare.pdf}
-  \captionof{figure}{Comparison of true and inferred haplotypes for Chromosome 14 (2,369 SNPs) in sample PG0396-C before and after haplotype painting using a reference panel of the laboratory parasite lines (3D7, Dd2, HB3 and 7G8). The yellow, cyan and white background label the haplotype segments from strains 7G8, HB3 and Dd2 respectively. The switch errors are obtained by counting the changes of a strain segment mapped to reference strains; the genotype errors are the discordance between the strain and the mapped reference segments.}
-\end{center}
+%\end{center}
 
-\begin{center}
-  \includegraphics[width = 0.6\textwidth]{FigXmixIBDbgIBD.pdf}
-  \captionof{figure}{Scatter plot of the background relatedness and within sample relatedness in mixed samples.}
-\end{center}
+%\begin{center}
+  %\includegraphics[width = 0.8\textwidth]{DEploid_IBD_haps_compare.pdf}
+  %\captionof{figure}{Comparison of true and inferred haplotypes for Chromosome 14 (2,369 SNPs) in sample PG0396-C before and after haplotype painting using a reference panel of the laboratory parasite lines (3D7, Dd2, HB3 and 7G8). The yellow, cyan and white background label the haplotype segments from strains 7G8, HB3 and Dd2 respectively. The switch errors are obtained by counting the changes of a strain segment mapped to reference strains; the genotype errors are the discordance between the strain and the mapped reference segments.}
+%\end{center}
 
-\begin{center}
-  \captionof{table}{Dictionary}
-  \begin{tabular}{p{3cm}|p{8cm}}\toprule
-    Mixed infection & In this paper, mixed infection is specific to mixed strains of the same species ({\it P. falciparum})\\
-    COI & \\
-    Number of strains & \\
-    Number of effective strains & \\
-    Strain & DEploid, DEploid-IBD classification of greater than 1\%.{}\\
-    Genome & \\
-    Haplotypes & Unique segment of sequence\\\bottomrule
-  \end{tabular}
-\end{center}
+%\begin{center}
+  %\includegraphics[width = 0.6\textwidth]{FigXmixIBDbgIBD.pdf}
+  %\captionof{figure}{Scatter plot of the background relatedness and within sample relatedness in mixed samples.}
+%\end{center}
 
+%\begin{center}
+  %\captionof{table}{Dictionary}
+  %\begin{tabular}{p{3cm}|p{8cm}}\toprule
+    %Mixed infection & In this paper, mixed infection is specific to mixed strains of the same species ({\it P. falciparum})\\
+    %COI & \\
+    %Number of strains & \\
+    %Number of effective strains & \\
+    %Strain & DEploid, DEploid-IBD classification of greater than 1\%.{}\\
+    %Genome & \\
+    %Haplotypes & Unique segment of sequence\\\bottomrule
+  %\end{tabular}
+%\end{center}
 
 
-\end{appendixbox}
+
+%\end{appendixbox}
 
 
 

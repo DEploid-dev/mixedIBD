@@ -1,7 +1,7 @@
 \documentclass[9pt,lineno]{elife}
 \usepackage{fullpage,amsmath,url,cases}
 \usepackage{natbib,longtable,graphicx,tikz}
-\usepackage{subfig}
+%\usepackage{subfig}
 \usepackage{url}
 %\@ifundefined{showcaptionsetup}{}{%
 %\PassOptionsToPackage{caption=false}{subfig}}
@@ -9,7 +9,7 @@
 \usepackage{xcolor}
 \usepackage{colortbl}
 \definecolor{RubineRed}{RGB}{240, 0, 240}       % RubineRed  Approximate PANTONE RUBINE-RED
-\usepackage{subfig}
+%\usepackage{subfig}
 \usepackage{listings}
 \usepackage{color}
 
@@ -67,6 +67,8 @@
 \author{Sha Joe Zhu, Jacob Almagro-Garcia, Jason Hendry and Gil McVean}
 \date{}
 
+\usepackage[label font=bf,labelformat=simple, position = top, justification=RaggedRight,singlelinecheck=false]{subfig}
+\renewcommand{\thesubfigure}{\Alph{subfigure}}
 
 \setcounter{equation}{0}
 \setcounter{figure}{0}
@@ -80,6 +82,9 @@
 \renewcommand{\bibnumfmt}[1]{[S1#1]}
 \renewcommand{\citenumfont}[1]{S1#1}
 %%%%%%%%%% Prefix a "S" to all equations, figures, tables and reset the counter %%%%%%%%%%
+
+%\floatsetup[figure]{style=plain,subcapbesideposition=top}
+%\newsubfloat{figure}
 
 
 
@@ -444,7 +449,7 @@ d(x, y) = \sum_{l}^{L}\textrm{WSAF}_{x,l} * (1-\textrm{WSAF}_{y,l}) + \textrm{WS
 \end{equation}
 where $l$ represents an arbitrary locus, $L$ denotes the total number of loci, and $\textrm{WSAF}_{s,l}$ indicates the non-reference within-sample allele frequency for sample $s$ at locus $l$. $\textrm{WSAF}_{s,l}$ is then given by $\textrm{WSAF}_{s,l} = \frac{a_{s,l}}{r_{s,l}+a_{s,l}}$ where $a_{s,l}$ is the number of read counts supporting the alternative allele in sample $s$ at locus $l$, and $r_{s,l}$ is the number of read counts supporting the reference allele in sample $s$ at locus $l$.
 
-We find that samples from the same geographical region differentiate into clear clusters. We use this initial grouping as the base for defining the reference panels that assist the deconvolution procedure. Our definition of geographical groups are as follows, with different number of SNPs:
+We find that samples from the same geographical region differentiate into clear clusters. We use this initial grouping as the base for defining the reference panels that assist the deconvolution procedure. Our definition of geographical groups are as follows. In order to reduce the computational time, we restrict to polymorphic sites in each population group:
 \begin{enumerate}
   \item Malawi, Congo, with 349,243 sites.
   \item Ghana (Kassena), with 508,607 sites.
@@ -538,15 +543,16 @@ Vietnam & 23 & 122 & 16\\
 
 
 \subsection{Combining clonal sample pairs for background IBD computation}
-In order to construct the background IBD profile for classification, we combine clonal sample pairs to create artificial mixture at each sampling site to study the background IBD distribution. We assume artificial mixtures mimic infections from independent mosquito bites. The strain relative abundance is proportional to the median of sequence depth. The artificial mixture sample coverage is then obtained by accumulating the reference and alternative allele counts of two clonal samples. Similar to {\tt DEploidIBD} deconvolution, high allele count SNPs causes high leverage in the model. By combining allele counts from two samples, it creates artificial high leverage SNPs again. In addition, the sample sequence depth and skewness are heterogeneous due to different sample preparation and sequencing protocols. We change the {\tt DEploidIBD} filtering threshold from 99.5\% to 80\%, and use low recombination probabilities to avoid false IBD break detections. We validate our method using lab crosses \citep{Miles2016}, and compare the IBD block detections using \citet{Li2003}'s painting with parental strains and {\tt DEploidIBD} algorithm (Figure~\ref{fig:bgibd}).
+In order to construct the background IBD profile for classification, we combine clonal sample pairs to create artificial mixture at each sampling site to study the background IBD distribution. We assume artificial mixtures mimic infections from independent mosquito bites. The strain relative abundance is proportional to the median of sequence depth. The artificial mixture sample coverage is then obtained by accumulating the reference and alternative allele counts of two clonal samples. Similar to {\tt DEploidIBD} deconvolution, high allele count SNPs causes high leverage in the model. By combining allele counts from two samples, it creates artificial high leverage SNPs again. In addition, the sample sequence depth and skewness are heterogeneous due to different sample preparation and sequencing protocols. We reduce the {\tt DEploidIBD} filtering threshold from 99.5\% to 80\%, and use low recombination probabilities to avoid false IBD break detections. We validate our method using lab crosses \citep{Miles2016}, and compare the IBD block detections using \citet{Li2003}'s painting with parental strains and {\tt DEploidIBD} algorithm (Figure~\ref{fig:bgibd}).
 
 
 \begin{figure}[ht]
   \centering{}
-  \includegraphics[width = .85\textwidth]{bgIBDvalidation/bgIBD.pdf}
-  %\subfloat[]{\includegraphics[width = .85\textwidth]{bgIBDvalidation/bgIBD.pdf}}\\
+  %\includegraphics[width = .85\textwidth]{bgIBDvalidation/bgIBD.pdf}
+  \subfloat[]{\includegraphics[width = .65\textwidth]{bgIBDvalidation/bgIBD.pdf}}
+  \subfloat[]{\includegraphics[width = .35\textwidth]{bgIBDvalidation/bgN50.pdf}}
   %\subfloat[]{\includegraphics[width = .85\textwidth]{bgIBDvalidation/IBDtracklengthVsPercentage_data_clean.pdf}}
-  \caption{Comparison of IBD block detection of {\tt DEploidIBD} using artificial mixtures of lab crosses PG0071-C and PG0058-C (last track) with IBD block detection from ancestral state inference from \citet{Li2003}.}\label{fig:bgibd}
+  \caption{(A) Comparison of IBD block detection of {\tt DEploidIBD} using artificial mixtures of lab crosses PG0071-C and PG0058-C (last track) with IBD block detection from ancestral state inference from \citet{Li2003}. (B) Scatter plot of IBD segment Nx values extracted by comparing clonal sample ancestry and using {\tt DEploidIBD} on artificial mixtures.}\label{fig:bgibd}
 \end{figure}
 
 
