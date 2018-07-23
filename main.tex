@@ -150,7 +150,7 @@ Unlike our previous work, \texttt{DEploidIBD} infers strain structure in two ste
 
 \subsection{Method validation}
 
-We validated \texttt{DEploidIBD} through two experiments with lab controlled {\it in vitro} mixtures and simulated {\it in silico} mixtures from field clonal samples.  First, to test consistency with \texttt{DEploid} \citet{Zhu2017}, we re-analysed the 27 experimental mixtures from \citep{Wendler2015}.  This dataset includes 27 samples of various mixtures of four laboratory parasite lines (3D7, Dd2, HB3 and 7G8; Appendix~\ref{first:app}~Figure~\ref{fig:labMixEffk}).  Allowing for mixtures of up to four strains and using optimal reference panels, we found comparable performance with the single-step \texttt{DEploid} method, with the exception of three strains of equal proportions where LD information is necessary to achieve accurate deconvolution (Appendix~\ref{first:app}~Figure~\ref{fig:labMixEffk}).
+We validated \texttt{DEploidIBD} through two experiments with lab controlled {\it in vitro} mixtures and simulated {\it in silico} mixtures from field clonal samples.  First, to test consistency with \texttt{DEploid} \citet{Zhu2017}, we re-analysed the 27 experimental mixtures from \citep{Wendler2015}.  This dataset includes 27 samples of various mixtures of four laboratory parasite lines (3D7, Dd2, HB3 and 7G8; Figure~\ref{fig:benchmark}--Supplement~3).  Allowing for mixtures of up to four strains and using optimal reference panels, we found comparable performance with the single-step \texttt{DEploid} method, with the exception of three strains of equal proportions where LD information is necessary to achieve accurate deconvolution (Figure~\ref{fig:benchmark}--Supplement~3).
 
 To test the accuracy of \texttt{DEploidIBD} in a more realistic setting, we created {\it in silico} mixtures from 212 clonal samples of Asian origin with two proportions (10/90\%, 15/85\%, \dots, 45/55\%, 8 proportion pairs) for 8,070 sites from Chromosome 14.  A further 20 randomly chosen samples were used as the reference panel. In order to compare the accuracy of the two methods at different levels of relatedness, we set 25\%, 50\% and 75\% of the second haplotype to be the same as the first haplotype to mimic scenarios of low, medium and high relatedness. This operation sets a lower limit to the relatedness between two samples. In a lower diversity region like Asia, because of the background relatedness, the actual relatedness is expected to be higher.  To simulate data, we used empirical read depths and drew read counts for the two alleles from binomial proportions.  We inferred strain proportions (summarised by the effective number of strains: $1/\sum w_{i}^{2}$), and haplotypes. Both \texttt{DEploid} and \texttt{DEploidIBD} correctly estimate strain proportions with low relatedness (Figure~\ref{fig:benchmark}A). However, for moderate and high relatedness mixtures, \texttt{DEploid} fails to recover the correct proportion, when the effective number of strains is below 1.72, which happens when the minor strain proportion is below 30\%.
 
@@ -312,14 +312,6 @@ After accounting for between-continent differences in prevalence, the effective 
 \begin{figure}[ht]
   \centering{}
   \includegraphics[width=\textwidth]{Fig5.pdf}
-  \caption{The relationship between {\it P. falciparum} prevalence and characteristics of mixed infection. Each point consist with a row in Table~1 from different sampling locations and years. The relationship between the average effective number of strains, given by $(\sum w_i^2)^{-1}$, where $f_i$ is the proportion of the $i$th strain and the estimated prevalence.  Point shape indicates country and colour indicates the average level of IBD observed within mixed infections. Point size is proportional to Pf3k sample size.}
-  \label{fig:model}
-\end{figure}
-
-
-\begin{figure}[ht]
-  \centering{}
-  \includegraphics[width=\textwidth]{Fig5logpfpr.pdf}
   \caption{The relationship between {\it P. falciparum} prevalence and characteristics of mixed infection. Each point consist with a row in Table~1 from different sampling locations and years. The relationship between the average effective number of strains, given by $(\sum w_i^2)^{-1}$, where $f_i$ is the proportion of the $i$th strain and the estimated prevalence.  Point shape indicates country and colour indicates the average level of IBD observed within mixed infections. Point size is proportional to Pf3k sample size.}
   \label{fig:model}
 \end{figure}
