@@ -186,7 +186,86 @@ Finally, we extended benchmarking to \emph{in silico} mixtures of three Asian st
 
 \subsection{Geographical variation in mixed infection rates and relatedness}
 
-To investigate how the rate and relatedness structure of mixed infections varies among geographical regions with different epidemiological characteristics, we applied \texttt{DEploidIBD} to 2,344 field samples of {\it P. falciparum} released by the Pf3k project \citep{pf3k}.  These samples were collected under a wide range of studies with heterogeneous designs, with the majority of samples being taken from symptomatic individuals seeking clinical treatment. A summary of the data sources is presented in Table~\ref{tab:Pf3k} and full details regarding study designs can be found at \url{https://www.malariagen.net/projects/pf3k#sampling-locations}.  Details of data processing are given in the Methods. For deconvolution, samples were grouped into geographical regions by genetic similarity; four in Africa, and three in Asia. (Table~\ref{tab:Pf3k}). Reference panels were constructed from the clonal samples found at each region. Since previous research has uncovered severe population structure in Cambodia \citep{Miotto2013}, we stratified samples into West and North Cambodia when performing analysis at the country level. Diagnostic plots for the deconvolution of all samples can be found at \url{https://github.com/mcveanlab/mixedIBD-Supplement} and inferred haplotypes can be accessed at URL.  We identified 787 samples where low sequencing coverage or the presence of low-frequency strains resulted in unusual haplotypes (see Supplementary Material).  Estimates of strain number, proportions and IBD states from these samples are used in subsequent analyses, but not the haplotypes.  We also confirmed that reported results are not affected by the exclusion of all metrics from samples with poor haplotypes.  
+To investigate how the rate and relatedness structure of mixed infections varies among geographical regions with different epidemiological characteristics, we applied \texttt{DEploidIBD} to 2,344 field samples of {\it P. falciparum} released by the Pf3k project \citep{pf3k}.  These samples were collected under a wide range of studies with heterogeneous designs, with the majority of samples being taken from symptomatic individuals seeking clinical treatment. A summary of the data sources is presented in Table~\ref{tab:Pf3k} and full details regarding study designs can be found at \url{https://www.malariagen.net/projects/pf3k#sampling-locations}.  Details of data processing are given in the Methods. For deconvolution, samples were grouped into geographical regions by genetic similarity; four in Africa, and three in Asia. (Table~\ref{tab:Pf3k}). Reference panels were constructed from the clonal samples found at each region. Since previous research has uncovered severe population structure in Cambodia \citep{Miotto2013}, we stratified samples into West and North Cambodia when performing analysis at the country level. Diagnostic plots for the deconvolution of all samples can be found at \url{https://github.com/mcveanlab/mixedIBD-Supplement} and inferred haplotypes can be accessed at URL.  We identified 787 samples where low sequencing coverage or the presence of low-frequency strains resulted in unusual haplotypes (see Supplementary Material).  Estimates of strain number, proportions and IBD states from these samples are used in subsequent analyses, but not the haplotypes.  We also confirmed that reported results are not affected by the exclusion of all metrics from samples with poor haplotypes.
+
+
+\begin{table}[btp]
+  \caption{Summary of Pf3k samples.}\label{tab:Pf3k}
+{\small
+\begin{tabular}{p{1.3cm} c p{1.8cm} c | c c c c p{2.7cm}}
+\toprule\hline
+                %&                    &      &         &        &                   &              &          &  \\
+Country         &   Year  &Location  & $PfPr$ & $ss$   & $\bar{D}$ (s.e.)  & $\bar{\rho}$ & $\bar{K}$& Reference\\
+\midrule
+Gambia          &    2008 & Brikam   & 0.06   & 65     & 129 ( 9.4 )  & 0.53 & 1.3 &\citet{Amambua-Ngwa2012}\\
+\hline
+Ghana           &    2009 & Kassena & 0.79 & 121 & 86 ( 5.7 )& 0.25 & 1.6&\multirow{3}{*}{\parbox{3.4cm}{\citet{Duffy2015,Kamau2015,eLife2016}}}\\
+                & 2010 & Kassena & 0.79 & 171 & 127 ( 10.3 )& 0.26 & 1.5 &\\
+                & 2011 & Kassena & 0.72 & 97 & 76 ( 5.3 )& 0.24 & 1.5& \\
+                &      & Kintampo & 0.58 & 6 & 89 ( 13.5 )& 0.16 & 1.5&\\
+                & 2012 & Kassena & 0.52 & 47 & 111 ( 3.8 )& 0.31 & 1.6&\\
+                &      & Kintampo & 0.41 & 40 & 157 ( 8.1 )& 0.25 & 1.6&\\
+                & 2013 & Kassena & 0.31 & 88 & 119 ( 4 )& 0.29 & 1.6&\\
+                &      & Kintampo & 0.29 & 4 & 172 ( 38.4 )& 0.53 & 1.1&\\
+\hline
+Malawi & 2011 & Chikwawa & 0.19 & 230 & 101 ( 3 )& 0.28 & 1.7 &\citet{Ocholla2014}\\
+       &      & Zomba & 0.34 & 35 & 89 ( 9.1 )& 0.28 & 1.6 &\\
+\hline
+Mali & 2007 & Bandiagara & 0.43 & 9 & 95 ( 25.2 )& 0.39 & 1.8  &\multirow{3}{*}{\parbox{3.4cm}{\citet{eLife2016}}}\\
+     &      & Faladje & 0.37 & 36 & 75 ( 10.1 )& 0.34 & 1.3 &\\
+     &      & Kolle & 0.21 & 51 & 82 ( 10.5 )& 0.36 & 1.6 &\\
+\cline{1-8}
+Guinea & 2011 & Nzerekore & 0.49 & 97 & 77 ( 4.6 )& 0.21 & 1.4 &\\
+\cline{1-8}
+Congo DR        & 2013 & Kinshasa & 0.24 & 113 & 49 ( 3.2 )& 0.36 & 1.5\\
+\hline
+Senegal & 2004 & Thies & 0.09 & 2 & 130 ( 68.2 )& 0.03 & 1.4  &\citet{Wong2017}\\
+        & 2009 & Thies & 0.04 & 43 & 175 ( 14.9 )& 0.47 & 1.1  &\\
+        & 2010 & Thies & 0.04 & 24 & 159 ( 9.7 )& 0.36 & 1.3 &\\
+        & 2011 & Thies & 0.03 & 32 & 97 ( 6 )& 0.4 & 1.1 &\\
+\hline
+\hline
+West     & 2009 & Pursat & 0.0071 & 19 & 75 ( 8.8 )& 0.39 & 1.3 &\multirow{3}{*}{\parbox{3.4cm}{\citet{Amato2017, eLife2016}}}\\
+Cambodia & 2010 & Pursat & 0.0071 & 105 & 95 ( 6.8 )& 0.65 & 1.2&\\
+         & 2011 & Pailin & 0.0025 & 49 & 54 ( 4.1 )& 0.43 & 1.1&\\
+         &      & Pursat & 0.0096 & 103 & 49 ( 3.1 )& 0.63 & 1.2&\\
+         & 2012 & Pailin & 0.00096 & 31 & 46 ( 5.6 )& 0.43 & 1.0&\\
+         &      & Pursat & 0.0079 & 7 & 37 ( 19.1 )& 0.58 & 1.4&\\
+\cline{1-8}
+North & 2010 & Ratanakiri & 0.0039 & 50 & 71 ( 6.1 )& 0.44 & 1.3&\\
+Cambodia  & 2011 & Preah Vihear & 0.02 & 73 & 51 ( 5.3 )& 0.36 & 1.2&\\
+          &      & Ratanakiri & 0.0032 & 81 & 45 ( 4.3 )& 0.48 & 1.4&\\
+          & 2012 & Preah Vihear & 0.0075 & 30 & 43 ( 6.7 )& 0.38 & 1.0&\\
+          &      & Ratanakiri & 0.0016 & 15 & 44 ( 8.9 )& 0.32 & 1.3&\\
+\hline
+Thailand & 2011 & Mae Sot & 0.00011 & 35 & 66 ( 7.5 )& 0.35 & 1.2 &\multirow{3}{*}{\parbox{3.4cm}{\citet{Miotto2013, eLife2016}}}\\
+         &      & Sisakhet & 1e-04 & 5 & 112 ( 25.4 )& 0.17 & 1.3 &\\
+         & 2012 & Mae Sot & 5.7e-05 & 69 & 83 ( 4.9 )& 0.59 & 1.3 &\\
+         &      & Ranong & 0.00018 & 11 & 82 ( 12.4 )& 0.34 & 1.2 &\\
+         &      & Sisakhet & 0 & 13 & 89 ( 13 )& 0.37 & 1.1 &\\
+         & 2013 & Sisakhet & 0 & 3 & 62 ( 8.8 )& 0.09 & 1.2&\\
+\cline{1-8}
+Bangladesh & 2012 & Ramu & 0.0021 & 50 & 53 ( 4.2 )& 0.49 & 1.5 &\\
+\cline{1-8}
+Viet Nam & 2011 & Bu Gia Map & 0.0073 & 43 & 67 ( 5 )& 0.44 & 1.3&\\
+         &      & Phuoc Long & 0.0053 & 27 & 68 ( 7.2 )& 0.38 & 1.2&\\
+         & 2012 & Bu Gia Map & 0.0072 & 19 & 115 ( 8 )& 0.67 & 1.1&\\
+         &      & Phuoc Long & 0.0048 & 5 & 107 ( 6.3 )& 0.82 & 1.2&\\
+\cline{1-8}
+Myanmar & 2011 & Bago Division & 0.0076 & 12 & 59 ( 7.1 )& 0.26 & 1.2 &\\
+        & 2012 & Bago Division & 0.0084 & 47 & 62 ( 5.2 )& 0.46 & 1.2 &\\
+\cline{1-8}
+Laos & 2011 & Attapeu & 0.0094 & 59 & 71 ( 4.2 )& 0.37 & 1.4 &\\
+     & 2012 & Attapeu & 0.02 & 25 & 77 ( 7.2 )& 0.69 & 1.3 &\\
+\hline
+\bottomrule
+\end{tabular}
+}
+
+\tabledata{Summary of Pf3k samples in data release 5.1, where $D$ denotes mean read depth and $ss$ is sample size.  Genotyping, including both indel and SNP variants, was performed using a pipeline based on GATK best practices, see Methods. Data available from \url{ftp://ngs.sanger.ac.uk/production/pf3k/release_5/5.1}. $PfPr$ is the inferred parasite prevalence rate in a 5 $\times$ 5 km resolution grid from the MAP project, centred at the Pf3k sample collection sites; Relatedness $\rho$ and effective number of strains $K$ are summary metrics from {\tt DEploidIBD} output.}
+\end{table}
+
+
 
 We find substantial variation in the rate and relatedness structure of mixed infections across continents and countries.  Within Africa, rates of mixed infection vary from 18\% in Senegal to 63\% in Malawi (Figure~\ref{fig:mixInfPlot}A). In Southeast Asian samples, mixed infection rates are in general lower, though also vary considerably; from 21\% in Thailand to 54\% in Bangladesh.  Where data for a location is available over multiple years, we find no evidence for significant fluctuation over time (though we note that these studies are typically not well powered to see temporal variation and collection dates are very heterogeneous). We observe that between 5.1\% (Senegal) and 40\% (Malawi) of individuals have infections carrying more than two strains.
 
@@ -199,7 +278,7 @@ We find substantial variation in the rate and relatedness structure of mixed inf
 
 Relatedness between samples and populations also varies substantially.  In dual infections, the average fraction of the genome inferred to be IBD ranges from 21\% in Guinea to 59\% in West Cambodia (Figure~\ref{fig:mixInfPlot}B).  Asian populations show, on average, a higher level of relatedness within dual infections (48\%) compared to African populations (29\%).  Levels of IBD in samples with three or more strains are comparable to those seen in dual infections (average IBD being 50\% in Asia and 29\% in Africa) and significantly correlated at the country level (P = 0.0012), except Senegal.  Overall, 53\% of all mixed infections involve strains with over 30\% of the genome being IBD.
 
-We next considered the relationship between mixed infection rate and the level of IBD.  We find that populations with higher rates of mixed infection tend to have lower levels of IBD in mixed infections (linear model P = 0.06 after accounting for a continental level difference and weighted by sample size).  However, the continental level effect is driven by Senegal, which has an unusual combination of low mixed infections and also low IBD.  Excluding Senegal, we find a consistent pattern across populations (Figure~\ref{fig:mixInfPlot}C), with a strong negative correlation between mixed infection rate and the level of IBD (P = $3\times10^{-4}$).  Previous work has demonstrated how a recent and dramatic decline in {\emph P. falciparum} prevalence within Senegal has left an impact on patterns of genetic variation \citep{Daniels2015}, which may explain its unusual profile.  
+We next considered the relationship between mixed infection rate and the level of IBD.  We find that populations with higher rates of mixed infection tend to have lower levels of IBD in mixed infections (linear model P = 0.06 after accounting for a continental level difference and weighted by sample size).  However, the continental level effect is driven by Senegal, which has an unusual combination of low mixed infections and also low IBD.  Excluding Senegal, we find a consistent pattern across populations (Figure~\ref{fig:mixInfPlot}C), with a strong negative correlation between mixed infection rate and the level of IBD (P = $3\times10^{-4}$).  Previous work has demonstrated how a recent and dramatic decline in {\emph P. falciparum} prevalence within Senegal has left an impact on patterns of genetic variation \citep{Daniels2015}, which may explain its unusual profile.
 
 \begin{figure}[ht]
   \begin{center}
@@ -289,83 +368,6 @@ A non-trivial fraction (XX\%) of all mixed infections eluded classification.  We
 \section{Methods and Materials}
 
 To investigate how the rate and relatedness structure of mixed infections varies among geographical regions with different epidemiological characteristics, we applied \texttt{DEploidIBD} to 2,344 field samples of {\it P. falciparum} released by the Pf3k project \citep{pf3k}.  These samples were collected under a wide range of studies with heterogeneous designs. The majority of samples were taken from symptomatic individuals seeking clinical treatment. A summary of the data sources is presented in Table~\ref{tab:Pf3k} whereas full details regarding study designs can be found at \url{https://www.malariagen.net/projects/pf3k#sampling-locations},  After variant calling and quality control, we genotyped approximately 1M SNPs across all samples, sequenced to an average read depth of 86 (range 12.6 -- 192.5).  See Supplementary Materials for details on the filters used and data availability. The Pf3k sequences were aligned to the 3D7 reference genome, with SNP calling performed by the GATK pipelines for best practices. We set a QC threshold that made positive and false negative variant calls equally likely \citep{pf3k}. For deconvolution, samples were grouped into geographical regions by genetic similarity; four in Africa, and three in Asia. (Table~\ref{tab:Pf3k}). Reference panels were constructed from the clonal samples found at each region. Since previous research has uncovered severe population structure in Cambodia \citep{Miotto2013}, we stratified samples into West and North Cambodia when performing analysis at the country level. Diagnostic plots for the deconvolution of all samples can be found at \url{https://github.com/mcveanlab/mixedIBD-Supplement} whereas deconvolved haplotypes can be accessed at URL.
-
-
-\begin{table}[btp]
-  \caption{Summary of Pf3k samples.}\label{tab:Pf3k}
-{\small
-\begin{tabular}{p{1.3cm} c p{1.8cm} c | c c c c p{2.7cm}}
-\toprule\hline
-                %&                    &      &         &        &                   &              &          &  \\
-Country         &   Year  &Location  & $PfPr$ & $ss$   & $\bar{D}$ (s.e.)  & $\bar{\rho}$ & $\bar{K}$& Reference\\
-\midrule
-Gambia          &    2008 & Brikam   & 0.06   & 65     & 129 ( 9.4 )  & 0.53 & 1.3 &\citet{Amambua-Ngwa2012}\\
-\hline
-Ghana           &    2009 & Kassena & 0.79 & 121 & 86 ( 5.7 )& 0.25 & 1.6&\multirow{3}{*}{\parbox{3.4cm}{\citet{Duffy2015,Kamau2015,eLife2016}}}\\
-                & 2010 & Kassena & 0.79 & 171 & 127 ( 10.3 )& 0.26 & 1.5 &\\
-                & 2011 & Kassena & 0.72 & 97 & 76 ( 5.3 )& 0.24 & 1.5& \\
-                &      & Kintampo & 0.58 & 6 & 89 ( 13.5 )& 0.16 & 1.5&\\
-                & 2012 & Kassena & 0.52 & 47 & 111 ( 3.8 )& 0.31 & 1.6&\\
-                &      & Kintampo & 0.41 & 40 & 157 ( 8.1 )& 0.25 & 1.6&\\
-                & 2013 & Kassena & 0.31 & 88 & 119 ( 4 )& 0.29 & 1.6&\\
-                &      & Kintampo & 0.29 & 4 & 172 ( 38.4 )& 0.53 & 1.1&\\
-\hline
-Malawi & 2011 & Chikwawa & 0.19 & 230 & 101 ( 3 )& 0.28 & 1.7 &\citet{Ocholla2014}\\
-       &      & Zomba & 0.34 & 35 & 89 ( 9.1 )& 0.28 & 1.6 &\\
-\hline
-Mali & 2007 & Bandiagara & 0.43 & 9 & 95 ( 25.2 )& 0.39 & 1.8  &\multirow{3}{*}{\parbox{3.4cm}{\citet{eLife2016}}}\\
-     &      & Faladje & 0.37 & 36 & 75 ( 10.1 )& 0.34 & 1.3 &\\
-     &      & Kolle & 0.21 & 51 & 82 ( 10.5 )& 0.36 & 1.6 &\\
-\cline{1-8}
-Guinea & 2011 & Nzerekore & 0.49 & 97 & 77 ( 4.6 )& 0.21 & 1.4 &\\
-\cline{1-8}
-Congo DR        & 2013 & Kinshasa & 0.24 & 113 & 49 ( 3.2 )& 0.36 & 1.5\\
-\hline
-Senegal & 2004 & Thies & 0.09 & 2 & 130 ( 68.2 )& 0.03 & 1.4  &\citet{Wong2017}\\
-        & 2009 & Thies & 0.04 & 43 & 175 ( 14.9 )& 0.47 & 1.1  &\\
-        & 2010 & Thies & 0.04 & 24 & 159 ( 9.7 )& 0.36 & 1.3 &\\
-        & 2011 & Thies & 0.03 & 32 & 97 ( 6 )& 0.4 & 1.1 &\\
-\hline
-\hline
-West     & 2009 & Pursat & 0.0071 & 19 & 75 ( 8.8 )& 0.39 & 1.3 &\multirow{3}{*}{\parbox{3.4cm}{\citet{Amato2017, eLife2016}}}\\
-Cambodia & 2010 & Pursat & 0.0071 & 105 & 95 ( 6.8 )& 0.65 & 1.2&\\
-         & 2011 & Pailin & 0.0025 & 49 & 54 ( 4.1 )& 0.43 & 1.1&\\
-         &      & Pursat & 0.0096 & 103 & 49 ( 3.1 )& 0.63 & 1.2&\\
-         & 2012 & Pailin & 0.00096 & 31 & 46 ( 5.6 )& 0.43 & 1.0&\\
-         &      & Pursat & 0.0079 & 7 & 37 ( 19.1 )& 0.58 & 1.4&\\
-\cline{1-8}
-North & 2010 & Ratanakiri & 0.0039 & 50 & 71 ( 6.1 )& 0.44 & 1.3&\\
-Cambodia  & 2011 & Preah Vihear & 0.02 & 73 & 51 ( 5.3 )& 0.36 & 1.2&\\
-          &      & Ratanakiri & 0.0032 & 81 & 45 ( 4.3 )& 0.48 & 1.4&\\
-          & 2012 & Preah Vihear & 0.0075 & 30 & 43 ( 6.7 )& 0.38 & 1.0&\\
-          &      & Ratanakiri & 0.0016 & 15 & 44 ( 8.9 )& 0.32 & 1.3&\\
-\hline
-Thailand & 2011 & Mae Sot & 0.00011 & 35 & 66 ( 7.5 )& 0.35 & 1.2 &\multirow{3}{*}{\parbox{3.4cm}{\citet{Miotto2013, eLife2016}}}\\
-         &      & Sisakhet & 1e-04 & 5 & 112 ( 25.4 )& 0.17 & 1.3 &\\
-         & 2012 & Mae Sot & 5.7e-05 & 69 & 83 ( 4.9 )& 0.59 & 1.3 &\\
-         &      & Ranong & 0.00018 & 11 & 82 ( 12.4 )& 0.34 & 1.2 &\\
-         &      & Sisakhet & 0 & 13 & 89 ( 13 )& 0.37 & 1.1 &\\
-         & 2013 & Sisakhet & 0 & 3 & 62 ( 8.8 )& 0.09 & 1.2&\\
-\cline{1-8}
-Bangladesh & 2012 & Ramu & 0.0021 & 50 & 53 ( 4.2 )& 0.49 & 1.5 &\\
-\cline{1-8}
-Viet Nam & 2011 & Bu Gia Map & 0.0073 & 43 & 67 ( 5 )& 0.44 & 1.3&\\
-         &      & Phuoc Long & 0.0053 & 27 & 68 ( 7.2 )& 0.38 & 1.2&\\
-         & 2012 & Bu Gia Map & 0.0072 & 19 & 115 ( 8 )& 0.67 & 1.1&\\
-         &      & Phuoc Long & 0.0048 & 5 & 107 ( 6.3 )& 0.82 & 1.2&\\
-\cline{1-8}
-Myanmar & 2011 & Bago Division & 0.0076 & 12 & 59 ( 7.1 )& 0.26 & 1.2 &\\
-        & 2012 & Bago Division & 0.0084 & 47 & 62 ( 5.2 )& 0.46 & 1.2 &\\
-\cline{1-8}
-Laos & 2011 & Attapeu & 0.0094 & 59 & 71 ( 4.2 )& 0.37 & 1.4 &\\
-     & 2012 & Attapeu & 0.02 & 25 & 77 ( 7.2 )& 0.69 & 1.3 &\\
-\hline
-\bottomrule
-\end{tabular}
-}
-
-\tabledata{Summary of Pf3k samples in data release 5.1, where $D$ denotes mean read depth and $ss$ is sample size.  Genotyping, including both indel and SNP variants, was performed using a pipeline based on GATK best practices, see Methods. Data available from \url{ftp://ngs.sanger.ac.uk/production/pf3k/release_5/5.1}. $PfPr$ is the inferred parasite prevalence rate in a 5 $\times$ 5 km resolution grid from the MAP project, centred at the Pf3k sample collection sites; Relatedness $\rho$ and effective number of strains $K$ are summary metrics from {\tt DEploidIBD} output.}
-\end{table}
 
 
 
