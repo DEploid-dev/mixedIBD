@@ -128,7 +128,7 @@ A common approach to detecting IBD between two genomes is to employ a hidden Mar
 
 The effect of IBD among these $k$ strains is to limit the number of distinct genotype configurations possible, in a way that depends on the pattern of IBD sharing. Consider that, for any given locus, the $k$ strains in the infection are assigned to $j \leq k$ possible reference haplotypes. IBD exists when two or more strains are assigned to the same haplotype. Under this scenario, the total number of possible patterns of IBD for a given $k$ is equal to $\sum_{j=1}^{k} S(k,j)$ where $S(k,j)$ is the number of ways $k$ objects can be split into $j$ subsets (a Stirling number of the second kind \citep{Ronald1988}). Thus, for two strains, there are two possible IBD states (IBD or non-IBD), for three strains there are five states (all IBD, none IBD and the three pairwise IBD configurations), for four strains there are fifteen states (see Supplementary Materials), and so on. We limit analysis to a maximum of four strains for computational efficiency and because higher levels of mixed infection are rarely observed. Finally, for a given IBD state, only $2^j$ rather than $2^k$ genotype configurations are possible, thereby restricting the set of possible WSAF values.
 
-Moving along the genome, recombination can result in changes in IBD state, hence WSAF values (Figure~\ref{fig:fig1}B).  To infer IBD states we use a hidden Markov model, which assumes linkage equilibrium between variants for computational efficiency, with a Gamma-Poisson emission model for read counts (see Supplementary Materials).  Population-level allele frequencies are estimated from isolates obtained from a similar geographic region.  Given the structure of the hidden Markov model, we can compute the likelihood of the strain proportions by integrating over all possible IBD sharing patterns, yielding a Bayesian estimate for the number and proportions of strains (see Methods).  We then use posterior decoding to infer the relatedness structure across the genome (Figure~\ref{fig:fig1}B). To quantify relatedness, we compute the mean IBD between pairs of strains and statistics of IBD tract length (mean, median and N50; the 50th quantile of the ordered IBD segment (Figure~\ref{fig:fig1}C). 
+Moving along the genome, recombination can result in changes in IBD state, hence WSAF values (Figure~\ref{fig:fig1}B).  To infer IBD states we use a hidden Markov model, which assumes linkage equilibrium between variants for computational efficiency, with a Gamma-Poisson emission model for read counts (see Supplementary Materials).  Population-level allele frequencies are estimated from isolates obtained from a similar geographic region.  Given the structure of the hidden Markov model, we can compute the likelihood of the strain proportions by integrating over all possible IBD sharing patterns, yielding a Bayesian estimate for the number and proportions of strains (see Methods).  We then use posterior decoding to infer the relatedness structure across the genome (Figure~\ref{fig:fig1}B). To quantify relatedness, we compute the mean IBD between pairs of strains and statistics of IBD tract length (mean, median and N50; the 50th quantile of the ordered IBD segment (Figure~\ref{fig:fig1}C).
 
 In contrast to our previous work, \texttt{DEploidIBD} infers strain structure in two steps.  In the first we estimate the number and proportions of strains using Markov Chain Monte-Carlo (MCMC), allowing for IBD as described above.  In the second, we infer the individual genomes of the strains, using the MCMC methodology of~\citet{Zhu2017}, which can account for linkage disequilibrium (LD) between variants, but without updating strain proportions.  The choice of reference samples for deconvolution is described in~\citet{Zhu2017}.  During this step we do not use the inferred IBD constraints {\emph per se}, though the inferred haplotypes will typically copy from the same (or identical) members of the reference panel within the IBD tract.
 
@@ -138,9 +138,9 @@ In contrast to our previous work, \texttt{DEploidIBD} infers strain structure in
     \includegraphics[width=\textwidth]{Fig1.pdf}
     \caption{Deconvolution of a complex field sample PD0577-C from Thailand.  (A) Scatter-plot showing the number of reads supporting the reference (REF: x-axis) and alternative (ALT: y-axis) alleles. The multiple clusters indicate the presence of multiple strains, but cannot distinguish the exact number or proportions.  (B) The profile of within-sample allele frequency along chromosomes 11 and 12 (red points) suggests a changing profile of IBD with three distinct strains, estimated to be with proportions of $22\%$, $52\%$ and $26\%$ respectively (other chromosomes omitted for clarity, see Figure~\ref{fig:fig1}-Supplement~1); blue points indicate expected allele frequencies within the isolate. However, the strains are inferred to be siblings of each other: green segments indicate where all three strains are IBD; yellow, orange and dark orange segments indicate the regions where one pair of strains are IBD but the others are not.  In no region are all three strains inferred to be distinct. (C) Statistics of  IBD tract length, in particular illustrating the N50 segment length. A graphical description of the modules and workflows for \texttt{DEploidIBD} is given in Figure~\ref{fig:fig1}-Supplement~2.}\label{fig:fig1}
   \end{center}
-  
+
    \figsupp{Whole genome deconvolution of field sample PD0577-C. The outer ring shows the expected within-sample allele frequency (WSAF) (blue) and observed WSAF (red) across the genome. Red and blue points indicate observed and expected allele frequencies within the isolate. The inner ring indicates the IBD states among the three strains: green segments indicate where all three strains are IBD; yellow, orange and dark orange segments indicate the regions where one pair of strains are IBD but the others are not.  In no region are all three strains inferred to be distinct, suggesting that all three strains are siblings.}{\includegraphics[width=.7\textwidth]{{myring.ring}.pdf}}
-   
+
    \figsupp{A graphical description of the modules and work flows for \texttt{DEploidIBD}. The purple boxes at the bottom represent final outputs of the pipeline. The black boxes indicate when \texttt{DEploidIBD} is executed, with inputs highlighted by blue boxes. The process can be explained in 3 steps: Step 1. Apply \texttt{DEploidIBD} with population level allele frequencies to infer clonal haplotypes. Step 2: Apply \texttt{DEploidIBD} to infer the number of strains and strain proportions. Step 3: Apply \texttt{DEploidIBD} with fixed the proportions from Step 2, and use haplotypes from Step 1 as the reference panel for deconvolution.
    }{\includegraphics[width=.8\textwidth]{scheme-v2.png}}
 \end{figure}
@@ -156,7 +156,7 @@ We validated \texttt{DEploidIBD} through both experimental mixtures using lab st
 
 To test the accuracy of \texttt{DEploidIBD} in a more realistic setting, we created {\it in silico} mixtures of two strains from 212 clonal samples of Asian origin (proportions ranging from 10/90\% to 45/55\%) using Chromosome 14 data (8,070 sites).  A further 20 randomly chosen samples were used as the reference panel. In order to compare the accuracy of the two methods at different levels of relatedness, we set 25\%, 50\% and 75\% of the second haplotype to be the same as the first haplotype to mimic scenarios of low, medium and high relatedness. This operation sets a lower limit to the relatedness between two samples. In a lower diversity region like Asia, because of the background relatedness, the actual relatedness is expected to be higher.  To simulate data, we used empirical read depths and drew read counts for the two alleles from binomial proportions.  We inferred strain proportions (summarised by the effective number of strains: $1/\sum w_{i}^{2}$), and haplotypes. Both \texttt{DEploid} and \texttt{DEploidIBD} correctly estimate strain proportions with low relatedness (Figure~\ref{fig:benchmark}A). However, for moderate and high relatedness mixtures, \texttt{DEploid} fails to recover the correct proportion, when the minor strain proportion is below 30\%.
 
-\texttt{DEploidIBD} is a substantial improvement on \texttt{DEploid}. In addition to estimating proportions and number of strains accurately in all settings, \texttt{DEploidIBD} estimates of IBD tract length are  accurate, except for the low and moderately related samples, where \texttt{DEploidIBD} overestimates the mixture relatedness due to background relatedness (Figure~\ref{fig:benchmark}B). Rates of genotype error are similar for the two approaches in settings of low relatedness (error rate of 0.4\% per site for 25/75 mixtures and 1.0\% for 45/55 mixtures).  However, for the 25/75\% mixtures with high relatedness, genotype error for the non-IBD approach increases to 0.6\%, while error in the IBD approach remains at 0.4\% (Figure~\ref{fig:benchmark}C). Switch errors in haplotype estimation are comparable between the two methods and decrease with increased relatedness due to the higher homozygosity (Figure~\ref{fig:benchmark}D). In summary, joint inference of IBD profiles and strain haplotypes is expected to improve estimates of strain proportions (and hence haplotypes), particularly in regions with high rates of IBD. Moreover, direct estimates of IBD within mixed infections can be used as an additional feature to characterise isolates.
+\texttt{DEploidIBD} is a substantial improvement on \texttt{DEploid}. In addition to estimating proportions and number of strains accurately in all settings, \texttt{DEploidIBD} estimates of IBD tract length are  accurate, except for the low and moderately related samples, where \texttt{DEploidIBD} overestimates the mixture relatedness  $\sim 30\%$ when the true relatedness is 25\%, and overestimate the relatedness as $53\%$ when truth is 50\% due to background relatedness (Figure~\ref{fig:benchmark}B). Rates of genotype error are similar for the two approaches in settings of low relatedness (error rate of 0.4\% per site for 25/75 mixtures and 1.0\% for 45/55 mixtures).  However, for the 25/75\% mixtures with high relatedness, genotype error for the non-IBD approach increases to 0.6\%, while error in the IBD approach remains at 0.4\% (Figure~\ref{fig:benchmark}C). Switch errors in haplotype estimation are comparable between the two methods and decrease with increased relatedness due to the higher homozygosity (Figure~\ref{fig:benchmark}D). In summary, joint inference of IBD profiles and strain haplotypes is expected to improve estimates of strain proportions (and hence haplotypes), particularly in regions with high rates of IBD. Moreover, direct estimates of IBD within mixed infections can be used as an additional feature to characterise isolates.
 
 \begin{figure}[htp]
   \begin{center}
@@ -164,7 +164,7 @@ To test the accuracy of \texttt{DEploidIBD} in a more realistic setting, we crea
   \caption{Comparison of \texttt{DEploidIBD} and \texttt{DEploid}  on 76 {\it in silico} mixtures of two strains from Asia for 8,070 sites on Chromosome 14. (A) Relative differences of inferred effective number of strains using \texttt{DEploid} and \texttt{DEploidIBD}. The relative difference is calculated as the difference between inferred and expected effective number of strains divided by the expected value. (B) Inferred pairwise relatedness and N50 IBD tract length using \texttt{DEploidIBD}. Dotted lines mark parameters used in the simulation. (C) Cumulative distribution of the average per site genotype error across simulated mixtures with three levels of IBD (25\%, 50\% and 75\%) for a mixture proportion of $25/75\%$. We performed 100 simulations, but excluded eight cases where simulated haplotypes were over 99\% identical and another 16 cases where average coverage was below 20.  (D) Cumulative distribution of haplotype switch errors with three levels of IBD (25\%, 50\% and 75\%) for a mixture proportion of 25$\slash$75\%.
   }\label{fig:benchmark}
   \end{center}
-  
+
   \figsupp{Performance of \texttt{DEploidIBD} output diagnostics on 81 {\it in silico} mixtures of two strains from Africa using 92,780 sites from Chromsome 14. (A) Relative differences of inferred effective number of strains. (B) Inferred pairwise relatedness and N50 IBD tract length. Dotted lines mark parameters used in the simulation. (C) Cumulative distribution of average per site genotyping error for three levels of IBD (25\%, 50\% and 75\%).  (D) Cumulative distribution of haplotype switch error for three levels of IBD (25\%, 50\% and 75\%).
   }{\includegraphics[width = \textwidth]{Fig2Africa.pdf}}
     \newcounter{fig2Counter}
@@ -175,98 +175,14 @@ To test the accuracy of \texttt{DEploidIBD} in a more realistic setting, we crea
   \setcounter{enumi}{\value{fig2Counter}}
   \setcounter{figsupp}{1}
   \figsupp{\texttt{DEploidIBD} and \texttt{DEploid} output diagnostics of {\it in silico} 3-mixes from Asia. Let $p1$ and $p2$ denote the proportions of strains 1 and 2. The third strain is the dominate strain with proportion of $1-p1-p2$. We consider two scenarios: 5 cases that the other two strains have equal proportions ($p1=p2$) of ($0.1, 0.15, \dots, 0.3$) and 10 cases that all three strains have unequal proportions ($p1<p2$): (0.10, 0.15, 0.75), (0.10, 0.20, 0.70), (0.10, 0.25, 0.65), (0.15, 0.20, 0.65), (0.10, 0.30, 0.60), (0.15, 0.25, 0.60), (0.10, 0.40, 0.50), (0.15, 0.30, 0.55), (0.20, 0.25, 0.55) and (0.20, 0.30, 0.50). (A) Illustration of the mixture proportion profile over the effective $K$ surface. Let red and green color represent scenarios that $p1 = p2$ and $p1 < p2$. (B) Relative differences of inferred effective number of strains using \texttt{DEploid} and \texttt{DEploidIBD}. (C) Inferred pairwise relatedness and N50 IBD block length. Dashed in indicate the block lengths of the first and the second 50\% of the SNPs.}{\includegraphics[width = \textwidth]{Fig2SupMix3.pdf}}
-  
+
   \figsupp{{\it In vitro} validation and simulation results. Experimental validation and effective number of strains inferred by {\tt DEploidIBD}. We use a reference panel of the laboratory parasite lines (3D7, Dd2, HB3 and 7G8) to deconvolve the same lab-mixed samples, assuming 3 and 4 strains within a sample. Each experiment is performed with and without IBD inference. Black crosses indicate the true effective number of strains. Purple crosses indicate median values obtained from 30 replicates when using {\tt DEploidIBD} with a panel and assuming that the maximum number of strains is 4. The coloured dots show the inferred effective number of strains across replicates with intensity proportional to fraction. Note one sample (indicated by an asterisk) where balanced proportions of three strains results in the LD-free approach underfitting the data as a mixture of two strains with proportions of $1\slash3$ and $2\slash3$.}{\includegraphics[width=0.6\textwidth]{eff_k_both.pdf}}
 \end{figure}
 
 We repeated the \emph{in silico} experiment with  mixtures of two strains from 197 clonal African samples, with mixing proportions of 10/90\%, 25/75\% and 45/55\%, using 92,780 sites from Chromosome 14. \texttt{DEploidIBD} estimates the correct proportions at all relatedness levels (Figure~\ref{fig:benchmark}--Supplement~1), although with a greater relative difference in effective $K$ compare to Asia ($\sim$ 2\% vs. $\sim$ 1\%). \texttt{DEploidIBD} also recovers the correct level of relatedness and IBD tract length (note that in Africa background relatedness is typically low). The per site genotype error rate remains below 1\%.  The number of haplotype switch errors is higher than in Asia, but by a factor much less than the 11-fold increase in the number of SNPs.
 
-Finally, we extended benchmarking to \emph{in silico} mixtures of three Asian strains  (Figure~\ref{fig:benchmark}--supplement~2). We set one strain to be dominant (>50\%) and constructed the two minor strains to be IBD with the dominant strain over distinct halves of the chromosome, such that at any point there are only two distinct haplotypes present.We find that \texttt{DEploidIBD} outperforms (lower relative difference) \texttt{DEploid} in all cases, and typicaly provides accurate estimates of proportions (Figure~\ref{fig:benchmark}--Supplement~2) with the exception of cases where proportions of two strains are similar (0.10, 0.40, 0.50) and (0.30, 0.30, 0.40). In such cases, \texttt{DEploidIBD} also underestimates the pairwise relatedness and N50 segment lengths.
+Finally, we extended benchmarking to \emph{in silico} mixtures of three Asian strains  (Figure~\ref{fig:benchmark}--supplement~2). We set one strain to be dominant (>50\%) and constructed the two minor strains to be IBD with the dominant strain over distinct halves of the chromosome, such that at any point there are only two distinct haplotypes present.We find that \texttt{DEploidIBD} outperforms (lower relative difference) \texttt{DEploid} in all cases, and typicaly provides accurate estimates of proportions (Figure~\ref{fig:benchmark}--Supplement~2) with exceptions of two cases: (0.10, 0.40, 0.50) and (0.30, 0.30, 0.40). For the case of (0.10, 0.40, 0.50), strain with proportion of 10\% create very weak allele frequency imbalance, most WSAF are around 0.5 and between 0.4 and 0.6. Therefore, {\tt DEploidIBD} wrongly infer the number of strains as two in 90 out of 100 cases, most cases identify proportions as $\sim 45/55\%$ mixtures. For the case of (0.30, 0.30, 0.40), WSAF are around 0.3 and 0.4, 0.6 and 0.7, 86 out of 100 cases infer the number of strains wrong, and identify the proportions as $\sim 35/65\%$. In such cases, \texttt{DEploidIBD} also underestimates the pairwise relatedness and N50 segment lengths.
 
-
-\subsection{Sample collection and data generation}
-
-To investigate how the rate and relatedness structure of mixed infections varies among geographical regions with different epidemiological characteristics, we applied \texttt{DEploidIBD} to 2,344 field samples of {\it P. falciparum} released by the Pf3k project \citep{pf3k}.  These samples were collected under a wide range of studies with heterogeneous designs. The majority of samples were taken from symptomatic individuals seeking clinical treatment. A summary of the data sources is presented in Table~\ref{tab:Pf3k} whereas full details regarding study designs can be found at \url{https://www.malariagen.net/projects/pf3k#sampling-locations},  After variant calling and quality control, we genotyped approximately 1M SNPs across all samples, sequenced to an average read depth of 86 (range 12.6 -- 192.5).  See Supplementary Materials for details on the filters used and data availability. The Pf3k sequences were aligned to the 3D7 reference genome, with SNP calling performed by the GATK pipelines for best practices. We set a QC threshold that made positive and false negative variant calls equally likely \citep{pf3k}. For deconvolution, samples were grouped into geographical regions by genetic similarity; four in Africa, and three in Asia. (Table~\ref{tab:Pf3k}). Reference panels were constructed from the clonal samples found at each region. Since previous research has uncovered severe population structure in Cambodia \citep{Miotto2013}, we stratified samples into West and North Cambodia when performing analysis at the country level. Diagnostic plots for the deconvolution of all samples can be found at \url{https://github.com/mcveanlab/mixedIBD-Supplement} whereas deconvolved haplotypes can be accessed at URL.
-
-
-
-
-
-\begin{table}[btp]
-  \caption{Summary of Pf3k samples.}\label{tab:Pf3k}
-{\small
-\begin{tabular}{p{1.3cm} c p{1.8cm} c | c c c c p{2.7cm}}
-\toprule\hline
-                %&                    &      &         &        &                   &              &          &  \\
-Country         &   Year  &Location  & $PfPr$ & $ss$   & $\bar{D}$ (s.e.)  & $\bar{\rho}$ & $\bar{K}$& Reference\\
-\midrule
-Gambia          &    2008 & Brikam   & 0.06   & 65     & 129 ( 9.4 )  & 0.53 & 1.3 &\citet{Amambua-Ngwa2012}\\
-\hline
-Ghana           &    2009 & Kassena & 0.79 & 121 & 86 ( 5.7 )& 0.25 & 1.6&\multirow{3}{*}{\parbox{3.4cm}{\citet{Duffy2015,Kamau2015,eLife2016}}}\\
-                & 2010 & Kassena & 0.79 & 171 & 127 ( 10.3 )& 0.26 & 1.5 &\\
-                & 2011 & Kassena & 0.72 & 97 & 76 ( 5.3 )& 0.24 & 1.5& \\
-                &      & Kintampo & 0.58 & 6 & 89 ( 13.5 )& 0.16 & 1.5&\\
-                & 2012 & Kassena & 0.52 & 47 & 111 ( 3.8 )& 0.31 & 1.6&\\
-                &      & Kintampo & 0.41 & 40 & 157 ( 8.1 )& 0.25 & 1.6&\\
-                & 2013 & Kassena & 0.31 & 88 & 119 ( 4 )& 0.29 & 1.6&\\
-                &      & Kintampo & 0.29 & 4 & 172 ( 38.4 )& 0.53 & 1.1&\\
-\hline
-Malawi & 2011 & Chikwawa & 0.19 & 230 & 101 ( 3 )& 0.28 & 1.7 &\citet{Ocholla2014}\\
-       &      & Zomba & 0.34 & 35 & 89 ( 9.1 )& 0.28 & 1.6 &\\
-\hline
-Mali & 2007 & Bandiagara & 0.43 & 9 & 95 ( 25.2 )& 0.39 & 1.8  &\multirow{3}{*}{\parbox{3.4cm}{\citet{eLife2016}}}\\
-     &      & Faladje & 0.37 & 36 & 75 ( 10.1 )& 0.34 & 1.3 &\\
-     &      & Kolle & 0.21 & 51 & 82 ( 10.5 )& 0.36 & 1.6 &\\
-\cline{1-8}
-Guinea & 2011 & Nzerekore & 0.49 & 97 & 77 ( 4.6 )& 0.21 & 1.4 &\\
-\cline{1-8}
-Congo DR        & 2013 & Kinshasa & 0.24 & 113 & 49 ( 3.2 )& 0.36 & 1.5\\
-\hline
-Senegal & 2004 & Thies & 0.09 & 2 & 130 ( 68.2 )& 0.03 & 1.4  &\citet{Wong2017}\\
-        & 2009 & Thies & 0.04 & 43 & 175 ( 14.9 )& 0.47 & 1.1  &\\
-        & 2010 & Thies & 0.04 & 24 & 159 ( 9.7 )& 0.36 & 1.3 &\\
-        & 2011 & Thies & 0.03 & 32 & 97 ( 6 )& 0.4 & 1.1 &\\
-\hline
-\hline
-West     & 2009 & Pursat & 0.0071 & 19 & 75 ( 8.8 )& 0.39 & 1.3 &\multirow{3}{*}{\parbox{3.4cm}{\citet{Amato2017, eLife2016}}}\\
-Cambodia & 2010 & Pursat & 0.0071 & 105 & 95 ( 6.8 )& 0.65 & 1.2&\\
-         & 2011 & Pailin & 0.0025 & 49 & 54 ( 4.1 )& 0.43 & 1.1&\\
-         &      & Pursat & 0.0096 & 103 & 49 ( 3.1 )& 0.63 & 1.2&\\
-         & 2012 & Pailin & 0.00096 & 31 & 46 ( 5.6 )& 0.43 & 1.0&\\
-         &      & Pursat & 0.0079 & 7 & 37 ( 19.1 )& 0.58 & 1.4&\\
-\cline{1-8}
-North & 2010 & Ratanakiri & 0.0039 & 50 & 71 ( 6.1 )& 0.44 & 1.3&\\
-Cambodia  & 2011 & Preah Vihear & 0.02 & 73 & 51 ( 5.3 )& 0.36 & 1.2&\\
-          &      & Ratanakiri & 0.0032 & 81 & 45 ( 4.3 )& 0.48 & 1.4&\\
-          & 2012 & Preah Vihear & 0.0075 & 30 & 43 ( 6.7 )& 0.38 & 1.0&\\
-          &      & Ratanakiri & 0.0016 & 15 & 44 ( 8.9 )& 0.32 & 1.3&\\
-\hline
-Thailand & 2011 & Mae Sot & 0.00011 & 35 & 66 ( 7.5 )& 0.35 & 1.2 &\multirow{3}{*}{\parbox{3.4cm}{\citet{Miotto2013, eLife2016}}}\\
-         &      & Sisakhet & 1e-04 & 5 & 112 ( 25.4 )& 0.17 & 1.3 &\\
-         & 2012 & Mae Sot & 5.7e-05 & 69 & 83 ( 4.9 )& 0.59 & 1.3 &\\
-         &      & Ranong & 0.00018 & 11 & 82 ( 12.4 )& 0.34 & 1.2 &\\
-         &      & Sisakhet & 0 & 13 & 89 ( 13 )& 0.37 & 1.1 &\\
-         & 2013 & Sisakhet & 0 & 3 & 62 ( 8.8 )& 0.09 & 1.2&\\
-\cline{1-8}
-Bangladesh & 2012 & Ramu & 0.0021 & 50 & 53 ( 4.2 )& 0.49 & 1.5 &\\
-\cline{1-8}
-Viet Nam & 2011 & Bu Gia Map & 0.0073 & 43 & 67 ( 5 )& 0.44 & 1.3&\\
-         &      & Phuoc Long & 0.0053 & 27 & 68 ( 7.2 )& 0.38 & 1.2&\\
-         & 2012 & Bu Gia Map & 0.0072 & 19 & 115 ( 8 )& 0.67 & 1.1&\\
-         &      & Phuoc Long & 0.0048 & 5 & 107 ( 6.3 )& 0.82 & 1.2&\\
-\cline{1-8}
-Myanmar & 2011 & Bago Division & 0.0076 & 12 & 59 ( 7.1 )& 0.26 & 1.2 &\\
-        & 2012 & Bago Division & 0.0084 & 47 & 62 ( 5.2 )& 0.46 & 1.2 &\\
-\cline{1-8}
-Laos & 2011 & Attapeu & 0.0094 & 59 & 71 ( 4.2 )& 0.37 & 1.4 &\\
-     & 2012 & Attapeu & 0.02 & 25 & 77 ( 7.2 )& 0.69 & 1.3 &\\
-\hline
-\bottomrule
-\end{tabular}
-}
-
-\tabledata{Summary of Pf3k samples in data release 5.1, where $D$ denotes mean read depth and $ss$ is sample size.  Genotyping, including both indel and SNP variants, was performed using a pipeline based on GATK best practices, see Methods. Data available from \url{ftp://ngs.sanger.ac.uk/production/pf3k/release_5/5.1}. $PfPr$ is the inferred parasite prevalence rate in a 5 $\times$ 5 km resolution grid from the MAP project, centred at the Pf3k sample collection sites; Relatedness $\rho$ and effective number of strains $K$ are summary metrics from {\tt DEploidIBD} output.}
-\end{table}
 
 \subsection{Mixed infection rate and relatedness varies by geography}
 
@@ -364,6 +280,88 @@ Critically, we capture this behaviour in a simulation, \texttt{pf-meiosis}, and 
 A non-trivial fraction (XX\%) of all mixed infections eluded classification.  We suggest two explanations.  Firstly, our estimate of latent IBD, generated by combining pairs of random clonal samples from a given country into an artificial $M=0$ mixed infection, can be biased. This bias will exist if the way in which mosquitoes sample hosts differs from the way in which samples are collected for Pf3k (which is of course, very likely). Secondly, we focused our simulation efforts on mixed infection transmission chains, at the exclusion of other possibly common transmission histories (such as mixed infections containing cousins). Together, accounting for such phenomenon may sop up many of the unclassified mixed infections; though it remains for this to be demonstrated in future work.
 
 \texttt{DEploidIBD} is our effort to tackle a major remaining problem in malaria genetics: the deconvolution of mixed infections.  To a significant degree we achieve this, applying it to the largest available collection of global \textit{P.falciparum} samples currently in existence.  We show that extracting information from mixed infections will not only allow for a deeper understanding of malaria biology -- most fundamentally, a cataloguing of the routes by which individuals end up carrying multiple parasite strains in the first place -- but can also inform on malaria transmission epidemiology, in ways that could perhaps lend themselves to global efforts to control and eradicate the disease.
+
+
+\section{Methods and Materials}
+
+To investigate how the rate and relatedness structure of mixed infections varies among geographical regions with different epidemiological characteristics, we applied \texttt{DEploidIBD} to 2,344 field samples of {\it P. falciparum} released by the Pf3k project \citep{pf3k}.  These samples were collected under a wide range of studies with heterogeneous designs. The majority of samples were taken from symptomatic individuals seeking clinical treatment. A summary of the data sources is presented in Table~\ref{tab:Pf3k} whereas full details regarding study designs can be found at \url{https://www.malariagen.net/projects/pf3k#sampling-locations},  After variant calling and quality control, we genotyped approximately 1M SNPs across all samples, sequenced to an average read depth of 86 (range 12.6 -- 192.5).  See Supplementary Materials for details on the filters used and data availability. The Pf3k sequences were aligned to the 3D7 reference genome, with SNP calling performed by the GATK pipelines for best practices. We set a QC threshold that made positive and false negative variant calls equally likely \citep{pf3k}. For deconvolution, samples were grouped into geographical regions by genetic similarity; four in Africa, and three in Asia. (Table~\ref{tab:Pf3k}). Reference panels were constructed from the clonal samples found at each region. Since previous research has uncovered severe population structure in Cambodia \citep{Miotto2013}, we stratified samples into West and North Cambodia when performing analysis at the country level. Diagnostic plots for the deconvolution of all samples can be found at \url{https://github.com/mcveanlab/mixedIBD-Supplement} whereas deconvolved haplotypes can be accessed at URL.
+
+
+\begin{table}[btp]
+  \caption{Summary of Pf3k samples.}\label{tab:Pf3k}
+{\small
+\begin{tabular}{p{1.3cm} c p{1.8cm} c | c c c c p{2.7cm}}
+\toprule\hline
+                %&                    &      &         &        &                   &              &          &  \\
+Country         &   Year  &Location  & $PfPr$ & $ss$   & $\bar{D}$ (s.e.)  & $\bar{\rho}$ & $\bar{K}$& Reference\\
+\midrule
+Gambia          &    2008 & Brikam   & 0.06   & 65     & 129 ( 9.4 )  & 0.53 & 1.3 &\citet{Amambua-Ngwa2012}\\
+\hline
+Ghana           &    2009 & Kassena & 0.79 & 121 & 86 ( 5.7 )& 0.25 & 1.6&\multirow{3}{*}{\parbox{3.4cm}{\citet{Duffy2015,Kamau2015,eLife2016}}}\\
+                & 2010 & Kassena & 0.79 & 171 & 127 ( 10.3 )& 0.26 & 1.5 &\\
+                & 2011 & Kassena & 0.72 & 97 & 76 ( 5.3 )& 0.24 & 1.5& \\
+                &      & Kintampo & 0.58 & 6 & 89 ( 13.5 )& 0.16 & 1.5&\\
+                & 2012 & Kassena & 0.52 & 47 & 111 ( 3.8 )& 0.31 & 1.6&\\
+                &      & Kintampo & 0.41 & 40 & 157 ( 8.1 )& 0.25 & 1.6&\\
+                & 2013 & Kassena & 0.31 & 88 & 119 ( 4 )& 0.29 & 1.6&\\
+                &      & Kintampo & 0.29 & 4 & 172 ( 38.4 )& 0.53 & 1.1&\\
+\hline
+Malawi & 2011 & Chikwawa & 0.19 & 230 & 101 ( 3 )& 0.28 & 1.7 &\citet{Ocholla2014}\\
+       &      & Zomba & 0.34 & 35 & 89 ( 9.1 )& 0.28 & 1.6 &\\
+\hline
+Mali & 2007 & Bandiagara & 0.43 & 9 & 95 ( 25.2 )& 0.39 & 1.8  &\multirow{3}{*}{\parbox{3.4cm}{\citet{eLife2016}}}\\
+     &      & Faladje & 0.37 & 36 & 75 ( 10.1 )& 0.34 & 1.3 &\\
+     &      & Kolle & 0.21 & 51 & 82 ( 10.5 )& 0.36 & 1.6 &\\
+\cline{1-8}
+Guinea & 2011 & Nzerekore & 0.49 & 97 & 77 ( 4.6 )& 0.21 & 1.4 &\\
+\cline{1-8}
+Congo DR        & 2013 & Kinshasa & 0.24 & 113 & 49 ( 3.2 )& 0.36 & 1.5\\
+\hline
+Senegal & 2004 & Thies & 0.09 & 2 & 130 ( 68.2 )& 0.03 & 1.4  &\citet{Wong2017}\\
+        & 2009 & Thies & 0.04 & 43 & 175 ( 14.9 )& 0.47 & 1.1  &\\
+        & 2010 & Thies & 0.04 & 24 & 159 ( 9.7 )& 0.36 & 1.3 &\\
+        & 2011 & Thies & 0.03 & 32 & 97 ( 6 )& 0.4 & 1.1 &\\
+\hline
+\hline
+West     & 2009 & Pursat & 0.0071 & 19 & 75 ( 8.8 )& 0.39 & 1.3 &\multirow{3}{*}{\parbox{3.4cm}{\citet{Amato2017, eLife2016}}}\\
+Cambodia & 2010 & Pursat & 0.0071 & 105 & 95 ( 6.8 )& 0.65 & 1.2&\\
+         & 2011 & Pailin & 0.0025 & 49 & 54 ( 4.1 )& 0.43 & 1.1&\\
+         &      & Pursat & 0.0096 & 103 & 49 ( 3.1 )& 0.63 & 1.2&\\
+         & 2012 & Pailin & 0.00096 & 31 & 46 ( 5.6 )& 0.43 & 1.0&\\
+         &      & Pursat & 0.0079 & 7 & 37 ( 19.1 )& 0.58 & 1.4&\\
+\cline{1-8}
+North & 2010 & Ratanakiri & 0.0039 & 50 & 71 ( 6.1 )& 0.44 & 1.3&\\
+Cambodia  & 2011 & Preah Vihear & 0.02 & 73 & 51 ( 5.3 )& 0.36 & 1.2&\\
+          &      & Ratanakiri & 0.0032 & 81 & 45 ( 4.3 )& 0.48 & 1.4&\\
+          & 2012 & Preah Vihear & 0.0075 & 30 & 43 ( 6.7 )& 0.38 & 1.0&\\
+          &      & Ratanakiri & 0.0016 & 15 & 44 ( 8.9 )& 0.32 & 1.3&\\
+\hline
+Thailand & 2011 & Mae Sot & 0.00011 & 35 & 66 ( 7.5 )& 0.35 & 1.2 &\multirow{3}{*}{\parbox{3.4cm}{\citet{Miotto2013, eLife2016}}}\\
+         &      & Sisakhet & 1e-04 & 5 & 112 ( 25.4 )& 0.17 & 1.3 &\\
+         & 2012 & Mae Sot & 5.7e-05 & 69 & 83 ( 4.9 )& 0.59 & 1.3 &\\
+         &      & Ranong & 0.00018 & 11 & 82 ( 12.4 )& 0.34 & 1.2 &\\
+         &      & Sisakhet & 0 & 13 & 89 ( 13 )& 0.37 & 1.1 &\\
+         & 2013 & Sisakhet & 0 & 3 & 62 ( 8.8 )& 0.09 & 1.2&\\
+\cline{1-8}
+Bangladesh & 2012 & Ramu & 0.0021 & 50 & 53 ( 4.2 )& 0.49 & 1.5 &\\
+\cline{1-8}
+Viet Nam & 2011 & Bu Gia Map & 0.0073 & 43 & 67 ( 5 )& 0.44 & 1.3&\\
+         &      & Phuoc Long & 0.0053 & 27 & 68 ( 7.2 )& 0.38 & 1.2&\\
+         & 2012 & Bu Gia Map & 0.0072 & 19 & 115 ( 8 )& 0.67 & 1.1&\\
+         &      & Phuoc Long & 0.0048 & 5 & 107 ( 6.3 )& 0.82 & 1.2&\\
+\cline{1-8}
+Myanmar & 2011 & Bago Division & 0.0076 & 12 & 59 ( 7.1 )& 0.26 & 1.2 &\\
+        & 2012 & Bago Division & 0.0084 & 47 & 62 ( 5.2 )& 0.46 & 1.2 &\\
+\cline{1-8}
+Laos & 2011 & Attapeu & 0.0094 & 59 & 71 ( 4.2 )& 0.37 & 1.4 &\\
+     & 2012 & Attapeu & 0.02 & 25 & 77 ( 7.2 )& 0.69 & 1.3 &\\
+\hline
+\bottomrule
+\end{tabular}
+}
+
+\tabledata{Summary of Pf3k samples in data release 5.1, where $D$ denotes mean read depth and $ss$ is sample size.  Genotyping, including both indel and SNP variants, was performed using a pipeline based on GATK best practices, see Methods. Data available from \url{ftp://ngs.sanger.ac.uk/production/pf3k/release_5/5.1}. $PfPr$ is the inferred parasite prevalence rate in a 5 $\times$ 5 km resolution grid from the MAP project, centred at the Pf3k sample collection sites; Relatedness $\rho$ and effective number of strains $K$ are summary metrics from {\tt DEploidIBD} output.}
+\end{table}
 
 
 

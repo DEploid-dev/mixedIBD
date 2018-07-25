@@ -449,3 +449,201 @@ dev.off()
 
 
 
+pdf("hap_viterbi_hap1.pdf", height = 6, width = 16)
+par(mar=c(0,0,0,0))
+layout(matrix(c(14, rep(15,10),rep(16,10),rep(13,3),
+                1,rep(2,10),rep(3,10),rep(13,3),
+                1,rep(2,10),rep(3,10),rep(13,3),
+                1,rep(2,10),rep(3,10),rep(13,3),
+                4, rep(5,10),rep(6,10),rep(13,3),
+                4, rep(5,10),rep(6,10),rep(13,3),
+                4, rep(5,10),rep(6,10),rep(13,3),
+                7, rep(8,10),rep(9,10),rep(13,3),
+                7, rep(8,10),rep(9,10),rep(13,3),
+                7, rep(8,10),rep(9,10),rep(13,3),
+                10, rep(11,10),rep(12,10),rep(13,3),
+                10, rep(11,10),rep(12,10),rep(13,3)
+                ), 12, 24, byrow=T))
+
+plot(c(0,0),c(1,1), ylim = c(0,1), type="n", ylab="", xlab="", yaxt="n", xaxt="n", axes=F)
+axis(4, at=c(0,.5,1), labels=c(0,.5,1),line=-.5, cex.axis=tick_size)
+mtext("WSAF", side=4, line=-2, cex = tick_size)
+name1=factor("Pf3D7_11_v3", level = levels(myCoverageInfo$CHROM))
+#chrom.frac = factor(c("Pf3D7_11_v3","Pf3D7_12_v3"), level = levels(myCoverageInfo$CHROM))
+tmpCoveragePos = myCoverageInfo$POS[myCoverageInfo$CHROM == name1]
+plot(1:length(hapInfo$POS[hapChrom == name1]), obsWSAF[myCoverageInfo$CHROM == name1][tmpCoveragePos %in% hapInfo$POS[hapChrom == name1]], col="red", pch = 16, ylab = "", yaxt='n', xaxt="n", axes=F)
+points(1:length(hapInfo$POS[hapChrom == name1]), expWSAF[hapChrom == name1], col="blue", pch = 16)
+
+
+name2=factor("Pf3D7_12_v3", level = levels(myCoverageInfo$CHROM))
+tmpCoveragePos = myCoverageInfo$POS[myCoverageInfo$CHROM == name2]
+#tmpExcludePos = myExcludeInfo$excludeTable$POS[myExcludeInfo$excludeTable$CHROM == name1]
+#excludeLogic = ( tmpCoveragePos %in% tmpExcludePos )
+#plotIndex = which(!excludeLogic)
+
+
+plot(tmpCoveragePos, obsWSAF[myCoverageInfo$CHROM == name2], col="red", pch = 16, ylab = "", type="n", yaxt='n', xaxt="n", axes=F)
+#rect(min(tmpCoveragePos), 0, max(tmpCoveragePos), 1, col="grey", border=NA)
+points(tmpCoveragePos, obsWSAF[myCoverageInfo$CHROM == name2], col="red", pch = 16)
+points(hapInfo$POS[hapChrom == name2], expWSAF[hapChrom == name2], col="blue", pch = 16)
+
+plot(c(0,0),c(1,1), ylim = c(0,1), type="n", ylab="", xlab="", yaxt="n", xaxt="n", axes=F)
+axis(4, at=c(0,.5,1), labels=c(0,.5,1), line = -.5,cex.axis=tick_size)
+mtext("IBD state", side=4, line=-2, cex = tick_size)
+
+haplotypePainter(probs[probs$CHROM==name1,c(-1,-2)], labelScaling=1)
+#chromBlock = a[tmp.state$CHROM == name1,]
+#barplot(t(as.matrix(chromBlock)), col =  c("brown1", "yellow1", "gold", "orange", "chartreuse"), beside=F, border=NA, space=0,xaxt = "n", yaxt = "n", axes=F)
+text(c(1000,3000), c(.5, .5), labels = c(1,2), cex = tick_size)
+
+haplotypePainter(probs[probs$CHROM==name2,c(-1,-2)], labelScaling=1)
+#chromBlock = a[tmp.state$CHROM == name2,]
+#barplot(t(as.matrix(chromBlock)), col =  c("brown1", "yellow1", "gold", "orange", "chartreuse"), beside=F, border=NA, space=0, xaxt = "n", yaxt = "n", axes=F)
+text(c(1000,2250, 2850, 3600), c(.5, .5, .5, .5), labels = c(3,4,5,6), cex = tick_size)
+
+
+plot(c(0,0),c(1,1), ylim = c(0,1), type="n", ylab="", xlab="", yaxt="n", xaxt="n", axes=F)
+axis(4, at=c(0,.5,1), labels=c(0,.5,1), line = -.5, cex.axis=tick_size)
+mtext("Proportion", side=4, line=-2, cex = tick_size)
+
+#pdf("haps11_and_12.pdf", height = 7, width = 18)
+#par(mar=c(0,0,0,0))
+#par(mfrow=c(2,1))
+hap = hapInfo[hapInfo$CHROM == name1, -c(1,2)]
+    haplength = dim(hap)[1]
+    nhap = dim(hap)[2]
+
+    xrange = c(0, haplength)
+    yrange = c(0, 1)
+    plot( xrange, yrange, type= "n", xlim=xrange, ylim = yrange, ylab="", xlab = "", cex.axis=tick_size, yaxt="n", axes=F)
+    axis(1, cex.axis = tick_size*1.1)
+    xleft = 0:(haplength-1)
+    xright = xleft+1
+#    ycum = as.numeric(c(0, prop[1], 1))
+    ycum = as.numeric(c(0, cumsum(as.numeric(prop))))
+#cat(ycum, "\n")
+
+    for ( k in c(1:nhap) ){
+      tmpHap = hap[,k]
+      ybottom = ycum[k]
+      ytop = ycum[k+1]
+      rect(xleft, ybottom, xright, ytop, col = tmpHap , border = "transparent")
+    }
+#    lab.at = c(1, 400, 800, 1200, 1600, 2000, 2369)
+#    axis(1, at=lab.at, labels=lab.at, las=1, lwd = 0, cex=2, cex.axis=2.4)
+
+hap = hapInfo[hapInfo$CHROM == name2, -c(1,2)]
+    haplength = dim(hap)[1]
+    nhap = dim(hap)[2]
+
+    xrange = c(0, haplength)
+    yrange = c(0, 1)
+    plot( xrange, yrange, type= "n", xlim=xrange, ylim = yrange, ylab="", xlab = "", cex.axis=tick_size, yaxt="n", axes=F)
+    axis(1, cex.axis = tick_size*1.1)
+    xleft = 0:(haplength-1)
+    xright = xleft+1
+#    ycum = as.numeric(c(0, prop[1], 1))
+    ycum = as.numeric(c(0, cumsum(as.numeric(prop))))
+#cat(ycum, "\n")
+
+    for ( k in c(1:nhap) ){
+      tmpHap = hap[,k]
+      ybottom = ycum[k]
+      ytop = ycum[k+1]
+      rect(xleft, ybottom, xright, ytop, col = tmpHap , border = "transparent")
+    }
+
+plot(c(0,0),c(1,1), ylim = c(0,1), type="n", ylab="", xlab="", yaxt="n", xaxt="n", axes=F)
+#axis(4, at=c(0,.5,1), labels=c(0,.5,1), cex=1.5)
+#mtext("WSAF", side=4, line=-1.5, cex = 1.5)
+
+hap = hapInfo[hapInfo$CHROM == name1, -c(1,2)]
+    haplength = dim(hap)[1]
+    nhap = dim(hap)[2]
+plot(c(0,0),c(1,1), xlim = c(0,haplength), type="n", ylab="", xlab="", yaxt="n", xaxt="n", axes=F)
+mtext(paste("SNP Index"), side=3, line=-5, cex = label_size)
+
+hap = hapInfo[hapInfo$CHROM == name2, -c(1,2)]
+    haplength = dim(hap)[1]
+    nhap = dim(hap)[2]
+plot(c(0,0),c(1,1), xlim = c(0,nhap), type="n", ylab="", xlab="", yaxt="n", xaxt="n", axes=F)
+mtext(paste("SNP Index"), side=3, line=-5, cex = label_size)
+
+
+
+# 13
+plot(c(0,1), c(0,1), type = "n", axes = F, xlab = "", ylab= "")
+#legend("left", legend = c("No IBD", "All IBD", "1-2 IBD", "1-3 IBD", "2-3 IBD"), col = c("brown1", "chartreuse", "yellow1", "gold", "orange"), pch = 15,  bty = "n", cex = 3, ncol = 1)
+legend("left", legend = c("No IBD", "All IBD", "1-2 IBD", "1-3 IBD", "2-3 IBD"), col = c("brown1", "chartreuse", "yellow1", "gold", "orange"),
+    pch = 15,  bty = "n", cex = label_size*1.2, ncol = 1)
+
+
+
+
+# 14 15 16
+plot(c(0,0),c(1,1), ylim = c(0,1), type="n", ylab="", xlab="", yaxt="n", xaxt="n", axes=F)
+plot(c(0,0),c(1,1), ylim = c(0,1), type="n", ylab="", xlab="", yaxt="n", xaxt="n", axes=F)
+mtext(paste("Chromosome 11"), side=3, line=-2.5, cex = label_size)
+plot(c(0,0),c(1,1), ylim = c(0,1), type="n", ylab="", xlab="", yaxt="n", xaxt="n", axes=F)
+mtext(paste("Chromosome 12"), side=3, line=-2.5, cex = label_size)
+dev.off()
+
+
+
+
+
+pdf("hap_viterbi_hap2.pdf", height = 2, width = 16)
+par(mar=c(0,0,0,0))
+layout(matrix(c(1,rep(2,10),rep(2,10),rep(5,3),
+                1,rep(2,10),rep(2,10),rep(5,3),
+                1,rep(2,10),rep(2,10),rep(5,3),
+                3, rep(4,10),rep(4,10),rep(5,3),
+                3, rep(4,10),rep(4,10),rep(5,3)
+                ), 5, 24, byrow=T))
+
+#                13, rep(14,10),rep(14,10),rep(15,3),
+#                13, rep(14,10),rep(14,10),rep(15,3),
+#                13, rep(14,10),rep(14,10),rep(15,3),
+#                16, rep(17,10),rep(17,10),rep(15,3),
+#                16, rep(17,10),rep(17,10),rep(15,3)
+#13
+
+#plot(c(0,0),c(1,1), ylim = c(0,1), type="n", ylab="", xlab="", yaxt="n", xaxt="n", axes=F)
+plot(c(0,0),c(1,1), ylim = c(0,1), type="n", ylab="", xlab="", yaxt="n", xaxt="n", axes=F)
+
+#chromBlock = a[tmp.state$CHROM == name1,]
+#barplot(t(as.matrix(chromBlock)), col =  c("brown1", "yellow1", "gold", "orange", "chartreuse"), beside=F, border=NA, space=0,xaxt = "n", yaxt = "n", axes=F)
+
+
+aa = tmp.state[tmp.state$CHROM %in% factor(c(as.character(name1), as.character(name2)), levels = levels(tmp.state$CHROM)),3]
+segs = list()
+segs[[1]] = aa[1:2018]; segs[[2]] = aa[2019:3954]; segs[[3]] = aa[3955:5996]; segs[[4]] = aa[5997:6433]; segs[[5]] = aa[6434:7161]; segs[[6]] = aa[7162:8006]
+
+
+#lapply(segs, length) %>% unlist %>% sort.int(., index.return=T)
+#[1]  437  728  845 1936 2018 2042
+#[1] 4 5 6 2 1 3
+new.aa = list()
+new.aa[[1]] = segs[[4]]
+new.aa[[2]] = segs[[5]]
+new.aa[[3]] = segs[[6]]
+new.aa[[4]] = segs[[2]]
+new.aa[[5]] = segs[[1]]
+new.aa[[6]] = segs[[3]]
+new.aa = unlist(new.aa)
+
+a = matrix(0.0, ncol = 5, nrow = length(new.aa))
+a[cbind(1:length(new.aa), new.aa)] = 1.0
+
+#14
+barplot(t(as.matrix(a)), col =  c("brown1", "yellow1", "gold", "orange", "chartreuse"), beside=F, border=NA, space=0,xaxt = "n", yaxt = "n", axes=F)
+bb = lapply(segs, length) %>% unlist %>% sort.int(., index.return=T)
+bbx=bb$x / 2
+text(cumsum(c(0,bb$x[1:5]))+bbx, 0.5, labels = c("4", "5", "6", "2", "1 (N50)", "3"), cex = tick_size)
+# 16 17
+plot(c(0,0),c(1,1), ylim = c(0,1), type="n", ylab="", xlab="", yaxt="n", xaxt="n", axes=F)
+plot(c(0,0),c(1,1), xlim = c(0,100), type="n", ylab="", xlab="", yaxt="n", xaxt="n", axes=F)
+axis(side = 3, at = c(0,50,100), labels= c("0", "50", "100%"), cex.axis = tick_size)
+mtext(paste("Ordered IBD blocks"), side=3, line=-4.5, cex = label_size)
+
+dev.off()
