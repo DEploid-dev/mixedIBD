@@ -135,7 +135,7 @@ for ( chrom in unique(sample1.single0$CHROM)){
 }
 
 hmmibd = read.table("tmp.hmm.txt", header=T)
-hmmibd_len = hmmibd$end - hmmibd$start
+hmmibd_len = hmmibd$end[hmmibd$different==0] - hmmibd$start[hmmibd$different==0]
 
 pdf("bgN50.pdf", width = 8, height = 8)
 par(mar = c(5,5,5,3))
