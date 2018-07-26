@@ -29,6 +29,9 @@
 \usepackage[colorinlistoftodos]{todonotes}
 %\usepackage[disable]{todonotes}
 
+\usepackage{placeins}
+\usepackage{flafter}
+
 \newcounter{todocounter}
 \newcommand{\todonum}[2][]
 {\stepcounter{todocounter}\todo[#1]{\thetodocounter: #2}}
@@ -554,6 +557,56 @@ In order to construct the background IBD profile for classification, we combine 
   %\subfloat[]{\includegraphics[width = .85\textwidth]{bgIBDvalidation/IBDtracklengthVsPercentage_data_clean.pdf}}
   \caption{(A) Comparison of IBD block detection of {\tt DEploidIBD} using artificial mixtures of lab crosses PG0071-C and PG0058-C (last track) with IBD block detection from ancestral state inference from \citet{Li2003}. (B) Scatter plot of IBD segment Nx values extracted by comparing clonal sample ancestry and using {\tt DEploidIBD} on artificial mixtures.}\label{fig:bgibd}
 \end{figure}
+
+\newpage
+\FloatBarrier
+\section{Expected levels of IBD in \textit{ P.falciparum } mixed infections}
+
+The amount of IBD observed in a mixed infection is a function of the number of oocysts present in the biting mosquito. We will demonstrate this below.
+
+First, let us briefly review the fundamentals of malaria meiosis. In our case, we imagine a mosquito bites a human host containing two distinct malaria strains. Call these strains $A$ and $B$. Some number of gametocytes of $A$ and $B$ are imbibed during the bite, differentiate into gametes, and undergo fertilization to produce zygotes. Some fraction of these zygotes succeed in establishing themselves as oocysts on the mosquito midgut. Three products of fertilization are possible, and thus the oocysts can be either: $A+A$ or $B+B$ (inbred oocysts, $n_{ii}$), or $A+B$ (outbred oocysts, $n_{ij}$). The oocyst state of a mosquito can be characterized by ($n_{ij}$, $n_{ii}$). Which strain is maternal and paternal may vary from oocyst to oocyst, but this is of no consequence here.
+
+A $k=2$ mixed infection is established when two distinct sporozoites, produced from the oocysts of this mosquito, infect a host. Each oocyst produces thousands of sporozoites, of four types, which pool in the mosquito salivary glands. Imagine drawing a $k=2$ mixed infection from a mosquito harbouring a single outbred oocyst ($n_{ij}$ = 1). In such a mosquito there are two copies of each of the two strains (two sets of sister chromatids; $A$, $A$, $B$, $B$). Thus, ignoring recombination for the present, there are two pairs with an IBD fraction of 1 and, if our original strains are unrelated, the remainder of the ${4 \choose 2}$ pairs will have an IBD of 0. Thus a single $n_{ij}$ oocyst has an expected IBD of $E[f]= 2/{4 \choose 2} = 1/3$. We draw pairs without replacement, because if sporozoites of only one type seed the infection, it will be $k=1$.  Importantly, neither recombination nor segregation change this result, as they only shuffle how the total identity is distributed between pairs, rather than create or destroy identity (identity is created by DNA replication and destroyed by mutation); the expectation is taken over all pairs and is thus unaffected.
+
+Computing the expected IBD fraction for a mosquito posessing $n_{ij}$ outbred oocysts is an extension of the above. Again ignoring recombination, the expected IBD fraction $E[f|n_{ij}]$ is equal to the total number of pairs with an IBD of 1 (IBD pairs), over all possible pairs. In a mosquito with $n_{ij}$ oocysts, we have $2n_{ij}$ copies of each parental strain, thus we have ${2n_{ij} \choose 2}$ IBD pairs for each parental strain, thus $2 {2n_{ij} \choose 2}$ IBD pairs total. Dividing this by the total number of pairs amongst $n_{ij}$ oocysts we have...
+
+\begin{equation} \label{eq1}
+E[f|n_{ij} > 0] = \frac{2{2n_{ij} \choose 2}}{{4n_{ij} \choose 2}} = \frac{2n_{ij} - 1}{4n_{ij} - 1}
+\end{equation}
+
+The above yields $1/3$ for $n_{ij}=1$, approaching $1/2$ as $n_{ij}$ grows. It has been validated with \texttt{pf-meiosis} in Figure X.
+
+Including $n_{ii}$ oocysts is somewhat complicating, as some pairs (selected without replacement) may be identical (thus yielding $k=1$) or completely unrelated (yielding $k=2$, but effectively without having undergone meiosis or producing any detectable recombination breakpoints between parental strains).  We are interested in the expected IBD produced as a result of meiosis between parental strains, and thus for the moment we exclude these pairs. In practice, this means the mosquito must have at least one outbred oocyst, and at least one of the infecting sporozoites must be from an outbred oocyst.
+
+The derivation is as above: first ignoring recombination and segregation, then enumerating all IBD pairs (pairs with IBD fraction of 1) and dividing by the total number of pairs to compute the expectation. Note that the additional IBD pairs possible between an outbred and inbred oocyst are given by the term $8n_{ij}n_{ii}$, and that you can no longer use all possible pairs drawn without replacement as the denominator, but must exclude the pairs described above.
+
+\begin{equation} \label{eq2}
+\begin{split}
+E[f|n_{ij} > 0, n_{ii}] & = \frac{2{2n_{ij} \choose 2} + 8n_{ij}n_{ii}}{2{2n_{ij} \choose 2} + 16n_{ij}n_{ii} + 4n_{ij}^2} \\
+& = \frac{{2n_{ij} \choose 2} + 4n_{ij}n_{ii}}{{2n_{ij} \choose 2} + 8n_{ij}n_{ii} + 2n_{ij}^2} \\
+& = \frac{n_{ij}(2n_{ij} - 1) + 4n_{ij}n_{ii}}{n_{ij}(2n_{ij} - 1) + 8n_{ij}n_{ii} + 2n_{ij}^2} \\
+& = \frac{2n_{ij} - 1 + 4n_{ii}}{2n_{ij} - 1 + 8n_{ii} + 2n_{ij}} \\
+& = \frac{2(n_{ij} + 2n_{ii}) - 1}{4(n_{ij} + 2n_{ii}) - 1}
+\end{split}
+\end{equation}
+
+Which is of a similar form to above, but increases to $1/2$ quicker if more inbred oocysts are present.
+
+The expression for $E[f|n_{ij} > 0, n_{ii}]$ can also be derived by recognizing that there are three \textit{types} of pairs possible in a mosquito with a collection of $n_{ij}$ and $n_{ii}$ oocysts: (1) a pair can contain two strains from a single $n_{ij}$, ($n^{o=1}_{ij}$); (2) a pair can contain two strains from two different $n_{ij}$, ($n^{o=2}_{ij}$); or (3) a pair can contain one strain from an $n_{ij}$ oocyst and one from an $n_{ii}$ oocyst, $n^{o=2}_{ij, ii}$. Pair type (1) is unique to malaria and has an  $E[f|n^{o=1}_{ij}]=1/3$, as shown above; pair type (2) are standard siblings with $E[f|n^{o=2}_{ij}]=1/2$; and pair type (3) represent a mother-daughter relationship, also with $E[f|n^{o=2}_{ij, ii}]=1/2$. The full IBD fraction and IBD segment length distributions of these pairs were generated using \texttt{pf-meiosis} and can be seen in Figure X. We enumerate the number of each pair type given $n_{ij}$ and $n_{ii}$, weighted by their expectation, to derive $E[f|n_{ij} > 0, n_{ii}]$:
+
+\begin{equation}
+\begin{split}
+E[f|n_{ij} > 0, n_{ii}] & = \frac{n^{o=1}_{ij}E[f|n^{o=1}_{ij}] + n^{o=2}_{ij}E[f|n^{o=2}_{ij}] 
++ n^{o=2}_{ij, ii}E[f|n^{o=2}_{ij, ii}]}{n^{o=1}_{ij} + n^{o=2}_{ij} + n^{o=2}_{ij, ii}} \\
+& = \frac{ n_{ij}{4\choose 2}1/3 + 16{n_{ij}\choose 2}1/2 + 16n_{ij}n_{ii}1/2}{
+n_{ij}{4\choose 2} + 16{n_{ij}\choose 2} + 16n_{ij}n_{ii}} \\
+& = \frac{2n_{ij} + 4n_{ij}(n_{ij} - 1) + 8n_{ij}n_{ii}}{6n_{ij} + 8n_{ij}(n_{ij} - 1) + 16n_{ij}n_{ii}}\\
+& = \frac{1 + 2(n_{ij} - 1) + 4n_{ii}}{3 + 4(n_{ij} - 1) + 8n_{ii}} \\
+& = \frac{2(n_{ij} + 2n_{ii}) - 1}{4(n_{ij} + 2n_{ii}) - 1}
+\end{split}
+\end{equation}
+
+As above.
 
 
 \bibliography{mixedIBD.bib}
