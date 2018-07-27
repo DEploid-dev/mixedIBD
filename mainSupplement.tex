@@ -574,7 +574,14 @@ Computing the expected IBD fraction for a mosquito posessing $n_{ij}$ outbred oo
 E[f|n_{ij} > 0] = \frac{2{2n_{ij} \choose 2}}{{4n_{ij} \choose 2}} = \frac{2n_{ij} - 1}{4n_{ij} - 1}
 \end{equation}
 
-The above yields $1/3$ for $n_{ij}=1$, approaching $1/2$ as $n_{ij}$ grows. It has been validated with \texttt{pf-meiosis} in Figure X.
+The above yields $1/3$ for $n_{ij}=1$, approaching $1/2$ as $n_{ij}$ grows. It has been validated with \texttt{pf-meiosis} in Figure~\ref{fig:validoocyst}.
+
+
+\begin{figure}[pt]
+  \centering{}
+  \includegraphics[width = .85\textwidth]{supFigures/supp-Fig1.pdf}
+  \caption{Exploring the relationship between number of outbred oocysts ($n_{ij}$) and IBD. (A) Joint IBD fraction and IBD segment length distributions for $k=2$ mixed infections simulated from two unrelated strains and a fixed number of outbred oocysts $n_{ij}$, using \textt{pf-meiosis}. Mean values for each distribution are indicated by same-color dashed lines. Each distribution is created from 1000 simulated mixed infections. (B) Validation of theoretical result given in text (S1.8). Line plot compares trend in expected IBD fraction with the number of outbred oocysts, $n_{ij}$, for infections simulated in panel A, and the analytical expression S1.8.} \label{fig:validoocyst}
+\end{figure}
 
 Including $n_{ii}$ oocysts is somewhat complicating, as some pairs (selected without replacement) may be identical (thus yielding $k=1$) or completely unrelated (yielding $k=2$, but effectively without having undergone meiosis or producing any detectable recombination breakpoints between parental strains).  We are interested in the expected IBD produced as a result of meiosis between parental strains, and thus for the moment we exclude these pairs. In practice, this means the mosquito must have at least one outbred oocyst, and at least one of the infecting sporozoites must be from an outbred oocyst.
 
@@ -590,9 +597,15 @@ E[f|n_{ij} > 0, n_{ii}] & = \frac{2{2n_{ij} \choose 2} + 8n_{ij}n_{ii}}{2{2n_{ij
 \end{split}
 \end{equation}
 
-Which is of a similar form to above, but increases to $1/2$ quicker if more inbred oocysts are present.
+Which is of a similar form to above, but increases to $1/2$ quicker if more inbred oocysts are present. As before the equation is validated in Figure~\ref{fig:validinbred}A.
 
-The expression for $E[f|n_{ij} > 0, n_{ii}]$ can also be derived by recognizing that there are three \textit{types} of pairs possible in a mosquito with a collection of $n_{ij}$ and $n_{ii}$ oocysts: (1) a pair can contain two strains from a single $n_{ij}$, ($n^{o=1}_{ij}$); (2) a pair can contain two strains from two different $n_{ij}$, ($n^{o=2}_{ij}$); or (3) a pair can contain one strain from an $n_{ij}$ oocyst and one from an $n_{ii}$ oocyst, $n^{o=2}_{ij, ii}$. Pair type (1) is unique to malaria and has an  $E[f|n^{o=1}_{ij}]=1/3$, as shown above; pair type (2) are standard siblings with $E[f|n^{o=2}_{ij}]=1/2$; and pair type (3) represent a mother-daughter relationship, also with $E[f|n^{o=2}_{ij, ii}]=1/2$. The full IBD fraction and IBD segment length distributions of these pairs were generated using \texttt{pf-meiosis} and can be seen in Figure X. We enumerate the number of each pair type given $n_{ij}$ and $n_{ii}$, weighted by their expectation, to derive $E[f|n_{ij} > 0, n_{ii}]$:
+\begin{figure}[ht]
+  \centering{}
+  \includegraphics[width = .85\textwidth]{supFigures/supp-Fig2.pdf}
+  \caption{Exploring expected IBD allowing for outbred ($n_{ij}$) and inbred ($n_{ii}$) (A) Validation of theoretical result given in text (S1.9). Line plot compares trend in expected IBD fraction with the number of outbred oocysts, $n_{ij}$, for infections simulated in panel A, and the analytical expression S1.9. Differing number of inbred oocysts are indicated with color. (B) The three types of pairs. } \label{fig:validinbred}
+\end{figure}
+
+The expression for $E[f|n_{ij} > 0, n_{ii}]$ can also be derived by recognizing that there are three \textit{types} of pairs possible in a mosquito with a collection of $n_{ij}$ and $n_{ii}$ oocysts: (1) a pair can contain two strains from a single $n_{ij}$, ($n^{o=1}_{ij}$); (2) a pair can contain two strains from two different $n_{ij}$, ($n^{o=2}_{ij}$); or (3) a pair can contain one strain from an $n_{ij}$ oocyst and one from an $n_{ii}$ oocyst, $n^{o=2}_{ij, ii}$. Pair type (1) is unique to malaria and has an  $E[f|n^{o=1}_{ij}]=1/3$, as shown above; pair type (2) are standard siblings with $E[f|n^{o=2}_{ij}]=1/2$; and pair type (3) represent a mother-daughter relationship, also with $E[f|n^{o=2}_{ij, ii}]=1/2$. The full IBD fraction and IBD segment length distributions of these pairs were generated using \texttt{pf-meiosis} and can be seen in Figure~\ref{fig:validinbred}B. We enumerate the number of each pair type given $n_{ij}$ and $n_{ii}$, weighted by their expectation, to derive $E[f|n_{ij} > 0, n_{ii}]$:
 
 \begin{equation}
 \begin{split}
@@ -608,6 +621,7 @@ n_{ij}{4\choose 2} + 16{n_{ij}\choose 2} + 16n_{ij}n_{ii}} \\
 
 As above.
 
+\FloatBarrier
 
 \bibliography{mixedIBD.bib}
 
