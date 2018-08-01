@@ -134,16 +134,16 @@ for ( chrom in unique(sample1.single0$CHROM)){
 #    dev.off()
 }
 
-hmmibd = read.table("tmp.hmm.txt", header=T)
-hmmibd_len = hmmibd$end[hmmibd$different==0] - hmmibd$start[hmmibd$different==0]
+#hmmibd = read.table("tmp.hmm.txt", header=T)
+#hmmibd_len = hmmibd$end[hmmibd$different==0] - hmmibd$start[hmmibd$different==0]
 
 pdf("bgN50.pdf", width = 8, height = 8)
 par(mar = c(5,5,5,3))
 x = lapply(seq(0, .9, by = .1), function(x){computeNx(block.length.by.posterior.all, x)}) %>% unlist
 y = lapply(seq(0, .9, by = .1), function(x){computeNx(block.length.by.viterbi.all, x)}) %>% unlist
-hmmibd_len_Nx = lapply(seq(0, .9, by = .1), function(x){computeNx(hmmibd_len, x)}) %>% unlist
+#hmmibd_len_Nx = lapply(seq(0, .9, by = .1), function(x){computeNx(hmmibd_len, x)}) %>% unlist
 plot(x/1000,y/1000, xlim=c(0, 1.2e3), ylim=c(0,1.2e3), xlab = "Compare ancestry IBD block NX (kb)", ylab = "DEploidIBD IBD block NX (kb)", cex.lab = 1.5, cex.axis = 1.5, cex.main = 2, main = paste("Correlation: ", round(cor(x,y), digits = 2)))
-points(x/1000, hmmibd_len_Nx/1000, col = "red")
+#points(x/1000, hmmibd_len_Nx/1000, col = "red")
 abline(0,1)
 dev.off()
 
