@@ -61,8 +61,8 @@ plain.tex: main.tex Makefile
 	sed -e "s/elife/article/" \
 	 -e "s/\\\usepackage{hyperref}/\\\usepackage{hyperref, natbib, fullpage}\n/" \
 	 -e "/\\\maketitle/d" \
-	 -e "s/\\\contrib\[$$\\\dagger$$\]{These authors contributed equally to this work}/\\\maketitle\n\\\footnotetext{$$\\\dagger$$ These authors contributed equally to this work}/" \
-	 -e "s/\\\corr{gil.mcvean@bdi.ox.ac.uk}{GM}/\\\footnotetext{For correspondence: gil.mcvean@bdi.ox.ac.uk}/" \
+	 -e "s/\\\contrib\[$$\\\dagger$$\]{These authors contributed equally to this work}/\\\maketitle\n\\\footnotetext[2]{These authors contributed equally to this work}/" \
+	 -e "s/\\\corr{gil.mcvean@bdi.ox.ac.uk}{GM}/\\\footnotetext[1]{For correspondence: gil.mcvean@bdi.ox.ac.uk}/" \
 	 -e "s/width=\\\textwidth/width=0.8\\\textwidth/g" \
 	 -e "/figsupp/d" \
 	 -e "s/tabledata/caption/" \
