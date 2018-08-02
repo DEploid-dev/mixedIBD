@@ -1,0 +1,55 @@
+
+\ifx\c@authorfn\undefined{}
+\newcounter{authorfn}
+\setcounter{authorfn}{1}
+\newcommand{\authfn}[1]{%
+  \fnsymbolmult{\numexpr\value{authorfn}+#1}%
+}
+\else
+\fi
+
+\def\@correspondence{}
+\def\@contribution{}
+\def\@presentaddress{}
+\def\@deceased{}
+
+
+\ifx\c@correspondence\undefined{}
+\newcommand{\corr}[2]{%
+  \ifx\empty\@correspondence\else\appto{\@correspondence}{; }{}{}\fi
+  \appto{\@correspondence}{%
+    \url{#1}%
+    \ifx\empty#2\else\space(#2)\fi
+  }{}{}%
+}
+\fi
+
+
+\ifx\c@contribution\undefined{}
+\newcommand{\contrib}[2][]{
+  \appto{\@contribution}{%
+  \ifx\empty#1\else\textsuperscript{#1}\fi
+  #2\\
+  }{}{}
+}
+\fi
+
+
+\ifx\c@presentaddress\undefined{}
+\newcommand{\presentadd}[2][]{
+  \ifx\empty\@presentaddress\else\appto{\@presentaddress}{; }{}{}\fi
+  \appto{\@presentaddress}{%
+  \ifx\empty#1\else\textsuperscript{#1}\fi
+  #2%
+  }{}{}
+}
+\fi
+
+\ifx\c@deceased\undefined{}
+\newcommand{\deceased}[1]{\def\@deceased{\textsuperscript{#1}Deceased}}
+\fi
+
+
+\reversemarginpar
+
+
