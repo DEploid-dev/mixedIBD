@@ -49,7 +49,7 @@ tmpmain.pdf: tmpmain.tex
 
 tmpmain.tex: main.tex Makefile
 	sed -e "/Manuscript submitted to eLife/d" elife.cls > tmpelife.cls
-	sed -e "s/elife/tmpelife/" main.tex > tmpmain.tex
+	sed -e "s/\\\documentclass\[9pt,lineno\]{elife}/\\\documentclass\[9pt\]{tmpelife}/" main.tex > tmpmain.tex
 
 plain.pdf: plain.tex tmpmain.pdf
 	pdflatex plain.tex
