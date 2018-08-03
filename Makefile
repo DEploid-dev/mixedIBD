@@ -24,11 +24,11 @@ mainSupplement.pdf: mainSupplement.tex ${supfigures} ${supfigurespdf} ${suptex} 
 	pdflatex mainSupplement.tex
 	pdflatex mainSupplement.tex
 
-mainSupplement.aux: mainSupplement.tex
-	pdflatex mainSupplement.tex
-
 mainSupplement.bbl: mainSupplement.aux
 	bibtex mainSupplement.aux
+
+mainSupplement.aux: mainSupplement.tex
+	pdflatex mainSupplement.tex
 
 
 otherFigures.pdf: otherFigures.tex ${supfigures} ${supfigurespdf} ${suptex} supplementReset.tex

@@ -1,8 +1,10 @@
-\documentclass[9pt,lineno]{elife}
+\documentclass[9pt]{article}
 \usepackage{fullpage,amsmath,url,cases}
 \usepackage{natbib,longtable,graphicx,tikz}
 %\usepackage{subfig}
 \usepackage{url}
+\usepackage{pdfpages}
+\usepackage{hyperref, natbib}
 %\@ifundefined{showcaptionsetup}{}{%
 %\PassOptionsToPackage{caption=false}{subfig}}
 \graphicspath{{./figures/}{./figures/otherFigures/}}
@@ -430,7 +432,7 @@ We find markers with high frequencies in both reference and alternative allele c
 \end{figure}
 
 \subsubsection{High nucleotide diversity regions}
-\noindent 
+\noindent
 Regions containing high leverage points tend to be at the ends of chromosomes or within regions of high nucleotide diversity, where read mapping is problematic (see Figure~\ref{fig:nd}).
 
 We use clonal haplotypes to compute nucleotide diversity in a sliding window along the genome. At each SNP, we use $n_{0}$ and $n_{1}$ to denote counts for reference and alternate alleles, respectively. Let $n = (n_{0} + n_{1})$ be the number of haplotypes in the population with a non-missing call. We compute the mean number of pairwise differences for this SNP as follows: First, compute the total number of pairs as $n$ choose 2: $n_{pairs} = n * (n - 1) / 2$. Then compute the number of pairs that are the same: $n_{same} = (n_{0} * (n_{0} - 1) / 2) + (n_{1} * (n_{1} - 1) / 2)$. Compute the number of pairs that are different: $n_{d}$ = $n_{pairs} - n_{same}$. Therefore, the mean number of pairwise differences: $mpd = n_{d} / n_{pairs}$. To compute the nucleotide diversity $\pi$, we compute the sum of $mpd$ in a window of 20kbp bases centred on each SNP, and divide by the number of accessible bases. This gives the mean number of pairwise differences per base.
@@ -618,7 +620,13 @@ n_{ij}{4\choose 2} + 16{n_{ij}\choose 2} + 16n_{ij}n_{ii}} \nonumber\\
 As above.
 
 \FloatBarrier
-
+\bibliographystyle{chicagoa}
 \bibliography{mixedIBD.bib}
+
+\newpage
+\renewcommand{\thepage}{S2--\arabic{page}}
+\setcounter{page}{1}
+
+\includepdf[pages=-]{180803_Pf3k_project_info.pdf}
 
 \end{document}
