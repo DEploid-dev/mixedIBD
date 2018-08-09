@@ -91,7 +91,7 @@
 \author[1,2,3,4]{Alistair Miles}
 
 \author[1]{Daniel J. Weiss}
-\author[1]{Timothy C.D. Lucas}
+\author[1]{Tim C.D. Lucas}
 \author[1]{Michele Nguyen}
 
 %\author[$ $]{Pf3k Consortium}
@@ -114,7 +114,7 @@
 \maketitle{}
 
 \begin{abstract}
-Individuals infected with the {\it Plasmodium falciparum} malaria parasite can carry multiple strains with varying levels of relatedness. Yet, how parameters of local epidemiology and the biology of transmission affect the rate and relatedness of such mixed infections remains unclear.  Here, we develop an enhanced method for strain deconvolution from genome sequencing data, which estimates the number of strains, their proportions, identity-by-descent (IBD) profiles and individual haplotypes.  We validate the method through experimental and {\em in silico} simulations and apply it to the Pf3k data set, consisting of 2,344 field samples from 13 countries.  We find that the rate of mixed infection varies from 18\% to 63\% across countries and that 51\% of all mixed infections involve more than two strains.  By modelling the structure of IBD resulting from different infection mechanisms we estimate that 55\% of dual infections contain sibling strains likely to have been co-transmitted from a single mosquito, and find evidence of mixed infections propagated over successive infection cycles.  By combining genetic data with epidemiological estimates of prevalence from the Malaria Atlas Project, we find that, at the country level, prevalence correlates with both the rate of mixed infection (Pearson $r = 0.65$, P $= 3.7 \times 10^{-6}$) and the level of IBD ($r = -0.51$, $P = 6.0 \times 10^{-4}$).Genomics is becoming a standard tool in pathogen surveillance. In this work, we conclude that monitoring fine-scale patterns of mixed infections and within-sample relatedness will be highly informative for assessing the impact of interventions and to inform malaria control programs.
+Individuals infected with the {\it Plasmodium falciparum} malaria parasite can carry multiple strains with varying levels of relatedness. Yet, how parameters of local epidemiology and the biology of transmission affect the rate and relatedness of such mixed infections remains unclear.  Here, we develop an enhanced method for strain deconvolution from genome sequencing data, which estimates the number of strains, their proportions, identity-by-descent (IBD) profiles and individual haplotypes.  We validate the method through experimental and {\em in silico} simulations and apply it to the Pf3k data set, consisting of 2,344 field samples from 13 countries.  We find that the rate of mixed infection varies from 18\% to 63\% across countries and that 51\% of all mixed infections involve more than two strains.  By modelling the structure of IBD resulting from different infection mechanisms we estimate that 55\% of dual infections contain sibling strains likely to have been co-transmitted from a single mosquito, and find evidence of mixed infections propagated over successive infection cycles.  By combining genetic data with epidemiological estimates of prevalence from the Malaria Atlas Project, we find that, at the country level, prevalence correlates with both the rate of mixed infection (Pearson $r = 0.65$, P $= 3.7 \times 10^{-6}$) and the level of IBD ($r = -0.51$, $P = 6.0 \times 10^{-4}$). Genomics is becoming a standard tool in pathogen surveillance. In this work, we conclude that monitoring fine-scale patterns of mixed infections and within-sample relatedness will be highly informative for assessing the impact of interventions and to inform malaria control programs.
 \end{abstract}
 
 \keywords{Malaria, genome, epidemiology, relatedness}
@@ -148,7 +148,7 @@ The effect of IBD among these $k$ strains is to limit the number of distinct gen
 
 Moving along the genome, recombination can result in changes in IBD state, hence changing WSAF values at those loci (Figure~\ref{fig:fig1}B).  To infer IBD states we use a hidden Markov model, which assumes linkage equilibrium between variants for computational efficiency, with a Gamma-Poisson emission model for read counts (see Supplementary Materials).  Population-level allele frequencies are estimated from isolates obtained from a similar geographic region.  Given the structure of the hidden Markov model, we can compute the likelihood of the strain proportions by integrating over all possible IBD sharing patterns, yielding a Bayesian estimate for the number and proportions of strains (see Methods).  We then use posterior decoding to infer the relatedness structure across the genome (Figure~\ref{fig:fig1}B). To quantify relatedness, we compute the mean IBD between pairs of strains, and statistics of IBD tract length (mean, median and N50, the length-weighted median IBD tract length, Figure~\ref{fig:fig1}C).
 
-In contrast to our previous work, \texttt{DEploidIBD} infers strain structure in two steps.  In the first we estimate the number and proportions of strains using Markov Chain Monte-Carlo (MCMC), allowing for IBD as described above.  In the second, we infer the individual genomes of the strains, using the MCMC methodology of~\citet{Zhu2017}, which can account for linkage disequilibrium (LD) between variants, but without updating strain proportions.  The choice of reference samples for deconvolution is described in~\citet{Zhu2017} and in the Supplementary Materials.  During this step we do not use the inferred IBD constraints {\emph per se}, though the inferred haplotypes will typically copy from the same (or identical) members of the reference panel within the IBD tract.
+In contrast to our previous work, \texttt{DEploidIBD} infers strain structure in two steps.  In the first we estimate the number and proportions of strains using Markov Chain Monte-Carlo (MCMC), allowing for IBD as described above.  In the second, we infer the individual genomes of the strains, using the MCMC methodology of~\citet{Zhu2017}, which can account for linkage disequilibrium (LD) between variants, but without updating strain proportions.  The choice of reference samples for deconvolution is described in~\citet{Zhu2017} and in the Supplementary Materials.  During this step we do not use the inferred IBD constraints {\em per se}, though the inferred haplotypes will typically copy from the same (or identical) members of the reference panel within the IBD tract.
 
 
 \begin{figure}[ht]
@@ -212,7 +212,7 @@ To investigate how the rate and relatedness structure of mixed infections varies
 \hline
 \hline
                 %&                    &      &         &        &                   &              &          &  \\
-Country         &   Year  &Location  & $PfPr$ & $ss$   & $\bar{D}$ (s.e.)  & $\bar{\rho}$ & $\bar{K}$& Reference\\
+Country         &   Year  &Location  & $PfPR$ & $ss$   & $\bar{D}$ (s.e.)  & $\bar{\rho}$ & $\bar{K}$& Reference\\
 \hline
 Gambia          &    2008 & Brikam   & 0.06   & 65     & 129 ( 9.4 )  & 0.53 & 1.3 &\citet{Amambua-Ngwa2012}\\
 \hline
@@ -279,7 +279,7 @@ Laos & 2011 & Attapeu & 0.0094 & 59 & 71 ( 4.2 )& 0.37 & 1.4 &\\
 \end{tabular}
 }
 
-\tabledata{Summary of Pf3k samples in data release 5.1, where $D$ denotes mean read depth and $ss$ is sample size.  Genotyping, including both indel and SNP variants, was performed using a pipeline based on GATK best practices, see Methods. Data available from \url{ftp://ngs.sanger.ac.uk/production/pf3k/release_5/5.1}. $PfPr$ is the inferred parasite prevalence rate in a 5 $\times$ 5 km resolution grid from the MAP project, centred at the Pf3k sample collection sites; Relatedness $\rho$ and effective number of strains $K_{e}$ are summary metrics from {\tt DEploidIBD} output.}
+\tabledata{Summary of Pf3k samples in data release 5.1, where $D$ denotes mean read depth and $ss$ is sample size.  Genotyping, including both indel and SNP variants, was performed using a pipeline based on GATK best practices, see Methods. Data available from \url{ftp://ngs.sanger.ac.uk/production/pf3k/release_5/5.1}. $PfPR$ is the inferred parasite prevalence rate in a 5 $\times$ 5 km resolution grid from the MAP project, centred at the Pf3k sample collection sites; Relatedness $\rho$ and effective number of strains $K_{e}$ are summary metrics from {\tt DEploidIBD} output.}
 \end{table}
 
 
@@ -336,7 +336,7 @@ We find that the effective number of strains is a significant predictor of $PfPR
 \begin{figure}[htp]
   \centering{}
   \includegraphics[width=\textwidth]{Fig5.pdf}
-  \caption{The relationship between {\it P. falciparum} prevalence (Pfpr) and characteristics of mixed infection including (A) the average effective number of strains, given by $K_e = (\sum w_i^2)^{-1}$, where $w_i$ is the proportion of the $i$th strain; (B) within sample relatedness (average IBD fraction) in mixed samples; (C) background relatedness between clonal samples; and (D) super sibling rate ($M>1$) in dual infections. Each point relates to a row in Table~1 from different sampling locations and years. Point size is proportional to Pf3k sample size. We label points with the country of the sampling site contributing the largest number of samples.}
+  \caption{The relationship between {\it P. falciparum} prevalence (PfPR) and characteristics of mixed infection including (A) the average effective number of strains, given by $K_e = (\sum w_i^2)^{-1}$, where $w_i$ is the proportion of the $i$th strain; (B) within sample relatedness (average IBD fraction) in mixed samples; (C) background relatedness between clonal samples; and (D) super sibling rate ($M>1$) in dual infections. Each point relates to a row in Table~1 from different sampling locations and years. Point size is proportional to Pf3k sample size. We label points with the country of the sampling site contributing the largest number of samples. Black R is the R for the combined dataset.}
   \label{fig:model}
 \end{figure}
 
