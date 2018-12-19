@@ -1,0 +1,24 @@
+\documentclass[preview]{standalone}
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{ulem}
+
+%\usepackage{floatrow}
+\usepackage{graphicx}
+\graphicspath{{./otherFigures/}}
+\usepackage{caption}
+\usepackage[label font=bf,labelformat=simple, position = top, justification=RaggedRight,singlelinecheck=false]{subfig}
+\newdimen\figrasterwd
+\figrasterwd\textwidth
+%\floatsetup[figure]{style=plain,subcapbesideposition=top}
+\newsubfloat{figure}
+\renewcommand{\thesubfigure}{\Alph{subfigure}}
+
+
+\begin{document}
+\begin{figure}
+\centering
+  \subfloat[][]{\includegraphics[width=\textwidth]{image1.jpeg}}
+\end{figure}
+\end{document}
+
