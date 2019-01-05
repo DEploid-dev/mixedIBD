@@ -178,8 +178,6 @@ We validated \texttt{DEploidIBD} through both experimental mixtures using lab st
 
 \todo{Change numbers}\texttt{DEploidIBD} is a substantial improvement on \texttt{DEploid}. In addition to estimating proportions and number of strains, \texttt{DEploidIBD} also estimates identity-by-descent (IBD) profiles. However, due to background relatedness {\tt DEploidIBD} typically over-estimates IBD fraction by a few percentage points  (Figure~\ref{fig:benchmark}B). Rates of genotype error are similar for the two approaches in settings of low relatedness (error rate of 0.4\% per site for 25/75 mixtures and 1.0\% for 45/55 mixtures).  However, for the 25/75\% mixtures with high relatedness, genotype error for the non-IBD approach increases to 0.6\%, while error in the IBD approach remains at 0.4\% (Figure~\ref{fig:benchmark}C). Switch errors in haplotype estimation are comparable between the two methods and decrease with increased relatedness due to the higher homozygosity (Figure~\ref{fig:benchmark}D). In summary, joint inference of IBD profiles and strain haplotypes is expected to improve estimates of strain proportions (and hence haplotypes), particularly in regions with high rates of IBD. Moreover, direct estimates of IBD within mixed infections can be used as an additional feature to characterise isolates.
 
-\todo{Jason: change figure simulation figure, for k = 4, 4th strain color is not obvious, consider to use pink, need to check k = 3, the 1 bite case relatedeness}
-
 \begin{figure}[htp]
   \begin{center}
   \includegraphics[width=.9\textwidth]{Fig2.pdf}
