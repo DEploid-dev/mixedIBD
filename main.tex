@@ -172,8 +172,7 @@ We validated \texttt{DEploidIBD} through both experimental mixtures using lab st
 
 To test the accuracy of \texttt{DEploidIBD} in a more realistic setting, we created {\it in silico} mixtures of 2, 3 and 4 strains given different transmission scenarios from mosquito bites (see Figure~\ref{fig:benchmark}--Supplement~2). For example, a mixed infection of two strains can happen via a single mosquito bite passing on two parasite progenies, also known as a co-infection or via two independent mosquito bites, also known as a super-infection. Ignoring the background relatedness from historical transmissions, to obtain a mixed infection of 3 strains can be slightly more complex: Beside a co-infection (3 related strains) and a super-infection (3 unrelated strains), we can also have a mixture of a co-infection and a super-infection (2 related strains and a unrelated strain). The complete simulation procedure is available at \url{https://github.com/DEploid-dev/DEploid-Data-Benchmark-in_silico_field}.
 
-
-To simulate a mixture of 2 strains, we randomly selected two strains from 204 clonal samples of Asian origin (proportions ranging from 10/90\% to 50/50\%) using Chromosome 14 data.  A further 20 randomly chosen samples were used as the reference panel. In order to compare the accuracy of the two methods at different levels of relatedness, we set 25\%, 50\% and 75\% of the second haplotype to be the same as the first haplotype to mimic scenarios of low, medium and high relatedness. This operation sets a lower limit to the relatedness between two strains, as background relatedness may also exist. We used empirical read depths and drew read counts for the two alleles from binomial proportions. We excluded sites for analysis at zero alternative allele counts in both targeted samples and reference panel, and obtain around 3,041 polymorphic sites (standard deviation 227) for each {\it in silico} samples. We inferred strain proportions (summarised by the effective number of strains: $K_e = 1/\sum w_{i}^{2}$, where $w_i$ is the proportion of the $i$th strain), and haplotypes. Both \texttt{DEploid} and \texttt{DEploidIBD} correctly estimate strain proportions with low relatedness (Figure~\ref{fig:benchmark}--Supplement~3 A). However, for moderate and high relatedness mixtures, \texttt{DEploid} fails to recover the correct proportion, when the minor strain proportion is below 30\% (Figure~\ref{fig:benchmark}--Supplement~3 B and C).
+To simulate a mixture of 2 strains, we randomly selected two strains from 204 clonal samples of Asian origin (proportions ranging from 10/90\% to 50/50\%) using Chromosome 14 data.  A further 20 randomly chosen samples were used as the reference panel. In order to compare the accuracy of the two methods at different levels of relatedness, we set 0\%, 25\%, 50\% and 75\% of the second haplotype to be the same as the first haplotype to mimic scenarios of unrelated, low, medium and high relatedness. This operation sets a lower limit to the relatedness between two strains, as background relatedness may also exist. We used empirical read depths and drew read counts for the two alleles from binomial proportions. We excluded sites for analysis at zero alternative allele counts in both targeted samples and reference panel, and obtain around 3,041 polymorphic sites (standard deviation 227) for each {\it in silico} samples. We inferred strain proportions (summarised by the effective number of strains: $K_e = 1/\sum w_{i}^{2}$, where $w_i$ is the proportion of the $i$th strain), and haplotypes. Both \texttt{DEploid} and \texttt{DEploidIBD} correctly estimate strain proportions with low relatedness (Figure~\ref{fig:benchmark}--Supplement~3 A). However, for moderate and high relatedness mixtures, \texttt{DEploid} fails to recover the correct proportion, when the minor strain proportion is below 30\% (Figure~\ref{fig:benchmark}--Supplement~3 panels B and C).
 
 
 %============ low relatedness
@@ -192,13 +191,22 @@ To simulate a mixture of 2 strains, we randomly selected two strains from 204 cl
 
 \texttt{DEploidIBD} is a substantial improvement on \texttt{DEploid}. In addition to estimating proportions and number of strains, \texttt{DEploidIBD} also estimates identity-by-descent (IBD) profiles. However, due to background relatedness {\tt DEploidIBD} typically over-estimates IBD fraction by a few percentage points (Figure~\ref{fig:benchmark}--Supplement~3). Because of our analysis only use polymophic sites across reference strains and within sample, the artefact causes a consistent shift that seems to underestimate relatedness when relatedness is 75\%. Rates of genotype error are similar for the two approaches in settings of low relatedness ({\tt DEploidIBD} has an error rate of 1.5\% per site for 20/80 mixtures and 2.8\% for 50/50 mixtures).  However, for the 20/80\% mixtures with high relatedness, genotype error for the non-IBD approach increases to 3.5\%, while error in the IBD approach remains at 1.5\% (Figure~\ref{fig:benchmark}C). Switch errors in haplotype estimation are comparable between the two methods and decrease with increased relatedness due to the higher homozygosity (Figure~\ref{fig:benchmark}D). In summary, joint inference of IBD profiles and strain haplotypes is expected to improve estimates of strain proportions (and hence haplotypes), particularly in regions with high rates of IBD. Moreover, direct estimates of IBD within mixed infections can be used as an additional feature to characterise isolates.
 
-
 We repeated the \emph{in silico} experiment with mixtures of two strains from 189 clonal African samples, with mixing proportions of ranging from 10/90\% to 50/50\%, using about 7,757 sites (s.d. 178) from Chromosome 14. \texttt{DEploidIBD} estimates the correct proportions at all relatedness levels.
 \texttt{DEploidIBD} also recovers the correct level of relatedness and IBD tract length (note that in Africa background relatedness is typically low).
-Because parasite genetic distance in Africa is generally greater than Asia, a random choice of 20 reference strains in Africa does not work as well as in Asia. As a result, both the per site genotype error and haplotype switch error have raised more than twice as much compare to Asia.
+Because parasite genetic distance in Africa is generally greater than Asia, a reference panel of 20 random 20 strains in Africa does not work as well as in Asia. As a result, both the per site genotype error and haplotype switch error have raised more than twice as much compare to Asia (Figure~\ref{fig:benchmark} panels B and C).
+
+We further extended benchmarking to \emph{in silico} mixtures of three strains in African population with mixing proportions of 10/10/80\%, 10/25/65\%, 15/25/60\%, 10/40/50\%, 15/30/55\%, 20/30/50\%, 33/33/34\% (Figure~\ref{fig:benchmark} A). Similar to previous experiment, we benchmark our methods in cases if parasite strains are all from different mosquito bites or they are all from the same mosquito bite. For the latter, we randomly selected two strains, namely parent A and parent B, from 204 clonal samples of Africa origin, and set the first 33\% of the first haplotype and the last 66\% of the second haplotype the same as parent A; the rest of the first and second haplotypes and the third haplotype the same as parent B, to mimic the scenario of a 1/3 pairwise relatedness within sample. We found that {\tt DEploid} failed in almost all cases to recover correct number of strains and proportions. Whereas {\tt DEploid-IBD} only struggles with the case that all strains have equal proportions, recovers correct number of strains, proportions and relatedness statistics.
+
+In addition, we consider the scenario of
 
 
-We further extended benchmarking to \emph{in silico} mixtures of three strains in both Asian and African populations (Figure~\ref{fig:benchmark} A).
+(Figure~\ref{fig:benchmark}--Supplement~2)
+
+In addition to benchmark our methods in cases of co-infection and super-infection, we
+
+
+
+ Similar to the previous experiment for check
 
 
 
@@ -231,21 +239,25 @@ We further extended benchmarking to \emph{in silico} mixtures of three strains i
   {\includegraphics[width = \textwidth]{Fig2SimScheme.pdf}}
 
   \figsupp{
-Comparison of \texttt{DEploidIBD} and \texttt{DEploid} on 100 {\it in silico} mixtures of two strains from Asia for 3,041 (s.d. 227) sites on Chromosome 14.
-(A) Relative differences of inferred effective number of strains. (B) Inferred pairwise relatedness and N50 IBD tract length. Dotted lines mark parameters used in the simulation.  We performed 100 simulations, but excluded eight cases that samples with very low coverage (below 13) and another 11 cases that sample coverage is between 13 and 29, and the reference panel contains at least one low confidence haplotype. (C) Cumulative distribution of average per site genotyping error for three levels of IBD (25\%, 50\% and 75\%).  (D) Cumulative distribution of haplotype switch error for the same three levels of IBD.}{\includegraphics[width = \textwidth]{Fig2Asia.pdf}}
+%Comparison of \texttt{DEploidIBD} and \texttt{DEploid} on 100 {\it in silico} mixtures of two strains from Asia for 3,041 (s.d. 227) sites on Chromosome 14.
+%(A) Relative differences of inferred effective number of strains. (B) Inferred pairwise relatedness and N50 IBD tract length. Dotted lines mark parameters used in the simulation.  We performed 100 simulations, but excluded eight cases that samples with very low coverage (below 13) and another 11 cases that sample coverage is between 13 and 29, and the reference panel contains at least one low confidence haplotype. (C) Cumulative distribution of average per site genotyping error for three levels of IBD (25\%, 50\% and 75\%).  (D) Cumulative distribution of haplotype switch error for the same three levels of IBD.
+}{\includegraphics[width = \textwidth]{Fig2Asia.pdf}}
 
   \figsupp{
-Comparison of \texttt{DEploidIBD} and \texttt{DEploid} on 100 {\it in silico} mixtures of two strains from Asia for 3,041 (s.d. 227) sites on Chromosome 14.
-(A) Relative differences of inferred effective number of strains. (B) Inferred pairwise relatedness and N50 IBD tract length. Dotted lines mark parameters used in the simulation.  We performed 100 simulations, but excluded eight cases that samples with very low coverage (below 13) and another 11 cases that sample coverage is between 13 and 29, and the reference panel contains at least one low confidence haplotype. (C) Cumulative distribution of average per site genotyping error for three levels of IBD (25\%, 50\% and 75\%).  (D) Cumulative distribution of haplotype switch error for the same three levels of IBD.}{\includegraphics[width = \textwidth]{Fig2Asia2.pdf}}
+%Comparison of \texttt{DEploidIBD} and \texttt{DEploid} on 100 {\it in silico} mixtures of two strains from Asia for 3,041 (s.d. 227) sites on Chromosome 14.
+%(A) Relative differences of inferred effective number of strains. (B) Inferred pairwise relatedness and N50 IBD tract length. Dotted lines mark parameters used in the simulation.  We performed 100 simulations, but excluded eight cases that samples with very low coverage (below 13) and another 11 cases that sample coverage is between 13 and 29, and the reference panel contains at least one low confidence haplotype. (C) Cumulative distribution of average per site genotyping error for three levels of IBD (25\%, 50\% and 75\%).  (D) Cumulative distribution of haplotype switch error for the same three levels of IBD.
+}{\includegraphics[width = \textwidth]{Fig2Asia2.pdf}}
 
 \end{figure}
 
-\begin{table}
-  \caption{Summary of deconvolution of {\it in silico} mixtures}
-% k = 2, alternate colors
-% scenario ID, Fraction of infer correct K, Fraction of overestimating K, Fraction of underestimating K, expected Effective K, observed mean Effective K (sd), expected relatedness, observed mean relatedness (sd), expected N50, observed mean N50 (sd)
 
-\end{table}
+
+%\begin{table}
+  %\caption{Summary of deconvolution of {\it in silico} mixtures}
+%% k = 2, alternate colors
+%% scenario ID, Fraction of infer correct K, Fraction of overestimating K, Fraction of underestimating K, expected Effective K, observed mean Effective K (sd), expected relatedness, observed mean relatedness (sd), expected N50, observed mean N50 (sd)
+
+%\end{table}
 
 
 \subsection{Geographical variation in mixed infection rates and relatedness}
