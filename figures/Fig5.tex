@@ -1,5 +1,4 @@
 \documentclass[preview]{standalone}
-
 \usepackage{helvet}
 \renewcommand{\familydefault}{\sfdefault}
 \usepackage{ulem}
@@ -9,18 +8,16 @@
 \graphicspath{{./otherFigures/}}
 \usepackage{caption}
 \usepackage[label font=bf,labelformat=simple, position = top, justification=RaggedRight,singlelinecheck=false]{subfig}
+\newdimen\figrasterwd
+\figrasterwd\textwidth
 %\floatsetup[figure]{style=plain,subcapbesideposition=top}
 \newsubfloat{figure}
-\renewcommand{\thesubfigure}{\Alph{subfigure}}
 
 
 \begin{document}
 \begin{figure}
 \centering
-  \subfloat[][]{\includegraphics[width=0.5\textwidth]{mean_eff_kclosest.pdf}}
-  \subfloat[][]{\includegraphics[width=0.5\textwidth]{within_relatednessclosest.pdf}}\\
-  \subfloat[][]{\includegraphics[width=0.5\textwidth]{{ibd.percentage.meanclosestlogx}.pdf}}
-  \subfloat[][]{\includegraphics[width=0.5\textwidth]{supersib_rateclosest.pdf}}\\
+\includegraphics[width=\textwidth]{figure_a.pdf}
 \end{figure}
 \end{document}
 
