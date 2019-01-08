@@ -197,16 +197,8 @@ Because parasite genetic distance in Africa is generally greater than Asia, a re
 
 We further extended benchmarking to \emph{in silico} mixtures of three strains in African population with mixing proportions of 10/10/80\%, 10/25/65\%, 15/25/60\%, 10/40/50\%, 15/30/55\%, 20/30/50\%, 33/33/34\% (Figure~\ref{fig:benchmark} A). Similar to previous experiment, we benchmark our methods in cases if parasite strains are all from different mosquito bites or they are all from the same mosquito bite. For the latter, we randomly selected two strains, namely parent A and parent B, from 204 clonal samples of Africa origin, and set the first 33\% of the first haplotype and the last 66\% of the second haplotype the same as parent A; the rest of the first and second haplotypes and the third haplotype the same as parent B, to mimic the scenario of a 1/3 pairwise relatedness within sample. We found that {\tt DEploid} failed in almost all cases to recover correct number of strains and proportions. Whereas {\tt DEploid-IBD} only struggles with the case that all strains have equal proportions, recovers correct number of strains, proportions and relatedness statistics.
 
-In addition, we consider the scenario of
+In addition to basic co-infection and and super-infection scenarios of 3 strains, we also consider more complex cases when co-infection happens within super-infection. This data simulation is similar to simulating 2 strains of 50\% relatedness with one additional unrelated haplotype. Therefore, the overall pairwise relatedness is one half distributed over three possible pairs (Figure~\ref{fig:benchmark}--Supplement~2). As expected, the more outbreeding there is, the better the inference.
 
-
-(Figure~\ref{fig:benchmark}--Supplement~2)
-
-In addition to benchmark our methods in cases of co-infection and super-infection, we
-
-
-
- Similar to the previous experiment for check
 
 
 
