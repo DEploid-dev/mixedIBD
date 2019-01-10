@@ -331,7 +331,7 @@
   %% Updated 2017/06/30 to allow optional argument
   \newcommand{\figsupp}[3][]{%
     \refstepcounter{figsupp}%
-    {%
+    { %
     \ifstrequal{#1}{none}{}{%
       \small\textbf{Figure~\thefigure--Figure supplement \arabic{figsupp}.} \ifstrempty{#1}{#2}{#1}}}\par
     \addtostream{suppinfo}{%

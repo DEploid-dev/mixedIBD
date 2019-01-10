@@ -45,6 +45,8 @@ pdfFigures:
 	cd figures/; pdflatex Fig2Africa.tex
 	cd figures/; pdflatex Fig2SupMix3.tex
 	cd figures/; pdflatex Fig2Asia.tex
+	cd figures/; pdflatex Fig2k3.tex
+	cd figures/; pdflatex Fig2k4.tex
 	cd figures/; pdflatex Fig3Sup.tex
 
 tmpmain.pdf: tmpmain.tex
