@@ -71,7 +71,7 @@ plain.tex: main.tex Makefile
 	 -e "s/width=\\\textwidth/width=0.8\\\textwidth/g" \
 	 -e "/figsupp/d" \
 	 -e "s/tabledata/caption/" \
-	 -e "s/\\\end{document}/\\\includepdf[pages=18-22]{tmpmain.pdf}\n\\\end{document}/" \
+	 -e "s/\\\end{document}/\\\includepdf[pages=21-27]{tmpmain.pdf}\n\\\end{document}/" \
 	 -e "s/\\\bibliography{mixedIBD.bib}/\\\bibliographystyle{chicagoa}\n\\\bibliography{mixedIBD.bib}/" \
 	  main.tex > plain.tex
 
