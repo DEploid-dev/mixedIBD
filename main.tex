@@ -249,8 +249,11 @@ In summary, joint inference of IBD profiles and strain haplotypes is expected to
 \begin{figure}[htp]
   \begin{center}
     \includegraphics[width=\textwidth]{Fig3.pdf}
-    \caption{  (A) Cumulative distribution of the average per site genotype error across simulated mixtures with three levels of IBD (25\%, 50\% and 75\%) for a mixture proportion of $20/80\%$. We performed 100 simulations, but excluded eight cases where simulated haplotypes were over 99\% identical and another 16 cases where average coverage was below 20.  (C) Cumulative distribution of haplotype switch errors with three levels of IBD (25\%, 50\% and 75\%) for a mixture proportion of 25$\slash$75\%.
-} \label{fig:error-analysis}
+    \caption{Cumulative distribution of the average per site genotype error (left) and switch error (right) across simulated mixtures.
+    (A) Error rates of Asia {\it in silico} samples of three levels of IBD (25\%, 50\% and 75\%) for a 2-mixture proportion of $20/80\%$. {\tt DEploidIBD} gives more accurate proportion, it therefore enables our haplotype inference algorithm to better allocate data for haplotype inference.
+    (B) Error rates of Africa {\it in silico} samples of three levels of IBD (25\%, 50\% and 75\%) for a 2-mixture proportion of $20/80\%$. Inference in Asia benefits from better reference panels, it therefore gives lower error rates than Africa.
+    (C) {\tt DEploidIBD} error rates of Africa {\it in silico} samples of three mosquito biting scenarios for a 3-mixture proportion of $10/10/80\%$. Additional strain increases the difficulty for haplotype inference: Even though the differences in genotype error between scenarios are small. A reference panel of size 20 is not providing enough backbone structure for the haplotype, which leads to increased switch errors.
+    } \label{fig:error-analysis}
   \end{center}
 \end{figure}
 
