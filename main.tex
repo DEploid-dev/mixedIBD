@@ -227,20 +227,19 @@ Both \texttt{DEploid} and \texttt{DEploidIBD} correctly estimate strain proporti
 
 
 %============ low relatedness
-%20v80 IBD genotype error =  1.459436 %
-%20v80 non-IBD genotype error =  1.95864 %
+%20v80 IBD genotype error =  0.729718 %
+%20v80 non-IBD genotype error =  0.97932 %
+
 %============ low relatedness
-%50v50 IBD genotype error =  2.757869 %
-%50v50 non-IBD genotype error =  3.21973 %
+%50v50 IBD genotype error =  1.378934 %
+%50v50 non-IBD genotype error =  1.609865 %
 
 %============ high relatedness
-%20v80 IBD genotype error =  1.526196 %
-%20v80 non-IBD genotype error =  3.553771 %
+%20v80 IBD genotype error =  0.7630979 %
+%20v80 non-IBD genotype error =  1.776885 %
 
-%(1.459436+1.95864)/2 = 1.7
-%(2.757869+3.21973)/2 = 3.0
 
-We repeated the \emph{in silico} experiment with mixtures of two strains from 204 clonal Asian samples, also with mixing proportions of ranging from 10/90\% to 50/50\%, using about 3,041 sites (s.d. 227) from Chromosome 14. We found that rates of genotype error are similar for the two approaches in settings of low relatedness: ({\tt DEploidIBD} has an error rate of 1.5\% per site for 20/80 mixtures and 2.8\% for 50/50 mixtures).  However, for the 20/80\% mixtures with high relatedness, genotype error for the non-IBD approach increases to 3.5\%, while error in the IBD approach remains at 1.5\% (Figure~\ref{fig:error-analysis}A). Switch errors in haplotype estimation are comparable between the two methods and decrease with increased relatedness due to the higher homozygosity (Figure~\ref{fig:error-analysis}B).
+We repeated the \emph{in silico} experiment with mixtures of two strains from 204 clonal Asian samples, also with mixing proportions of ranging from 10/90\% to 50/50\%, using about 3,041 sites (s.d. 227) from Chromosome 14. We found that rates of genotype error are similar for the two approaches in settings of low relatedness: ({\tt DEploidIBD} has an error rate of 0.7\% per site per strain for 20/80 mixtures and 1.4\% for 50/50 mixtures).  However, for the 20/80\% mixtures with high relatedness, genotype error for the non-IBD approach increases to 1.8\%, while error in the IBD approach remains at 0.8\% (Figure~\ref{fig:error-analysis}A). Switch errors in haplotype estimation are comparable between the two methods and decrease with increased relatedness due to the higher homozygosity (Figure~\ref{fig:error-analysis}B).
 Because parasite genetic distance in Africa is generally greater than Asia, a reference panel of 20 random 20 strains in Africa does not work as well as in Asia. As a result, both the per site genotype error and haplotype switch error have raised more than twice as much compare to Asia (Figure~\ref{fig:error-analysis}).
 In summary, joint inference of IBD profiles and strain haplotypes is expected to improve estimates of strain proportions (and hence haplotypes), particularly in regions with high rates of IBD. Moreover, direct estimates of IBD within mixed infections can be used as an additional feature to characterise isolates.
 
@@ -258,7 +257,9 @@ In summary, joint inference of IBD profiles and strain haplotypes is expected to
 We further extended benchmarking to \emph{in silico} mixtures of three strains in African population with mixing proportions of 10/10/80\%, 10/25/65\%, 15/25/60\%, 10/40/50\%,
 15/30/55\%, 20/30/50\%, 33/33/34\% (Figure~\ref{fig:benchmark}C). Similar to previous experiment, we benchmark our methods in cases if parasite strains are all from different mosquito bites or they are all from the same mosquito bite. For the latter, we randomly selected two strains, namely parent A and parent B, from 189 clonal samples of Africa origin, and set the first 33\% of the first haplotype and the last 66\% of the second haplotype the same as parent A; the rest of the first and second haplotypes and the third haplotype the same as parent B, to mimic the scenario of a 1/3 pairwise relatedness within sample. We found that {\tt DEploid} failed in most cases to recover correct number of strains and proportions, except proportion composition of 10/40/50\%. {\tt DEploid} underestimate the number of strains as 2 in more than 90 replicates out of 100. Whereas {\tt DEploid-IBD} only struggles with the case that all strains have equal proportions, recovers correct number of strains, proportions and relatedness metrics.
 
-In addition to basic co-infection and and super-infection scenarios of 3 strains, we also consider more complex events when co-infection presents within super-infection. This data simulation is similar to simulating 2 strains of 50\% relatedness with one additional unrelated haplotype. Therefore, the overall pairwise relatedness is one half distributed over three possible pairs, which leads to 1/6 (Figure~\ref{fig:benchmark}--Supplement~2). As expected, the more outbreeding there is, the better the inference. Among unbalanced mixtures, {\tt DEploid} can recover correct number of strains in at least 58 out 100 replicates. Yet {\tt DEploid} still struggles if minor strain proportions are below 10\%. Whereas {\tt DEploidIBD} recovers correct number of strains and proportions in at least 75 out 100 replicates in unbalanced mixtures. We notice that {\tt DEploidIBD} is less confident to infer samples of sequence coverage below 20, which we urge users to pay attention to data quality before using our method.
+In addition to basic co-infection and and super-infection scenarios of 3 strains, we also consider more complex events when co-infection presents within super-infection. This data simulation is similar to simulating 2 strains of 50\% relatedness with one additional unrelated haplotype. Therefore, the overall pairwise relatedness is one half distributed over three possible pairs, which leads to 1/6 (Figure~\ref{fig:benchmark}--Supplement~2). Among unbalanced mixtures, {\tt DEploid} can recover correct number of strains in at least 58 out 100 replicates. Yet {\tt DEploid} still struggles if minor strain proportions are below 10\%. Whereas {\tt DEploidIBD} recovers correct number of strains and proportions in at least 75 out 100 replicates in unbalanced mixtures. We notice that {\tt DEploidIBD} is less confident to infer samples of sequence coverage below 20, which we urge users to pay attention to data quality before using our method.
+
+As expected, the more outbreeding there is, the better the inference for each strain. The genotype error reduces if strains are less related within sample (see Figure~\ref{fig:error-analysis}). On the other hand, the more outbreeding implies that there are more haplotype structures within sample. As a result, this will lead to increasing switch errors if we can not provide appropriate reference panels.
 
 We repeated mixed of 3 experiments using samples from Asia. The background relatedness increased the difficulty for deconvolution. In particularly, 12\% of the data simulation contain almost identical haplotypes (less than SOME NUMBER OF SITES ARE DIFFERENT), which lead both {\tt DEploid} and {\tt DEploidIBD} to falsely infer number of strains as 2 for these samples. Moreover, in comparison to experiments of African origins, a reference panel of 20 random Asian haplotype helps to tease apart the tangled genome, {\tt DEploid} therefore shows improved performance in this setting. It even works for some replicates with balanced mixtures (40 out of 100 replicates, see Figure~\ref{fig:benchmark}--Supplement~\ref*{figsupp:k3}), whereas {\tt DEploidIBD} does not work. This suggests that an appropriate reference panel is essential for deconvolution and learning the number of strains.
 
