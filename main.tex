@@ -179,10 +179,10 @@ We validated \texttt{DEploidIBD} through both experimental mixtures using lab st
   \begin{center}
   \includegraphics[width=.9\textwidth]{Fig2.pdf}
   \caption{Metric comparison of \texttt{DEploidIBD} and \texttt{DEploid} on 100 {\it in silico} mixtures of different scenarios. From the left to the right, panels illustrate the strain proportion compositions, distribution of inferred K using both methods: {\tt DEploid} in orange and {\tt DEploidIBD} in blue, effective number of strains, pairwise relatedness and IBD N50s. From top to the bottom, we order the cases from even proportions to the most imbalanced composition. We use color grey to fade out experiments of low coverage data, and use color pink to show impact on other metrics when $k$ is wrongly inferred.
-  (A) Simulation of high-relatedness (75\%) two strains from Africa for 7,757 (s.d. 178) sites on Chromosome 14. {\tt DEploid} underestimates the minor strain proportion if strains have high relatedness. In the extreme case, {\tt DEploid} misclassifies a $2$-mixture as clonal, whereas {\tt DEploidIBD} does not.
-  (B) Simulation of high-relatedness (75\%) two strains from Asia for 3,041 sites (s.d. 227) on Chromosome 14.
+  (A) Using {\it in silico} African samples of high-relatedness (75\%) two strains for 7,757 (s.d. 178) sites on Chromosome 14, {\tt DEploid} underestimates the minor strain proportion if strains have high relatedness. In the extreme case, {\tt DEploid} misclassifies a $2$-mixture as clonal, whereas {\tt DEploidIBD} does not.
+  (B) Using {\it in silico} Asian samples of high-relatedness (75\%) two strains for 3,041 sites (s.d. 227) on Chromosome 14, {\tt DEploidIBD} performs similar to using African samples.
   From (A) to (B), we observe evidence of higher background relatedness in Asia.
-  (C) Simulation of three strains co-infection from Africa, each haplotype pair has 1/3 of identical genomes. Both methods fail to deconvolute of 3-mixture of all equal proportions. However, for unbalanced mixtures, {\tt DEploidIBD} is a substantial improvement from {\tt DEploid}.
+  (C) Using {\it in silico} African co-infection samples of three strains. Each haplotype pair has 1/3 of identical genomes. Both methods fail to deconvolute of 3-mixture of all equal proportions. However, for unbalanced mixtures, {\tt DEploidIBD} is a substantial improvement from {\tt DEploid}.
   }\label{fig:benchmark}
   \end{center}
 
