@@ -14,6 +14,13 @@ main.pdf: main.tex ${mainfiguresPng} ${mainfiguresPdf} main.bbl pdfFigures
 	pdflatex main.tex
 	pdflatex main.tex
 
+main_todo.pdf: main.pdf
+	sed -e "s/\\\usepackage\[disable\]{todonotes}/\\\usepackage\[colorinlistoftodos\]{todonotes}/" main.tex > main_todo.tex
+	pdflatex main_todo.tex
+	bibtex main_todo.aux
+	pdflatex main_todo.tex
+	pdflatex main_todo.tex
+
 main.aux: main.tex
 	pdflatex main.tex
 
@@ -23,6 +30,13 @@ main.bbl: main.aux
 mainSupplement.pdf: mainSupplement.tex ${supfigures} ${supfigurespdf} ${suptex} supplementReset.tex mainSupplement.bbl
 	pdflatex mainSupplement.tex
 	pdflatex mainSupplement.tex
+
+mainSupplement_todo.pdf: mainSupplement.pdf
+	sed -e "s/\\\usepackage\[disable\]{todonotes}/\\\usepackage\[colorinlistoftodos\]{todonotes}/" mainSupplement.tex > mainSupplement_todo.tex
+	pdflatex mainSupplement_todo.tex
+	bibtex mainSupplement_todo.aux
+	pdflatex mainSupplement_todo.tex
+	pdflatex mainSupplement_todo.tex
 
 mainSupplement.bbl: mainSupplement.aux
 	bibtex mainSupplement.aux

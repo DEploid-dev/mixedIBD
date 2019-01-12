@@ -28,8 +28,7 @@
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\usepackage[colorinlistoftodos]{todonotes}
-%\usepackage[disable]{todonotes}
+\usepackage[disable]{todonotes}
 
 \usepackage{placeins}
 \usepackage{flafter}
@@ -96,12 +95,11 @@
 %%%%%%% Start on new page
 \renewcommand{\thepage}{S1-\arabic{page}}
 \begin{document}
-\maketitle{}
-%\listoftodos
-%\clearpage
+\listoftodos
+\clearpage
 %\setcounter{page}{1}
 
-%\maketitle
+\maketitle
 \tableofcontents
 
 %\setcounter{section}{0}
@@ -151,7 +149,8 @@ $\mathcal{G}$ & Genotype state at site $i$ \\
 \end{table}
 
 \subsection{Modelling with IBD state}
-
+\todonum{Sup. Mat. 2, describe the model in more detail}
+\todonum{Sup. Mat. 6, Description of MCMC for IBD inference}
 We describe the mixed infection problem by considering the number of strains, $n$, the relative abundance of each strain, $\mathbf{w}$, and their allelic states, $\mathbf{h}_{i}$. In addition to \citet{Zhu2017}, we also infer the IBD-state $\mathcal{S}_{i}$, which describes the strain relationship with each other at each site $i$. For example, for three strains, the IBD-state could be one of the five cases: (1) all strains are not IBD; (2)(3)(4) only two strains are IBD; (5) all strains are IBD (see Table~\ref{tab:encode}). To simplify our problem, we assume independence between each marker, and drop the subscript $i$ from now on. Similar to \citet{Jack2016}, we use a Bayesian approach and define the posterior probabilities of $n$, $\mathbf{w}$, $\mathbf{h}$ and $\mathcal{S}$,  as:
 
 \begin{equation}
@@ -246,7 +245,7 @@ L(q_{i}| e, D) \propto \frac{\Gamma(a_i + c\cdot \pi_{i}) \Gamma(r_i + c\cdot (1
 \subsection{Implementation details}
 \begin{itemize}
   \item {\bf Genotype states to allele states} For simplicity, we make $P(\mathbf{h} | \xi) = 1$.
-
+\todonum{Sup. Mat. 3, what is meant by “genotypes” vs. “alleles”}
 
 
 %We then compute the likelihood as $\frac{x^{\alpha-1}(1-x)^{\beta-1}} {\Beta(\alpha,\beta)}\!$, where
@@ -264,6 +263,7 @@ L(q_{i}| e, D) \propto \frac{\Gamma(a_i + c\cdot \pi_{i}) \Gamma(r_i + c\cdot (1
 
 \item {\bf Parameters}. \textcolor{black}{The parameter $c$ (Equation~\eqref{eqn:llk}) reflects how much data are available. The mean coverage of the validation data set ranges from 106.20 to 147.04, with a mean of 124.487.} In practice, we set the parameters $c=100$; $\eta = 0$, \textcolor{black}{$\sigma^2 = 5$ which are adjusted accordingly when working with extremely unbalanced samples (see \citet{Zhu2017} supplementary material)}.  We set the read error rate as 0.01 and the rate of mis-copying as 0.01.
 
+\todonum{Minor Comment 6, on the scaling parameter G }
 \item {\bf Recombination rate and scaling}. We assume a uniform recombination map, where the genetic distance between loci $i$ and $i+1$ is computed by $\psi_i = D_i / d_m$ where $D_i$ denotes the physical distance between loci $i$ and $i+1$ in nucleotides and $d_m$ denotes the average recombination rate in Morgans bp$^{-1}$. We use the recombination rate for {\it P. falciparum} of 13,500 base pairs per centiMorgan as reported by \citet{Miles2016}. The recombination rate is scaled by a factor $G$, which reflects the effective population size, rate of inbreeding, and relatedness of the reference panel. \textcolor{black}{In practice, we deconvolve over 1 million markers in field samples. We use a value of $G=20$ to ensure small values for recombination probabilities between any two markers, with a mean of 0.015. A large value of $G$ relaxes the reference panel constraint, becoming an LD free model when $G$ is infinity.}  The scaled genetic distance $G\psi$ is used to compute the transition probability of switching from copying reference haplotype $a$ to reference haplotype $b$.
 
 \item {\bf IBD state transitions} A significant improvement from \citet{Zhu2017}'s method is that $P(\mathcal{S}_{i}|n)$ takes into account of the IBD state at the previous position $i-1$ with recombination. A transition into a different IBD state will take into account of recombination probabilities.
@@ -428,11 +428,13 @@ We find markers with high frequencies in both reference and alternative allele c
     \includegraphics[width=0.7\textwidth]{{PG0415-CaltVsRefAndWSAFvsPLAF}.png}
   \caption{We observe a small number of heterozygous sites with high coverage (marked as crosses above), which can potentially mislead our model to over-fit the data with additional strains.
   }
+  \todonum[inline]{Sup. Mat. 4. needs caption}
   \label{fig:fitering}
 \end{figure}
 
 \subsubsection{High nucleotide diversity regions}
 \noindent
+\todonum{Sup. Mat. 5, Why are we calculating diversity}
 Regions containing high leverage points tend to be at the ends of chromosomes or within regions of high nucleotide diversity, where read mapping is problematic (see Figure~\ref{fig:nd}).
 
 We use clonal haplotypes to compute nucleotide diversity in a sliding window along the genome. At each SNP, we use $n_{0}$ and $n_{1}$ to denote counts for reference and alternate alleles, respectively. Let $n = (n_{0} + n_{1})$ be the number of haplotypes in the population with a non-missing call. We compute the mean number of pairwise differences for this SNP as follows: First, compute the total number of pairs as $n$ choose 2: $n_{pairs} = n * (n - 1) / 2$. Then compute the number of pairs that are the same: $n_{same} = (n_{0} * (n_{0} - 1) / 2) + (n_{1} * (n_{1} - 1) / 2)$. Compute the number of pairs that are different: $n_{d}$ = $n_{pairs} - n_{same}$. Therefore, the mean number of pairwise differences: $mpd = n_{d} / n_{pairs}$. To compute the nucleotide diversity $\pi$, we compute the sum of $mpd$ in a window of 20kbp bases centred on each SNP, and divide by the number of accessible bases. This gives the mean number of pairwise differences per base.
