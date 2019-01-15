@@ -263,8 +263,8 @@ L(q_{i}| e, D) \propto \frac{\Gamma(a_i + c\cdot \pi_{i}) \Gamma(r_i + c\cdot (1
 
 \item {\bf Parameters}. \textcolor{black}{The parameter $c$ (Equation~\eqref{eqn:llk}) reflects how much data are available. The mean coverage of the validation data set ranges from 106.20 to 147.04, with a mean of 124.487.} In practice, we set the parameters $c=100$; $\eta = 0$, \textcolor{black}{$\sigma^2 = 5$ which are adjusted accordingly when working with extremely unbalanced samples (see \citet{Zhu2017} supplementary material)}.  We set the read error rate as 0.01 and the rate of mis-copying as 0.01.
 
-\todonum{Minor Comment 6, on the scaling parameter G }
-\item {\bf Recombination rate and scaling}. We assume a uniform recombination map, where the genetic distance between loci $i$ and $i+1$ is computed by $\psi_i = D_i / d_m$ where $D_i$ denotes the physical distance between loci $i$ and $i+1$ in nucleotides and $d_m$ denotes the average recombination rate in Morgans bp$^{-1}$. We use the recombination rate for {\it P. falciparum} of 13,500 base pairs per centiMorgan as reported by \citet{Miles2016}. The recombination rate is scaled by a factor $G$, which reflects the effective population size, rate of inbreeding, and relatedness of the reference panel. \textcolor{black}{In practice, we deconvolve over 1 million markers in field samples. We use a value of $G=20$ to ensure small values for recombination probabilities between any two markers, with a mean of 0.015. A large value of $G$ relaxes the reference panel constraint, becoming an LD free model when $G$ is infinity.}  The scaled genetic distance $G\psi$ is used to compute the transition probability of switching from copying reference haplotype $a$ to reference haplotype $b$.
+
+\item {\bf Recombination rate and scaling}. We assume a uniform recombination map, where the genetic distance between loci $i$ and $i+1$ is computed by $\psi_i = D_i / d_m$ where $D_i$ denotes the physical distance between loci $i$ and $i+1$ in nucleotides and $d_m$ denotes the average recombination rate in Morgans bp$^{-1}$. We use the recombination rate for {\it P. falciparum} of 13,500 base pairs per centiMorgan as reported by \citet{Miles2016}. \donenum{Minor Comment 6, on the scaling parameter G }The recombination rate is scaled by a factor $G$, which reflects the effective population size, rate of inbreeding, and relatedness of the reference panel. \textcolor{red}{In practice, we deconvolve over 1 million markers in field samples. We tune the parameter $G$ using {\it in vitro} lab mixtures, use a value of $G=20$ to ensure small values for recombination probabilities between any two markers, with a mean of 0.015. A large value of $G$ relaxes the reference panel constraint, becoming an LD free model when $G$ is infinity. The scaled genetic distance $G\psi$ is used to compute the transition probability of switching from copying reference haplotype $a$ to reference haplotype $b$. Given LD varies enormously between {\it P. falciparum} populations, we will investigate how to tune this parameter for future improvement. In the current release, our program allows users to apply the flag {\tt -G} and specify an input parameter $G$.}
 
 \item {\bf IBD state transitions} A significant improvement from \citet{Zhu2017}'s method is that $P(\mathcal{S}_{i}|n)$ takes into account of the IBD state at the previous position $i-1$ with recombination. A transition into a different IBD state will take into account of recombination probabilities.
 
@@ -290,6 +290,31 @@ Using a reference panel free approach means that it can be difficult to deconvol
 $\{\frac{1}{4},\frac{1}{4}, \frac{1}{4}, \frac{1}{4}\}$ and $\{\frac{1}{4},\frac{1}{4}, \frac{1}{2}\}$, or $\{\frac{1}{5},\frac{1}{5}, \frac{1}{5}, \frac{1}{5}, \frac{1}{5}\}$ and $\{\frac{1}{5},\frac{1}{5}, \frac{3}{5}\}$, $\{\frac{1}{5},\frac{2}{5}, \frac{2}{5}\}$ and
 $\{\frac{1}{5},\frac{1}{5}, \frac{1}{5}, \frac{2}{5}\}$. We advise users to apply {\tt DEploid} with multiple runs with and without the `-ibd' flag and see if such problem occurs.
 
+\todonum{Major 7: What does this mean, and why did the new method perform more poorly than the original}
+In the new method, {\tt DEploidIBD} does not reinforce any haplotype structure. At every site, the posterior probability maximizes at IBD state  looks for the best , Consider the following toy example:
+
+%Pf3D7\_01\_v3	&	95754	&	0	&	0	&	1	&	0	\\
+%Pf3D7\_01\_v3	&	100330	&	0	&	1	&	0	&	0	\\
+
+%\begin{center}
+  %\begin{tabular}{cccccc}
+    %CHROM	&	POS	&	3D7	&	Dd2	&	HB3	&	7G8	\\
+%Pf3D7\_01\_v3	&	94487	&	0	&	0	&	0	&	1	\\
+%Pf3D7\_01\_v3	&	95518	&	0	&	1	&	1	&	0	\\
+%Pf3D7\_01\_v3	&	95632	&	0	&	0	&	1	&	0	\\
+%Pf3D7\_01\_v3	&	95641	&	0	&	0	&	1	&	0	\\
+%Pf3D7\_01\_v3	&	95680	&	0	&	0	&	1	&	0	\\
+%Pf3D7\_01\_v3	&	95685	&	0	&	0	&	1	&	0	\\
+%Pf3D7\_01\_v3	&	95686	&	0	&	0	&	1	&	0	\\
+%Pf3D7\_01\_v3	&	95754	&	0	&	0	&	1	&	0	\\
+%Pf3D7\_01\_v3	&	100330	&	0	&	1	&	0	&	0	\\
+%Pf3D7\_01\_v3	&	100608	&	0	&	1	&	0	&	1	\\
+%Pf3D7\_01\_v3	&	101269	&	0	&	1	&	1	&	1	\\
+  %\end{tabular}
+%\end{center}
+
+
+
 
 \subsection{Commands}
 Each isolate deconvolution is repeated 15 times with a random seeds of choice from 1 to 15. We take the seed with the smallest value such that the number of strain is the consensus one.
@@ -307,6 +332,8 @@ interpretDEploid.r -ref ${ref} -alt ${alt} -plaf ${plaf} -o ${prefix} -dEprefix 
 \end{lstlisting}
 
 
+\subsection{Error analysis}
+\todonum{Error analysis}
 
 
 %\subsection{Viterbi path mean {\textcolor{red}{TODO: EXPAND}}}
