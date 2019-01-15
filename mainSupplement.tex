@@ -259,7 +259,7 @@ L(q_{i}| e, D) \propto \frac{\Gamma(a_i + c\cdot \pi_{i}) \Gamma(r_i + c\cdot (1
 \item {\bf MCMC parameters for deconvolution}
 
 \begin{itemize}
-\item {\bf Number of strains}. As described above, we aim to infer more strains than are actually present, starting the MCMC chain with a fixed $n$, which has a default of $5$. At the point of reporting, we keep strains with a proportion above a fixed threshold, typically $0.01$.
+\item {\bf Number of strains}. As described above, we aim to infer more strains than are actually present, starting the MCMC chain with a fixed $n$, which has a default of $5$. \textcolor{red}{In our experience, we use the flag {\tt -k} to specify the number of strains as 4.} At the point of reporting, we keep strains with a proportion above a fixed threshold, typically $0.01$.
 
 \item {\bf Parameters}. \textcolor{black}{The parameter $c$ (Equation~\eqref{eqn:llk}) reflects how much data are available. The mean coverage of the validation data set ranges from 106.20 to 147.04, with a mean of 124.487.} In practice, we set the parameters $c=100$; $\eta = 0$, \textcolor{black}{$\sigma^2 = 5$ which are adjusted accordingly when working with extremely unbalanced samples (see \citet{Zhu2017} supplementary material)}.  We set the read error rate as 0.01 and the rate of mis-copying as 0.01.
 
