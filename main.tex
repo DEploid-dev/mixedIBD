@@ -239,6 +239,14 @@ For mixtures of two strains, both \texttt{DEploid} and \texttt{DEploidIBD} perfo
 
 To simulate realistic mixed infections containing 3 or 4 strains, we first considered the different transmission scenarios under which they can arise.  Here, we stipulated that a mixed infection of $k$ strains can result from $m$ biting events, where $k \in \{3,4\}$ and $1~{\leq}~{m}~{\leq}~k$. When greater than one strain is transmitted in a single biting event, the co-transmitted strains will share IBD, as a consequence of meiosis occurring in the mosquito. Strains transmitted through independent bites, causing superinfection in the host, do not share any IBD beyond background. Following this paradigm, we generated seven types of IBD structures: $k=3$, $m=1, 2, 3$ and $k=4$, $m=1, 2, 3, 4$; and simulated each of these across a variety of strain proportions, again using sets of clonal samples from Africa and Asia as our starting strains.
 
+The methods only work if they can leverage imbalances in proportions -- their is an identifiabiliy issue in equal proportion samples.
+
+Clear difference in performance for high-ibd examples with k = 3. As IBd climbs depolid performs progressively worse, underestimating k and when k is correct getitn gproroption worng, depolidibd does well. given adequate coverage the statistics are accurate. conclusion as long as not equal proportion we can deconvolute k=3.
+
+For k=4, deploidibd is able to deconvolute in cases where the strains are highly imbalanced, excepting the case where all strains are delivered in a single bite, where k is underestiamted. More variable estimates, Deploid does not estimate well.
+
+We also
+
 
 
 
