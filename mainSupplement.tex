@@ -106,17 +106,7 @@
 
 \newpage
 
-
-
-
 \section{Deconvolution in the presence of IBD}
-
-
-
-%\todo{expand methods}
-
-%\subsection{Deconvolution of mixed infection}
-
 \subsection{Notations}
 We use the same notations as \citet{Zhu2017} (see Table~\ref{tab:notation}). Our data, $D$, are the allele read counts of sample $j$ at a given site $i$, denoted as $r_{j,i}$ and $a_{j,i}$ for reference (REF) and alternative (ALT) alleles respectively.  These have assigned values of $0$ and $1$, respectively. Here we consider only bi-allelic loci, though future extensions to the model to include multi-allelic sites could be accommodated.  The empirical allele frequencies within a sample (WSAF) $p_{j,i}$ and at population level (PLAF) $f_i$ are calculated by $ \frac{a_{j,i}}{a_{j,i} + r_{j,i}}$ and $ \frac{\sum_j a_{j,i}}{\sum_j a_{j,i} + \sum_j r_{j,i}}$ respectively. Since all data in this section refers to the same sample, we drop the subscript $j$ from now on.
 
@@ -150,7 +140,6 @@ $\mathcal{G}$ & Genotype state at site $i$ \\
 
 \subsection{Modelling with IBD state}
 \todonum{Sup. Mat. 2, describe the model in more detail}
-\todonum{Sup. Mat. 6, Description of MCMC for IBD inference}
 We describe the mixed infection problem by considering the number of strains, $n$, the relative abundance of each strain, $\mathbf{w}$, and their allelic states, $\mathbf{h}_{i}$. In addition to \citet{Zhu2017}, we also infer the IBD-state $\mathcal{S}_{i}$, which describes the strain relationship with each other at each site $i$. For example, for three strains, the IBD-state could be one of the five cases: (1) all strains are not IBD; (2)(3)(4) only two strains are IBD; (5) all strains are IBD (see Table~\ref{tab:encode}). To simplify our problem, we assume independence between each marker, and drop the subscript $i$ from now on. Similar to \citet{Jack2016}, we use a Bayesian approach and define the posterior probabilities of $n$, $\mathbf{w}$, $\mathbf{h}$ and $\mathcal{S}$,  as:
 
 \begin{equation}
@@ -217,15 +206,16 @@ L(q_{i}| e, D) \propto \frac{\Gamma(a_i + c\cdot \pi_{i}) \Gamma(r_i + c\cdot (1
 \end{equation}
 
 
-%\subsubsection{Metropolis-Hastings update for proportions}\label{sec:updateP}
-%\todo{To keep this? or just mention this is the same as \citet{Zhu2017}}
-%We update $\mathbf{w}|n$, through the underlying log titres, $\mathbf{x}|n$. Specifically, we choose $i$ uniformly from $n$ and propose new $x_i'$s from $x_i' = x_i + \delta x$, where $\delta x \sim N(0, \sigma^2/s)$, and $s$ is a scaling factor. The new proposed proportion is therefore $\frac{\exp(x_k')}{\sum_{k=1}^n \exp(x_k')}$. Since the proposal distribution is symmetrical, the Hastings ratio is 1. A new update is accepted with probability
+\subsection{Technical details}
+\todonum{Sup. Mat. 6, Description of MCMC for IBD inference}
+\subsubsection{Metropolis-Hastings update for proportions}\label{sec:updateP}
+We update $\mathbf{w}|n$, through the underlying log titres, $\mathbf{x}|n$. Specifically, we choose $i$ uniformly from $n$ and propose new $x_i'$s from $x_i' = x_i + \delta x$, where $\delta x \sim N(0, \sigma^2/s)$, and $s$ is a scaling factor. The new proposed proportion is therefore $\frac{\exp(x_k')}{\sum_{k=1}^n \exp(x_k')}$. Since the proposal distribution is symmetrical, the Hastings ratio is 1. A new update is accepted with probability
 
- %$$\min\left(1, \frac{P(\mathbf{w}'|n)}{P(\mathbf{w}|n)} \frac{L(\mathbf{w}', \mathbf{h}, {\mathcal S} | e, D)}{L(\mathbf{w}, \mathbf{h}, {\mathcal S} | e, D)}\right).$$
+ $$\min\left(1, \frac{P(\mathbf{w}'|n)}{P(\mathbf{w}|n)} \frac{L(\mathbf{w}', \mathbf{h}, {\mathcal S} | e, D)}{L(\mathbf{w}, \mathbf{h}, {\mathcal S} | e, D)}\right).$$
 
-%\subsubsection{Gibbs sampling for haplotype and IBD-configuration update}
+\subsubsection{Gibbs sampling for haplotype and IBD-configuration update}
 
-
+\subsubsection{Adjust inbreeding prior}
 %\paragraph{Prior on $\mathcal{S}|n$}
 
 %Inbreeding coefficient.
@@ -239,6 +229,37 @@ L(q_{i}| e, D) \propto \frac{\Gamma(a_i + c\cdot \pi_{i}) \Gamma(r_i + c\cdot (1
 %\end{itemize}
 
 %Hidden markov model, $\mathcal{S}_{i}$ transition probability $t_{i, i+1}$, and emission probability $P(\mathbf{h} | \xi)$.
+
+
+\noindent{\bf Caveat: identifiability with balanced mixing}\\
+Using a reference panel free approach means that it can be difficult to deconvolve samples containing strains with equal proportions. For example, without a reference panel, we assume independence between loci, and it is difficult to distinguish between $\{\frac{1}{3},\frac{1}{3},\frac{1}{3}\}$ and $\{\frac{1}{3},\frac{2}{3}\}$, or
+$\{\frac{1}{4},\frac{1}{4}, \frac{1}{4}, \frac{1}{4}\}$ and $\{\frac{1}{4},\frac{1}{4}, \frac{1}{2}\}$, or $\{\frac{1}{5},\frac{1}{5}, \frac{1}{5}, \frac{1}{5}, \frac{1}{5}\}$ and $\{\frac{1}{5},\frac{1}{5}, \frac{3}{5}\}$, $\{\frac{1}{5},\frac{2}{5}, \frac{2}{5}\}$ and
+$\{\frac{1}{5},\frac{1}{5}, \frac{1}{5}, \frac{2}{5}\}$. We advise users to apply {\tt DEploid} with multiple runs with and without the `-ibd' flag and see if such problem occurs.
+
+\todonum{Major 7: What does this mean, and why did the new method perform more poorly than the original}
+In the new method, {\tt DEploidIBD} does not reinforce any haplotype structure. At every site, the posterior probability maximizes at IBD state  looks for the best , Consider the following toy example:
+
+%Pf3D7\_01\_v3	&	95754	&	0	&	0	&	1	&	0	\\
+%Pf3D7\_01\_v3	&	100330	&	0	&	1	&	0	&	0	\\
+
+%\begin{center}
+  %\begin{tabular}{cccccc}
+    %CHROM	&	POS	&	3D7	&	Dd2	&	HB3	&	7G8	\\
+%Pf3D7\_01\_v3	&	94487	&	0	&	0	&	0	&	1	\\
+%Pf3D7\_01\_v3	&	95518	&	0	&	1	&	1	&	0	\\
+%Pf3D7\_01\_v3	&	95632	&	0	&	0	&	1	&	0	\\
+%Pf3D7\_01\_v3	&	95641	&	0	&	0	&	1	&	0	\\
+%Pf3D7\_01\_v3	&	95680	&	0	&	0	&	1	&	0	\\
+%Pf3D7\_01\_v3	&	95685	&	0	&	0	&	1	&	0	\\
+%Pf3D7\_01\_v3	&	95686	&	0	&	0	&	1	&	0	\\
+%Pf3D7\_01\_v3	&	95754	&	0	&	0	&	1	&	0	\\
+%Pf3D7\_01\_v3	&	100330	&	0	&	1	&	0	&	0	\\
+%Pf3D7\_01\_v3	&	100608	&	0	&	1	&	0	&	1	\\
+%Pf3D7\_01\_v3	&	101269	&	0	&	1	&	1	&	1	\\
+  %\end{tabular}
+%\end{center}
+
+
 
 
 
@@ -285,36 +306,6 @@ L(q_{i}| e, D) \propto \frac{\Gamma(a_i + c\cdot \pi_{i}) \Gamma(r_i + c\cdot (1
 
 
 
-\noindent{\bf Caveat: identifiability with balanced mixing}\\
-Using a reference panel free approach means that it can be difficult to deconvolve samples containing strains with equal proportions. For example, without a reference panel, we assume independence between loci, and it is difficult to distinguish between $\{\frac{1}{3},\frac{1}{3},\frac{1}{3}\}$ and $\{\frac{1}{3},\frac{2}{3}\}$, or
-$\{\frac{1}{4},\frac{1}{4}, \frac{1}{4}, \frac{1}{4}\}$ and $\{\frac{1}{4},\frac{1}{4}, \frac{1}{2}\}$, or $\{\frac{1}{5},\frac{1}{5}, \frac{1}{5}, \frac{1}{5}, \frac{1}{5}\}$ and $\{\frac{1}{5},\frac{1}{5}, \frac{3}{5}\}$, $\{\frac{1}{5},\frac{2}{5}, \frac{2}{5}\}$ and
-$\{\frac{1}{5},\frac{1}{5}, \frac{1}{5}, \frac{2}{5}\}$. We advise users to apply {\tt DEploid} with multiple runs with and without the `-ibd' flag and see if such problem occurs.
-
-\todonum{Major 7: What does this mean, and why did the new method perform more poorly than the original}
-In the new method, {\tt DEploidIBD} does not reinforce any haplotype structure. At every site, the posterior probability maximizes at IBD state  looks for the best , Consider the following toy example:
-
-%Pf3D7\_01\_v3	&	95754	&	0	&	0	&	1	&	0	\\
-%Pf3D7\_01\_v3	&	100330	&	0	&	1	&	0	&	0	\\
-
-%\begin{center}
-  %\begin{tabular}{cccccc}
-    %CHROM	&	POS	&	3D7	&	Dd2	&	HB3	&	7G8	\\
-%Pf3D7\_01\_v3	&	94487	&	0	&	0	&	0	&	1	\\
-%Pf3D7\_01\_v3	&	95518	&	0	&	1	&	1	&	0	\\
-%Pf3D7\_01\_v3	&	95632	&	0	&	0	&	1	&	0	\\
-%Pf3D7\_01\_v3	&	95641	&	0	&	0	&	1	&	0	\\
-%Pf3D7\_01\_v3	&	95680	&	0	&	0	&	1	&	0	\\
-%Pf3D7\_01\_v3	&	95685	&	0	&	0	&	1	&	0	\\
-%Pf3D7\_01\_v3	&	95686	&	0	&	0	&	1	&	0	\\
-%Pf3D7\_01\_v3	&	95754	&	0	&	0	&	1	&	0	\\
-%Pf3D7\_01\_v3	&	100330	&	0	&	1	&	0	&	0	\\
-%Pf3D7\_01\_v3	&	100608	&	0	&	1	&	0	&	1	\\
-%Pf3D7\_01\_v3	&	101269	&	0	&	1	&	1	&	1	\\
-  %\end{tabular}
-%\end{center}
-
-
-
 
 \subsection{Commands}
 Each isolate deconvolution is repeated 15 times with a random seeds of choice from 1 to 15. We take the seed with the smallest value such that the number of strain is the consensus one.
@@ -333,7 +324,27 @@ interpretDEploid.r -ref ${ref} -alt ${alt} -plaf ${plaf} -o ${prefix} -dEprefix 
 
 
 \subsection{Error analysis}
-\todonum{Error analysis}
+\donenum{Essential revision 2, error analysis}
+For haplotype quality analysis, we compare the testing haplotype ({\tt DEploid} output) with the true haplotype. In the ideal world, we have done all the phasing correctly, the only source of error is {\bf mismatches} between the testing haplotype and the truth. In practice, the deconvolution process breaks the haplotype and copies different genome segments from a reference panel and introduces {\bf switch errors}. Our method deconvolutes the haplotypes based on allele frequency imbalance, which assumes that the the sequencing read count is proportional to strain abundance. In the case when one strain has lower proportion to the other strains, there might be insufficient data to make accurate inference, and causes short segment of the haplotypes missing. We refer this as {\bf dropout error}. Dropout error can also be caused by the sequencing process, when parts of the genome are not well sequenced (low read count). In this error model, we do not further investigate the source of dropout errors.
+
+In principle, our error analysis approach slices the haplotypes into small chuncks (in the limit of one basepair), and searches the best path of the testing haplotyes $h$ in the true haplotypes $H$, such that it minimises the sum of mismatches, switches and dropouts. To model the errors in a probabilistic fashion, we introduce a simplified Hidden Markov model: In stead of probability, we consider the cost. Events with the lowest cost has probability of 1. We use a two-strains example for demonstration. At every position $i$, we consider the hidden state as all 4 possible permutations of the testing strain to best match the truth:
+\begin{enumerate}
+  \item $h_{1}$, $h_{2}$ match $H_{1}$ and $H_{2}$ respectively,
+  \item $h_{1}$, $h_{2}$ match $H_{2}$ and $H_{1}$ respectively,
+  \item $h_{1}$, $h_{2}$ both match $H_{1}$,
+  \item $h_{1}$, $h_{2}$ both match $H_{2}$.
+\end{enumerate}
+The cost of switching state takes into account of the emission cost at current position $i$, which is the total mismatches between testing haplotypes and the truth. At the next position $i+1$, we increment the total cost by a relative cost of 2 for switching and 1 for dropout. A state switch will happen when any other hidden states has a lower cost. The model will then accordingly increment error counts as we proceed from one end to the other.
+
+For more general cases, we need to consider all possible permutations of testing haplotypes to pair with the truth. For this study, we extend the error model to 3 strains (example in Figure\ref{fig:error}). The code {\tt errorAnalysis.r} is available at \url{https://github.com/DEploid-dev/DEploid-Utilities/}.
+
+\begin{figure}[htp]
+  \centering
+    \includegraphics[width=0.7\textwidth]{DEploid_IBD_haps_compare.pdf}
+  \caption{Comparison of true and inferred haplotypes for Chromosome 14 (2,369 SNPs) in sample PG0396-C before tuning haplotypes with Reference Panel V (top) and after tuning (bottom). Red bars mark wrongly inferred positions. The yellow, cyan and white background label the haplotype segments from strains 7G8, HB3 and Dd2 respectively. The switch errors are obtained by counting the changes of a strain segment mapped to reference strains; the genotype errors are the discordance between the strain and the mapped reference segments.
+  }
+  \label{fig:error}
+\end{figure}
 
 
 %\subsection{Viterbi path mean {\textcolor{red}{TODO: EXPAND}}}
