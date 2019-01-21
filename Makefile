@@ -62,6 +62,7 @@ pdfFigures:
 	cd figures/; pdflatex Fig2k3.tex
 	cd figures/; pdflatex Fig2k4.tex
 	cd figures/; pdflatex Fig3Sup.tex
+	cd figures/; pdflatex Fig2inVitro.tex
 
 tmpmain.pdf: tmpmain.tex
 	pdflatex tmpmain.tex
