@@ -146,7 +146,7 @@ P(n, \mathbf{w}, \mathbf{h}, \mathcal{S}| e, D) \propto L(n, \mathbf{w}, \mathbf
 \end{equation}
 where $e$ is the read error rate.
 
-\begin{table}
+\begin{table}{h}
 \centering
 \begin{tabular}{c|ccc}
   Index / & \multicolumn{3}{c}{IBD state} \\
@@ -178,7 +178,7 @@ P(n, \mathbf{w}, \mathbf{h}, \mathcal{S}) = P(n) \times P(\mathbf{w}|n) \times P
 where
 \begin{equation}
 P(\mathbf{h}, \mathcal{S}|n) = P(\mathcal{S}|n) \times \sum_{\xi \in \mathcal{G}} P(\mathbf{h} | \xi) \times P(\xi|\mathcal{S}).
-\label{eqn:}
+\label{eqn:ibd_prior}
 \end{equation}
 
 \noindent For details of the likelihood and the prior on the proportions see \citet{Zhu2017} sections 2.2.1 and 2.2.2. We use the following expression for the expected WSAF $q$, as:
@@ -201,38 +201,28 @@ To incorporate sequencing error, we modify the expected WSAF such that the allel
 \noindent We model over-dispersion in read counts relative to the Binomial using a Beta-binomial distribution. Please see {\bf Technical details} for likelihood calculations.
 
 \subsection{Technical details}
-\todonum{Sup. Mat. 2, describe the model in more detail}
-\todonum{Sup. Mat. 6, Description of MCMC for IBD inference}
+
+To infer the relatedness between strains within in a mixed infection and their relative proportions we use a Markov chain Monte Carlo (MCMC) approach. We learn the relative abundance of each strain by exploiting signatures of within-sample allele frequency imbalance, using a Metropolis-Hastings algorithm, which samples proportions ($w$) given IBD-configurations ($\mathcal{S}$). We then use a Gibbs sampler to update $\mathcal{S}$ for a given $w$ by sampling the IBD state from the posterior, and sample the genotype from the selected IBD state to update haplotypes.
+
+\donenum{Sup. Mat. 2, describe the model in more detail}
+\donenum{Sup. Mat. 6, Description of MCMC for IBD inference}
 \subsubsection{Metropolis-Hastings update for proportions}\label{sec:updateP}
 We update $\mathbf{w}|n$, through the underlying log titres, $\mathbf{x}|n$. Specifically, we choose $i$ uniformly from $n$ and propose new $x_i'$s from $x_i' = x_i + \delta x$, where $\delta x \sim N(0, \sigma^2/s)$, and $s$ is a scaling factor. The new proposed proportion is therefore $\frac{\exp(x_k')}{\sum_{k=1}^n \exp(x_k')}$. Since the proposal distribution is symmetrical, the Hastings ratio is 1. A new update is accepted with probability
 
  $$\min\left(1, \frac{P(\mathbf{w}'|n)}{P(\mathbf{w}|n)} \frac{L(\mathbf{w}', \mathbf{h}, {\mathcal S} | e, D)}{L(\mathbf{w}, \mathbf{h}, {\mathcal S} | e, D)}\right).$$
 
 \subsubsection{Gibbs sampling for haplotype and IBD-configuration update}
+\donenum{Major 7: What does this mean, and why did the new method perform more poorly than the original}
+In the new method, {\tt DEploidIBD} does not reinforce any haplotype structure. At every site, the posterior probability maximizes at IBD state. We use a two-layer hidden markov model framework to define our prior on IBD-configuration and haplotypes (Equation~\eqref{eqn:ibd_prior}). At the top layer, we have transitions between IBD-states, which reflect recombination events. From the top layer to the second layer, we defined a shrinkage prior, which computes the effective number of strains, and generate a binomial distribution for number of unique haplotypes given the probability of $\theta$, which is a beta random variable with shape parameters of effective number of strains ($K_{e}$) and difference between max number of strains and $K_{e}$. This genotype prior inclines to merge haplotypes to enable inbreeding. At the second layer, we make $P(\mathbf{h} | \xi) = 1$, and strictly copy the underline genotypes (from the IBD state) as the allelic state. The impact of sequencing error on the expected WSAF is adjusted using equation \eqref{eqn:adj_q}.
+\donenum{Sup. Mat. 3, what is meant by “genotypes” vs. “alleles”}
 
-\subsubsection{Adjust inbreeding prior}
-%\paragraph{Prior on $\mathcal{S}|n$}
-
-%Inbreeding coefficient.
-
-
-%To perform inference about the haplotypes present and their proportions we use Markov chain Monte Carlo (MCMC). We use a Metropolis-Hastings algorithm to sample proportions ($\mathbf w$) given $\mathbf h$; and use a Gibbs sampler to update $\mathbf h$ for a given $\mathbf w$, with two types of update: a single haplotype and a pair of haplotypes.
-
-%\begin{itemize}
-  %\item Likelihood
-  %\item MCMC
-%\end{itemize}
-
-%Hidden markov model, $\mathcal{S}_{i}$ transition probability $t_{i, i+1}$, and emission probability $P(\mathbf{h} | \xi)$.
-
+\vspace{.2cm}
 
 \noindent{\bf Caveat: identifiability with balanced mixing}\\
 Using a reference panel free approach means that it can be difficult to deconvolve samples containing strains with equal proportions. For example, without a reference panel, we assume independence between loci, and it is difficult to distinguish between $\{\frac{1}{3},\frac{1}{3},\frac{1}{3}\}$ and $\{\frac{1}{3},\frac{2}{3}\}$, or
 $\{\frac{1}{4},\frac{1}{4}, \frac{1}{4}, \frac{1}{4}\}$ and $\{\frac{1}{4},\frac{1}{4}, \frac{1}{2}\}$, or $\{\frac{1}{5},\frac{1}{5}, \frac{1}{5}, \frac{1}{5}, \frac{1}{5}\}$ and $\{\frac{1}{5},\frac{1}{5}, \frac{3}{5}\}$, $\{\frac{1}{5},\frac{2}{5}, \frac{2}{5}\}$ and
 $\{\frac{1}{5},\frac{1}{5}, \frac{1}{5}, \frac{2}{5}\}$. We advise users to apply {\tt DEploid} with multiple runs with and without the `-ibd' flag and see if such problem occurs.
 
-\todonum{Major 7: What does this mean, and why did the new method perform more poorly than the original}
-In the new method, {\tt DEploidIBD} does not reinforce any haplotype structure. At every site, the posterior probability maximizes at IBD state  looks for the best , Consider the following toy example:
 
 %Pf3D7\_01\_v3	&	95754	&	0	&	0	&	1	&	0	\\
 %Pf3D7\_01\_v3	&	100330	&	0	&	1	&	0	&	0	\\
@@ -260,11 +250,6 @@ In the new method, {\tt DEploidIBD} does not reinforce any haplotype structure. 
 
 \subsection{Implementation details}
 \begin{itemize}
-  \item {\bf Genotype states to allele states}
-Note that the new method breaks the deconvolution process into two parts: 1. Inferring the proportion and IBD state. 2. Use a reference panel to tune the haplotypes (see \cite{Zhu2017} for details), once we fix the proportions. This implementation detail is only relating to the first part, where the allelic state is used to reflect as part of the IBD state. Therefore, we make $P(\mathbf{h} | \xi) = 1$, and strictly copy the underline genotypes (from the IBD state) as the allelic state. The impact of sequencing error on the expected WSAF is adjusted using equation \eqref{eqn:adj_q}.
-\donenum{Sup. Mat. 3, what is meant by “genotypes” vs. “alleles”}
-
-
 %We then compute the likelihood as $\frac{x^{\alpha-1}(1-x)^{\beta-1}} {\Beta(\alpha,\beta)}\!$, where
 
 %${\displaystyle \mathrm {B} (\alpha ,\beta )={\frac {\Gamma (\alpha )\Gamma (\beta )}{\Gamma (\alpha +\beta )}}}$
@@ -288,7 +273,7 @@ For the second part of {\tt DEploidIBD} inferring haplotypes from a given refere
 
 \item {\bf Parameters}. In practice, we set the parameters $\eta = 0$, \textcolor{black}{$\sigma^2 = 5$ which are adjusted accordingly when working with extremely unbalanced samples (see \citet{Zhu2017} supplementary material)}.  We set the read error rate as 0.01 and the rate of mis-copying as 0.01.
 
-\item {\bf Recombination rate and scaling}. We assume a uniform recombination map, where the genetic distance between loci $i$ and $i+1$ is computed by $\psi_i = D_i / d_m$ where $D_i$ denotes the physical distance between loci $i$ and $i+1$ in nucleotides and $d_m$ denotes the average recombination rate in Morgans bp$^{-1}$. We use the recombination rate for {\it P. falciparum} of 13,500 base pairs per centiMorgan as reported by \citet{Miles2016}. \donenum{Minor Comment 6, on the scaling parameter G }The recombination rate is scaled by a factor $G$, which reflects the effective population size, rate of inbreeding, and relatedness of the reference panel. \textcolor{red}{In practice, we deconvolve over 1 million markers in field samples. We tune the parameter $G$ using {\it in vitro} lab mixtures, use a value of $G=20$ to ensure small values for recombination probabilities between any two markers, with a mean of 0.015. A large value of $G$ relaxes the reference panel constraint, becoming an LD free model when $G$ is infinity. The scaled genetic distance $G\psi$ is used to compute the transition probability of switching from copying reference haplotype $a$ to reference haplotype $b$. Given LD varies enormously between {\it P. falciparum} populations, we will investigate how to tune this parameter for future improvement. In the current release, our program allows users to apply the flag {\tt -G} and specify an input parameter $G$.}
+\item {\bf Recombination rate and scaling}. We assume a uniform recombination map, where the genetic distance between loci $i$ and $i+1$ is computed by $\psi_i = D_i / d_m$ where $D_i$ denotes the physical distance between loci $i$ and $i+1$ in nucleotides and $d_m$ denotes the average recombination rate in Morgans bp$^{-1}$. We use the recombination rate for {\it P. falciparum} of 13,500 base pairs per centiMorgan as reported by \citet{Miles2016}. \donenum{Minor Comment 6, on the scaling parameter G }The recombination rate is scaled by a factor $G$, which reflects the effective population size, rate of inbreeding, and relatedness of the reference panel. \textcolor{red}{In practice, we deconvolve over 1 million markers in field samples. We tune the parameter $G$ using {\it in vitro} lab mixtures, use a value of $G=20$ to ensure small values for recombination probabilities between any two markers, with a mean of 0.015. A large value of $G$ relaxes the reference panel constraint, becoming an LD free model when $G$ is infinity. The scaled genetic distance $G\psi$ is used to compute the transition probability of switching from copying reference haplotype $a$ to reference haplotype $b$. Given LD varies enormously between {\it P. falciparum} populations, we will investigate how to tune this parameter for future improvement. In the current release, our program allows users to apply the flag {\tt -G} and specify an input parameter $G$.} %For IBD track computation, we set $G = 0.1$ to enforce less recombination.
 
 \item {\bf IBD state transitions} A significant improvement from \citet{Zhu2017}'s method is that $P(\mathcal{S}_{i}|n)$ takes into account of the IBD state at the previous position $i-1$ with recombination. A transition into a different IBD state will take into account of recombination probabilities.
 
