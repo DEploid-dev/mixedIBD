@@ -171,7 +171,7 @@ viterbi state    & k = 2& k = 3 & k = 4 \\ \hline
 \end{table}
 
 
-\noindent We assume a prior in which the haplotypes of the $n$ strains are independent of each other and dependent only on the IBD state. Let $\mathcal{G}$ be the genotype state that is derived from the IBD state $\mathcal{S}$. We assume uniform prior on $\mathcal{G}|\mathcal{S}$. For example, if $n=3$ and only strains 1 and 2 are IBD, the genotype state at site $i$ $\mathcal{G}$ could be $\{0,0,0\}$; $\{0,0,1\}$; $\{1,1,0\}$ and $\{1,1,1\}$. Therefore, we can decompose the joint prior as:
+\noindent We assume a prior in which the haplotypes of the $n$ strains are independent of each other and dependent only on the IBD state. Let $\mathcal{G}$ be the genotype state that is derived from the IBD state $\mathcal{S}$. For example, if $n=3$ and only strains 1 and 2 are IBD, the genotype state at site $i$ $\mathcal{G}$ could be $\{0,0,0\}$; $\{0,0,1\}$; $\{1,1,0\}$ and $\{1,1,1\}$. Therefore, we can decompose the joint prior as:
 \begin{equation}
 P(n, \mathbf{w}, \mathbf{h}, \mathcal{S}) = P(n) \times P(\mathbf{w}|n) \times P(\mathbf{h} , \mathcal{S}|n),
 \end{equation}
@@ -181,7 +181,12 @@ P(\mathbf{h}, \mathcal{S}|n) = P(\mathcal{S}|n) \times \sum_{\xi \in \mathcal{G}
 \label{eqn:ibd_prior}
 \end{equation}
 
-\noindent For details of the likelihood and the prior on the proportions see \citet{Zhu2017} sections 2.2.1 and 2.2.2. We use the following expression for the expected WSAF $q$, as:
+%\noindent For details of the likelihood and the prior on the proportions see \citet{Zhu2017} sections 2.2.1 and 2.2.2.
+
+We use a two-layer hidden markov model framework to define a prior on IBD-configuration and haplotypes $P(\mathbf{h}, \mathcal{S}|n)$. At the top layer, we have transitions between IBD-states $\mathcal{S}_{i} | \mathcal{S}_{i-1}$, which accounts for recombination events and relatedness between strains. From the top layer to the second layer ($P(\xi|\mathcal{S})$, where $\xi \in \mathcal{G}$), we propose a non-uniform prior, such that genotype inclines to merge haplotypes to enable inbreeding.
+\donenum{Sup. Mat. 6, Description of MCMC for IBD inference}
+
+We use the following expression for the expected WSAF $q$, as:
 \begin{equation}
 q = \mathbf{w}\cdot\mathbf{h}.\label{eqn:qij_full_sum}
 \end{equation}
@@ -202,26 +207,29 @@ To incorporate sequencing error, we modify the expected WSAF such that the allel
 
 \subsection{Technical details}
 
+
 To infer the relatedness between strains within in a mixed infection and their relative proportions we use a Markov chain Monte Carlo (MCMC) approach. We learn the relative abundance of each strain by exploiting signatures of within-sample allele frequency imbalance, using a Metropolis-Hastings algorithm, which samples proportions ($w$) given IBD-configurations ($\mathcal{S}$). We then use a Gibbs sampler to update $\mathcal{S}$ for a given $w$ by sampling the IBD state from the posterior, and sample the genotype from the selected IBD state to update haplotypes.
 
 \donenum{Sup. Mat. 2, describe the model in more detail}
-\donenum{Sup. Mat. 6, Description of MCMC for IBD inference}
 \subsubsection{Metropolis-Hastings update for proportions}\label{sec:updateP}
 We update $\mathbf{w}|n$, through the underlying log titres, $\mathbf{x}|n$. Specifically, we choose $i$ uniformly from $n$ and propose new $x_i'$s from $x_i' = x_i + \delta x$, where $\delta x \sim N(0, \sigma^2/s)$, and $s$ is a scaling factor. The new proposed proportion is therefore $\frac{\exp(x_k')}{\sum_{k=1}^n \exp(x_k')}$. Since the proposal distribution is symmetrical, the Hastings ratio is 1. A new update is accepted with probability
 
  $$\min\left(1, \frac{P(\mathbf{w}'|n)}{P(\mathbf{w}|n)} \frac{L(\mathbf{w}', \mathbf{h}, {\mathcal S} | e, D)}{L(\mathbf{w}, \mathbf{h}, {\mathcal S} | e, D)}\right).$$
 
 \subsubsection{Gibbs sampling for haplotype and IBD-configuration update}
-\donenum{Major 7: What does this mean, and why did the new method perform more poorly than the original}
-In the new method, {\tt DEploidIBD} does not reinforce any haplotype structure. At every site, the posterior probability maximizes at IBD state. We use a two-layer hidden markov model framework to define our prior on IBD-configuration and haplotypes (Equation~\eqref{eqn:ibd_prior}). At the top layer, we have transitions between IBD-states, which reflect recombination events. From the top layer to the second layer, we defined a shrinkage prior, which computes the effective number of strains, and generate a binomial distribution for number of unique haplotypes given the probability of $\theta$, which is a beta random variable with shape parameters of effective number of strains ($K_{e}$) and difference between max number of strains and $K_{e}$. This genotype prior inclines to merge haplotypes to enable inbreeding. At the second layer, we make $P(\mathbf{h} | \xi) = 1$, and strictly copy the underline genotypes (from the IBD state) as the allelic state. The impact of sequencing error on the expected WSAF is adjusted using equation \eqref{eqn:adj_q}.
 \donenum{Sup. Mat. 3, what is meant by “genotypes” vs. “alleles”}
+In the new method, {\tt DEploidIBD} does not reinforce any haplotype structure. Haplotype structures are independent between sites. However, the IBD-states are connected. At every site, the posterior probability maximizes at IBD state. We use a forward process to compute the posterior probabilities for IBD-states, and then sample backwards to obtain IBD-states and underline genotype states. For simplicity, we make $P(\mathbf{h} | \xi) = 1$, and strictly copy the underline genotypes (from the IBD state) as the allelic state. The impact of sequencing error on the expected WSAF is adjusted using equation \eqref{eqn:adj_q}.
 
-\vspace{.2cm}
+Note that we propose a non-uniform prior on genotype of a given IBD state, this process is crucial to propose the inbreeding structures between haplotypes. In practice,
+we propose the a binomial distribution for the number of unique haplotypes given the probability of a inbreeding parameter $\theta$. The inbreeding parameter is proposed from a beta distribution with shape parameters of the total absolute number of strains (by taking the sum of genotype at a given site) and maximal number of strains minus the absolute number of strains.
+
+\vspace{.1cm}
+\donenum{Major 7: What does this mean, and why did the new method perform more poorly than the original}
 
 \noindent{\bf Caveat: identifiability with balanced mixing}\\
 Using a reference panel free approach means that it can be difficult to deconvolve samples containing strains with equal proportions. For example, without a reference panel, we assume independence between loci, and it is difficult to distinguish between $\{\frac{1}{3},\frac{1}{3},\frac{1}{3}\}$ and $\{\frac{1}{3},\frac{2}{3}\}$, or
 $\{\frac{1}{4},\frac{1}{4}, \frac{1}{4}, \frac{1}{4}\}$ and $\{\frac{1}{4},\frac{1}{4}, \frac{1}{2}\}$, or $\{\frac{1}{5},\frac{1}{5}, \frac{1}{5}, \frac{1}{5}, \frac{1}{5}\}$ and $\{\frac{1}{5},\frac{1}{5}, \frac{3}{5}\}$, $\{\frac{1}{5},\frac{2}{5}, \frac{2}{5}\}$ and
-$\{\frac{1}{5},\frac{1}{5}, \frac{1}{5}, \frac{2}{5}\}$. We advise users to apply {\tt DEploid} with multiple runs with and without the `-ibd' flag and see if such problem occurs.
+$\{\frac{1}{5},\frac{1}{5}, \frac{1}{5}, \frac{2}{5}\}$. Because of the inbreeding prior we use, the model will prefer to merge haplotypes when possible, which can lead to underestimate number of strains. We advise users to apply {\tt DEploid} with multiple runs with and without the `-ibd' flag and see if such problem occurs.
 
 
 %Pf3D7\_01\_v3	&	95754	&	0	&	0	&	1	&	0	\\
