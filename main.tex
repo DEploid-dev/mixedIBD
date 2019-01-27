@@ -362,7 +362,7 @@ With these simulated distributions, we used Naive Bayes to classify $k=2$ mixed 
 
 \begin{figure}[htp]
   \begin{center}
-  \includegraphics[width=\textwidth]{figures/Fig6_corrected.pdf}
+  \includegraphics[width=\textwidth]{Fig6_corrected.pdf}
    \caption{Identifying sibling strains within mixed infections.  (A) Schematic showing how IBD fraction and IBD segment length distributions are created for $k=2$ mixed infections using \texttt{pf-meiosis}. Two clonal samples from a given country are combined to create an unrelated ($M=0$, where $M$ is number of meioses that have occurred) mixed infection.  The $M=0$ infection is then passed through 3 rounds of \texttt{pf-meioses} to generate $M=1,2,3$ classes, representing serial transmission of the mixed infection ($M=1$ are siblings). (B) Simulated IBD distributions for $M=0,1,2,3$ for Ghana (top) and West Cambodia (bottom). A total of 10,000 mixed infections are simulated for each class, from 500 random pairs of clonal samples. (C) Classification results for 393 $K=2$ mixed infections from 13 countries. Undetermined indicates mixed infections with IBD statistics that were never observed in simulation. (D) Breakdown of class percentage by continent. Total number of samples is given above bars. Colours as in panel C ($M=0$, grey; $M=1$, purple; $M=2$, pink; $M=3$, orange; Undeteremined, black). (E) Same as (D), but by country. Abbreviations as in Figure~\ref{fig:mixInfPlot}.}
    \label{fig:classify}
    \end{center}
