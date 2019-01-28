@@ -32,7 +32,8 @@ mainSupplement.pdf: mainSupplement.tex ${supfigures} ${supfigurespdf} ${suptex} 
 	pdflatex mainSupplement.tex
 
 mainSupplement_todo.pdf: mainSupplement.pdf
-	sed -e "s/\\\usepackage\[disable\]{todonotes}/\\\usepackage\[colorinlistoftodos\]{todonotes}/" mainSupplement.tex > mainSupplement_todo.tex
+	sed -e "s/\\\usepackage\[disable\]{todonotes}/\\\usepackage\[colorinlistoftodos\]{todonotes}/" \
+	 -e "s/\\\textcolor{black}/\\\textcolor{red}/" mainSupplement.tex > mainSupplement_todo.tex
 	pdflatex mainSupplement_todo.tex
 	bibtex mainSupplement_todo.aux
 	pdflatex mainSupplement_todo.tex
