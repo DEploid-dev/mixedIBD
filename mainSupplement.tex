@@ -146,28 +146,48 @@ P(n, \mathbf{w}, \mathbf{h}, \mathcal{S}| e, D) \propto L(n, \mathbf{w}, \mathbf
 \end{equation}
 where $e$ is the read error rate.
 
-\begin{table}{h}
+\begin{table}
 \centering
+%\begin{tabular}{c|ccc}
+  %Index / & \multicolumn{3}{c}{IBD state} \\
+%IBD state    & k = 2& k = 3 & k = 4 \\ \hline
+%1	  &1-2	&	1-2-3	&1-2-3-4	\\
+%2	  &2-2	&	2-2-3	&2-2-3-4	\\
+%3	  &	  	&	3-2-3	&3-2-3-4	\\
+%4	  &		  &	1-3-3	&4-2-3-4	\\
+%5	  &		  &	3-3-3	&1-3-3-4	\\
+%6	  &	  	&		    &3-3-3-4	\\
+%7	  &	  	&		    &4-3-3-4	\\
+%8	  &	  	&	    	&1-4-3-4	\\
+%9	  &	  	&		    &4-4-3-4	\\
+%10	&	  	&		    &3-4-3-4	\\
+%11	&	  	&		    &1-2-4-4	\\
+%12	&		  &		    &2-2-4-4	\\
+%13	&	  	&		    &4-2-4-4	\\
+%14	&	  	&	    	&1-4-4-4	\\
+%15	&	  	&		    &4-4-4-4	\\
+%\end{tabular}
 \begin{tabular}{c|ccc}
   Index / & \multicolumn{3}{c}{IBD state} \\
-viterbi state    & k = 2& k = 3 & k = 4 \\ \hline
-1	  &1-2	&	1-2-3	&1-2-3-4	\\
-2	  &2-2	&	2-2-3	&2-2-3-4	\\
-3	  &	  	&	3-2-3	&3-2-3-4	\\
-4	  &		  &	1-3-3	&4-2-3-4	\\
-5	  &		  &	3-3-3	&1-3-3-4	\\
-6	  &	  	&		    &3-3-3-4	\\
-7	  &	  	&		    &4-3-3-4	\\
-8	  &	  	&	    	&1-4-3-4	\\
-9	  &	  	&		    &4-4-3-4	\\
-10	&	  	&		    &3-4-3-4	\\
-11	&	  	&		    &1-2-4-4	\\
-12	&		  &		    &2-2-4-4	\\
-13	&	  	&		    &4-2-4-4	\\
-14	&	  	&	    	&1-4-4-4	\\
-15	&	  	&		    &4-4-4-4	\\
+IBD state    & k = 2& k = 3 & k = 4 \\ \hline
+0   &0-1  & 0-1-2 & 0-1-2-3\\
+1	  &1-1	&	0-2-2	& 0-1-3-3	\\
+2	  &   	&	2-1-2	&0-3-2-3	\\
+3	  &	  	&	2-2-2	&0-3-3-3	\\
+4	  &		  &	1-1-2	&0-2-2-3	\\
+5	  &		  &	    	&3-1-2-3	\\
+6	  &	  	&		    &3-1-3-3	\\
+7	  &	  	&		    &3-3-2-3	\\
+8	  &	  	&	    	&3-3-3-3	\\
+9	  &	  	&		    &3-2-2-3	\\
+10	&	  	&		    &2-1-2-3	\\
+11	&	  	&		    &2-3-2-3	\\
+12	&		  &		    &2-2-2-3	\\
+13	&	  	&		    &1-1-2-3	\\
+14	&	  	&	    	&1-1-3-3	\\
 \end{tabular}
-\caption{IBD configurations of number of strains are 2, 3 and 4. The state 1-2 denotes that strains 1 and 2 are non-IBD; The state 2-2 denotes that strain 1 is IBD with strain 2. The state 2-2-3 denotes that strain 1 is IBD with strain 2, but not strain 3. }\label{tab:encode}
+\caption{IBD configurations (0-indexed) of number of strains are 2, 3 and 4. The state 0-1 denotes that strains 0 and 1 are non-IBD; The state 1-1 denotes that strains are IBD. The state 1-1-2 denotes that strain 0 is IBD with strain 1, but not strain 2. }\label{tab:encode}
+\donenum[inline]{need to fix the ordering now, DEploidIBD IBD states are 0-indexed}
 \end{table}
 
 
@@ -283,21 +303,21 @@ For the second part of {\tt DEploidIBD} inferring haplotypes from a given refere
 
 \item {\bf Recombination rate and scaling}. We assume a uniform recombination map, where the genetic distance between loci $i$ and $i+1$ is computed by $\psi_i = D_i / d_m$ where $D_i$ denotes the physical distance between loci $i$ and $i+1$ in nucleotides and $d_m$ denotes the average recombination rate in Morgans bp$^{-1}$. We use the recombination rate for {\it P. falciparum} of 13,500 base pairs per centiMorgan as reported by \citet{Miles2016}. \donenum{Minor Comment 6, on the scaling parameter G }The recombination rate is scaled by a factor $G$, which reflects the effective population size, rate of inbreeding, and relatedness of the reference panel. \textcolor{red}{In practice, we deconvolve over 1 million markers in field samples. We tune the parameter $G$ using {\it in vitro} lab mixtures, use a value of $G=20$ to ensure small values for recombination probabilities between any two markers, with a mean of 0.015. A large value of $G$ relaxes the reference panel constraint, becoming an LD free model when $G$ is infinity. The scaled genetic distance $G\psi$ is used to compute the transition probability of switching from copying reference haplotype $a$ to reference haplotype $b$. Given LD varies enormously between {\it P. falciparum} populations, we will investigate how to tune this parameter for future improvement. In the current release, our program allows users to apply the flag {\tt -G} and specify an input parameter $G$.} %For IBD track computation, we set $G = 0.1$ to enforce less recombination.
 
-\item {\bf IBD state transitions} A significant improvement from \citet{Zhu2017}'s method is that $P(\mathcal{S}_{i}|n)$ takes into account of the IBD state at the previous position $i-1$ with recombination. A transition into a different IBD state will take into account of recombination probabilities.
+%\item {\bf IBD state transitions} A significant improvement from \citet{Zhu2017}'s method is that $P(\mathcal{S}_{i}|n)$ takes into account of the IBD state at the previous position $i-1$ with recombination. A transition into a different IBD state will take into account of recombination probabilities.
 
 \item {\bf Update without linkage disequilibrium}. For initialising the chain, or if the markers present are very widely spaced, linkage disequilibrium can be ignored, which is equivalent to setting the genetic distance between adjacent loci to be infinitely high.  Under these circumstances, the haplotype updates become much simpler and depend only on the population-level allele frequency (PLAF), for example as estimated from the reference panel or provided independently.
 
-\item {\bf Reporting} We aim to provide users with a single point estimate of the haplotypes and their proportions, although the full chain is also available for analysis.  To achieve this we report values at the last iteration - i.e. we report a single sample from the posterior.  However, to measure robustness, we typically repeat the deconvolution with multiple random starting points\textcolor{black}{. We use a majority vote rule on the inferred number of strains; we then select the chain with the lowest average deviance (after removing the burn-in) as our estimate. The deviance measures the difference in log likelihood between the fitted and saturated models, the latter being inferred by setting the WSAF to that of the observed values.} These parameters can be modified by users to achieve a preferred balance between computational speed and confidence.  By default, we set the MCMC sampling rate as 5, with the first 50\% of samples removed as burn in and 800 samples used for estimation.
+\item {\bf Reporting}. We aim to provide users with a single point estimate of the haplotypes and their proportions, although the full chain is also available for analysis.  To achieve this we report values at the last iteration - i.e. we report a single sample from the posterior.  However, to measure robustness, we typically repeat the deconvolution with multiple random starting points\textcolor{black}{. We use a majority vote rule on the inferred number of strains; we then select the chain with the lowest average deviance (after removing the burn-in) as our estimate. The deviance measures the difference in log likelihood between the fitted and saturated models, the latter being inferred by setting the WSAF to that of the observed values.} These parameters can be modified by users to achieve a preferred balance between computational speed and confidence.  By default, we set the MCMC sampling rate as 5, with the first 50\% of samples removed as burn in and 800 samples used for estimation.
 
 \item {\bf Reference panel construction}. To infer clonal samples for the reference panel we use the Pf3k project data, running the algorithm without LD on all samples and identifying those with a dominant haplotype (proportion $>$ 0.99) as clonal.  These clonal samples are grouped by region of sampling to form location-specific reference panels.  In addition, we have included a number of reference strains, described in more detail below.
 
 \end{itemize}
 
+\item {\bf Extract pairwise IBD tracks and relatedness}.
+\donenum{pairwise IBD tracks and relatedness}
+At each site, we use the viterbi algorithm and  extract IBD states with the maximal forward posterior probabilities to obtain IBD state blocks. For each strain pair, we identify pairwise IBD tracks from IBD state blocks. For instance, for 3 strains, we identify 0-1 tracks from blocks of 1-1-2 and 2-2-2. IBD track lengths are computed by taking positional differences at the two ends of IBD tracks.
 
-  %\item {\bf Extract crossover events} We treat genome regions of which IBD posterior probabilities greater than 90\% as IBD blocks. Regions that are not identified by a particular IBD region are crossover event candidates. We identify the candidate region of which two sides belong to different IBD blocks as a crossover event.
-
-%\item {\bf MCMC parameters for recombination map and smoothing}
-%We burn the first 10\% of the MCMC chain, and draw every 5th sample of the chain. To collect 1000 samples for each SNP interval.
+Genomic data are usually heterogeneous: Both of the read coverage and depth vary along the sequence. In order to obtain a smooth posterior probabilities along the sequence, we take into account of transitions from both sides of a SNP. Once we determine the proportion of each strain. We fix the proportion, and use a forward-backward algorithm to compute the posterior probabilities (unlike the forward posterior during the MCMC steps). Finally, we integrate the posterior probabilities for each strain pair, and obtain the pairwise relatedness by taking the average among all possible pairs.
 \end{itemize}
 
 
@@ -321,7 +341,7 @@ interpretDEploid.r -ref ${ref} -alt ${alt} -plaf ${plaf} -o ${prefix} -dEprefix 
 
 \subsection{Error analysis}
 \donenum{Essential revision 2, error analysis}
-For haplotype quality analysis, we compare the testing haplotype ({\tt DEploid} output) with the true haplotype. In the ideal world, we have done all the phasing correctly, the only source of error is {\bf mismatches} between the testing haplotype and the truth. In practice, the deconvolution process breaks the haplotype and copies different genome segments from a reference panel and introduces {\bf switch errors}. Our method deconvolutes the haplotypes based on allele frequency imbalance, which assumes that the the sequencing read count is proportional to strain abundance. In the case when one strain has lower proportion to the other strains, there might be insufficient data to make accurate inference, and causes short segment of the haplotypes missing. We refer this as {\bf dropout error}. Dropout error can also be caused by the sequencing process, when parts of the genome are not well sequenced (low read count). In this error model, we do not further investigate the source of dropout errors.
+For haplotype quality analysis, we compare the testing haplotype ({\tt DEploid} output) with the true haplotype. In the ideal world, we have done all the phasing correctly, the only source of error is {\bf mismatches} between the testing haplotype and the truth. In practice, the deconvolution process breaks the haplotype and copies different genome segments from a reference panel and introduces {\bf switch errors}. Our method deconvolves the haplotypes based on allele frequency imbalance, which assumes that the the sequencing read count is proportional to strain abundance. In the case when one strain has lower proportion to the other strains, there might be insufficient data to make accurate inference, and causes short segment of the haplotypes missing. We refer this as {\bf dropout error}. Dropout error can also be caused by the sequencing process, when parts of the genome are not well sequenced (low read count). In this error model, we do not further investigate the source of dropout errors.
 
 In principle, our error analysis approach slices the haplotypes into small chuncks (in the limit of one basepair), and searches the best path of the testing haplotyes $h$ in the true haplotypes $H$, such that it minimises the sum of mismatches, switches and dropouts. To model the errors in a probabilistic fashion, we introduce a simplified Hidden Markov model: In stead of probability, we consider the cost. Events with the lowest cost has probability of 1. We use a two-strains example for demonstration. At every position $i$, we consider the hidden state as all 4 possible permutations of the testing strain to best match the truth:
 \begin{enumerate}
@@ -384,7 +404,7 @@ For more general cases, we need to consider all possible permutations of testing
 
 %\section{Deconvolution example with sample PD0577-C}
 
-%The following example shows a specific {\textmd DEploid} command to deconvolute the mixed sample {\textmd PD0577-C}:
+%The following example shows a specific {\textmd DEploid} command to deconvolve the mixed sample {\textmd PD0577-C}:
 %\linespread{1}
 %\begin{lstlisting}
 %dEploid -ref PD0577-C_ref.txt \
@@ -401,7 +421,7 @@ For more general cases, we need to consider all possible permutations of testing
     %-exportPostProb
 %\end{lstlisting}
 %\linespread{1.5}
-%where ``{\tt -ref PD0577-C\_ref.txt}'' and ``{\tt -alt PD0577-C\_alt.txt}'' define the input text files \footnote{The Pf3k data was deconvoluted using DEploid version v0.1-beta. Recent versions can take VCF files as input as well.} that record the reference and alternative read counts respectively; ``{\tt -plaf asia-1\_PLAF.txt}'' contains the population allele frequencies calculated from total read counts. Note that we use option ``{\tt -exclude asia-1\_exclude.txt}'' to skip deconvoluting monomophic sites; ``{\tt -panel asia-1\_panel.txt}'' specifies a text file including haplotypes of samples listed in Table~\ref{tab:panelSamples}; options ``{\tt -nSample}'', ``{\tt -rate}'' and ``{\tt -burn}'' specify the total number of MCMC samples to take, the sampling rate and the burning rate of the MCMC chain respectively. For detailed documentation, please see \url{http://deploid.readthedocs.io/en/latest/input.html}.
+%where ``{\tt -ref PD0577-C\_ref.txt}'' and ``{\tt -alt PD0577-C\_alt.txt}'' define the input text files \footnote{The Pf3k data was deconvolved using DEploid version v0.1-beta. Recent versions can take VCF files as input as well.} that record the reference and alternative read counts respectively; ``{\tt -plaf asia-1\_PLAF.txt}'' contains the population allele frequencies calculated from total read counts. Note that we use option ``{\tt -exclude asia-1\_exclude.txt}'' to skip deconvoluting monomophic sites; ``{\tt -panel asia-1\_panel.txt}'' specifies a text file including haplotypes of samples listed in Table~\ref{tab:panelSamples}; options ``{\tt -nSample}'', ``{\tt -rate}'' and ``{\tt -burn}'' specify the total number of MCMC samples to take, the sampling rate and the burning rate of the MCMC chain respectively. For detailed documentation, please see \url{http://deploid.readthedocs.io/en/latest/input.html}.
 
 %\linespread{1}
 %\begin{lstlisting}
