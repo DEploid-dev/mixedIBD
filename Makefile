@@ -16,7 +16,7 @@ main.pdf: main.tex ${mainfiguresPng} ${mainfiguresPdf} main.bbl pdfFigures
 
 main_todo.pdf: main.pdf
 	sed -e "s/\\\usepackage\[disable\]{todonotes}/\\\usepackage\[colorinlistoftodos\]{todonotes}/" \
-	 -e "s/\\\textcolor{black}/\\\textcolor{red}/" main.tex > main_todo.tex
+	 -e "s/\\\textcolor{black}/\\\textcolor{red}/g" main.tex > main_todo.tex
 	pdflatex main_todo.tex
 	bibtex main_todo.aux
 	pdflatex main_todo.tex
