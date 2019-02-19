@@ -107,21 +107,21 @@
 \newpage
 
 \section{Deconvolution in the presence of IBD}
-\subsection{Notations}
+\subsection{Notation}
 We use the same notations as \citet{Zhu2017} (see Table~\ref{tab:notation}). Our data, $D$, are the allele read counts of sample $j$ at a given site $i$, denoted as $r_{j,i}$ and $a_{j,i}$ for reference (REF) and alternative (ALT) alleles respectively.  These have assigned values of $0$ and $1$, respectively. Here we consider only bi-allelic loci, though future extensions to the model to include multi-allelic sites could be accommodated.  The empirical allele frequencies within a sample (WSAF) $p_{j,i}$ and at population level (PLAF) $f_i$ are calculated by $ \frac{a_{j,i}}{a_{j,i} + r_{j,i}}$ and $ \frac{\sum_j a_{j,i}}{\sum_j a_{j,i} + \sum_j r_{j,i}}$ respectively. Since all data in this section refers to the same sample, we drop the subscript $j$ from now on.
 
 \begin{table}[htb]\centering
-\begin{tabular}{c|c}\hline
+\begin{tabular}{c|l}\hline
 $i$              & Marker index\\
 $j$              & Sample index \\
 $r$              & Read count for reference allele \\
 $a$              & Read count for alternative allele \\
 $f$              & Population level allele frequency (PLAF) \\
-$n$              & Number of strains within sample \\
-$l$              & Sequence length \\
+$K$              & Number of distinct strains within sample \\
+$l$              & Number of sites\\
 $\mathbf{w}$      & Proportions of strains \\
-%$\mathbf{x}$	& Log titre of strains \\
-$\mathbf{h}_{i}$ & Allelic states of $n$ parasite strains at site $i$ \\
+$\mathbf{x}$	& Log titre of strains \\
+$\mathbf{h}_{i}$ & Allelic states of $K$ parasite strains at site $i$ \\
 $h_{k,i}$   & Allelic state of parasite strain $k$ at site $i$\\
 $p$              & Observed within sample allele frequency (WSAF) \\
 $q$              & Unadjusted expected WSAF  \\
@@ -130,201 +130,157 @@ $\pi$            & Adjusted expected WSAF \\
 %$\xi_{k,i}$     & Allelic state of reference panel strain $k$ at site $i$\\
 %$G$              & Scaling factor used for genetic map\\
 $e$              & Probability of read error\\
-$\mathcal{S}_{i}$ & IBD state at site $i$ \\
-$\mathcal{G}$ & Genotype state at site $i$ \\
+$\mathcal{S}_{i}$ & IBD configuration at site $i$ \\
+%$\mathcal{G}$ & Allelic configuration (genotype) at site $i$ \\
+$\theta$ & Probability of non-IBD in a mixture of two strains \\
 \hline
 \end{tabular}
 \vspace{.2cm}
-\caption{Table summarising the notation used in this article.}\label{tab:notation}
+\caption{Notation used in this article.}\label{tab:notation}
 \end{table}
 
-\subsection{Modelling with IBD state}
-We describe the mixed infection problem by considering the number of strains, $n$, the relative abundance of each strain, $\mathbf{w}$, and their allelic states, $\mathbf{h}_{i}$. In addition to \citet{Zhu2017}, we also infer the IBD-state $\mathcal{S}_{i}$, which describes the strain relationship with each other at each site $i$. For example, for three strains, the IBD-state could be one of the five cases: (1) all strains are not IBD; (2)(3)(4) only two strains are IBD; (5) all strains are IBD (see Table~\ref{tab:encode}). To simplify our problem, we assume independence between each marker, and drop the subscript $i$ from now on. Similar to \citet{Jack2016}, we use a Bayesian approach and define the posterior probabilities of $n$, $\mathbf{w}$, $\mathbf{h}$ and $\mathcal{S}$,  as:
+\subsection{Modelling mixed infections with IBD} \label{sect:prior}
+We describe the mixed infection problem by considering the number of strains, $K$, the relative abundance of each strain, $\mathbf{w}$, and the allelic state of the $k$th strain at the $i$th locus, $\mathbf{h}_{k,i}$. In addition to \citet{Zhu2017}, we also infer the identity-by-descent (IBD) state $\mathcal{S}_{i}$, which describes the strain relationship with each other at site $i$. For example, for three strains, the IBD-state could be one of the five cases: (1) all strains are not IBD; (2) strains 1 and 2 are IBD; (3) strains 1 and 3 are IBD; (4) strains 2 and 3 are IBD; (5) all strains are IBD (see Table~\ref{tab:encode}). To simplify the problem, we assume independence between markers, and drop the subscript $i$ from now on. As previously, we use a Bayesian approach and define the posterior probabilities of $K$, $\mathbf{w}$, $\mathbf{h}$ and $\mathcal{S}$,  as
 
 \begin{equation}
-P(n, \mathbf{w}, \mathbf{h}, \mathcal{S}| e, D) \propto L(n, \mathbf{w}, \mathbf{h}, \mathcal{S} | e, D) \times P(n, \mathbf{w}, \mathbf{h}, \mathcal{S}), \label{eqn:post}
+P(K, \mathbf{w}, \mathbf{h}, \mathcal{S}| e, D) \propto L(K, \mathbf{w}, \mathbf{h}, \mathcal{S} | e, D) \times P(K, \mathbf{w}, \mathbf{h}, \mathcal{S}), \label{eqn:post}
 \end{equation}
-where $e$ is the read error rate.
 
 \begin{table}
 \centering
-%\begin{tabular}{c|ccc}
-  %Index / & \multicolumn{3}{c}{IBD state} \\
-%IBD state    & k = 2& k = 3 & k = 4 \\ \hline
-%1	  &1-2	&	1-2-3	&1-2-3-4	\\
-%2	  &2-2	&	2-2-3	&2-2-3-4	\\
-%3	  &	  	&	3-2-3	&3-2-3-4	\\
-%4	  &		  &	1-3-3	&4-2-3-4	\\
-%5	  &		  &	3-3-3	&1-3-3-4	\\
-%6	  &	  	&		    &3-3-3-4	\\
-%7	  &	  	&		    &4-3-3-4	\\
-%8	  &	  	&	    	&1-4-3-4	\\
-%9	  &	  	&		    &4-4-3-4	\\
-%10	&	  	&		    &3-4-3-4	\\
-%11	&	  	&		    &1-2-4-4	\\
-%12	&		  &		    &2-2-4-4	\\
-%13	&	  	&		    &4-2-4-4	\\
-%14	&	  	&	    	&1-4-4-4	\\
-%15	&	  	&		    &4-4-4-4	\\
-%\end{tabular}
 \begin{tabular}{c|ccc}
-  Index / & \multicolumn{3}{c}{IBD state} \\
-IBD state    & k = 2& k = 3 & k = 4 \\ \hline
+  Index & \multicolumn{3}{c}{IBD state} \\
+    & K = 2& K = 3 & K = 4 \\ \hline
 0   &0-1  & 0-1-2 & 0-1-2-3\\
-1	  &1-1	&	0-2-2	& 0-1-3-3	\\
-2	  &   	&	2-1-2	&0-3-2-3	\\
-3	  &	  	&	2-2-2	&0-3-3-3	\\
-4	  &		  &	1-1-2	&0-2-2-3	\\
-5	  &		  &	    	&3-1-2-3	\\
-6	  &	  	&		    &3-1-3-3	\\
-7	  &	  	&		    &3-3-2-3	\\
-8	  &	  	&	    	&3-3-3-3	\\
-9	  &	  	&		    &3-2-2-3	\\
-10	&	  	&		    &2-1-2-3	\\
-11	&	  	&		    &2-3-2-3	\\
-12	&		  &		    &2-2-2-3	\\
-13	&	  	&		    &1-1-2-3	\\
-14	&	  	&	    	&1-1-3-3	\\
+1	  &0-0	&	0-0-1	& 0-0-1-2	\\
+2	  &   	&	0-1-0	&0-1-0-2	\\
+3	  &	  	&	0-1-1	&0-1-2-0	\\
+4	  &		  &	0-0-0	&0-1-1-2	\\
+5	  &		  &	    	&0-1-2-1	\\
+6	  &	  	&		    &0-1-2-2	\\
+7	  &	  	&		    &0-0-1-1	\\
+8	  &	  	&	    	&0-1-0-1	\\
+9	  &	  	&		    &0-1-1-0	\\
+10	&	  	&		    &0-0-0-1	\\
+11	&	  	&		    &0-0-1-0	\\
+12	&		  &		    &0-1-0-0	\\
+13	&	  	&		    &0-1-1-1	\\
+14	&	  	&	    	&0-0-0-0	\\
 \end{tabular}
-\caption{\textcolor{black}{IBD configurations (0-indexed) of number of strains are 2, 3 and 4. The state 0-1 denotes that strains 0 and 1 are non-IBD; The state 1-1 denotes that strains are IBD. The state 1-1-2 denotes that strain 0 is IBD with strain 1, but not strain 2.} }\label{tab:encode}
-\donenum[inline]{need to fix the ordering now, DEploidIBD IBD states are 0-indexed}
+\caption{\textcolor{black}{IBD configurations for two, three and four strains, ordered top to bottom by the number of IBD pairs. The (zero-indexed) notation indicates the type assigned to each haplotype, thus 0-1 indicates non-IBD for two strains, while 0-1-2-2 indicates four strains in which the third and fourth are IBD.} }\label{tab:encode}
 \end{table}
 
-
-\noindent We assume a prior in which the haplotypes of the $n$ strains are independent of each other and dependent only on the IBD state. Let $\mathcal{G}$ be the genotype state that is derived from the IBD state $\mathcal{S}$. For example, if $n=3$ and only strains 1 and 2 are IBD, the genotype state at site $i$ $\mathcal{G}$ could be $\{0,0,0\}$; $\{0,0,1\}$; $\{1,1,0\}$ and $\{1,1,1\}$. Therefore, we can decompose the joint prior as:
+\noindent where $e$ is the read error rate.  Moreover, we can decompose the joint prior as
 \begin{equation}
-P(n, \mathbf{w}, \mathbf{h}, \mathcal{S}) = P(n) \times P(\mathbf{w}|n) \times P(\mathbf{h} , \mathcal{S}|n),
-\end{equation}
-where
-\begin{equation}
-P(\mathbf{h}, \mathcal{S}|n) = P(\mathcal{S}|n) \times \sum_{\xi \in \mathcal{G}} P(\mathbf{h} | \xi) \times P(\xi|\mathcal{S}).
-\label{eqn:ibd_prior}
+P(K, \mathbf{w}, \mathbf{h}, \mathcal{S}) = P(K) \times P(\mathbf{w}|K) \times P(\mathcal{S}|K) \times P(\mathbf{h}|\mathcal{S}).
 \end{equation}
 
-%\noindent For details of the likelihood and the prior on the proportions see \citet{Zhu2017} sections 2.2.1 and 2.2.2.
+\noindent The priors on the number of strains, $K$, and their proportions, $\mathbf{w}$, are as in \citet{Zhu2017}, with associated hyperparameters being user-defined.  To model IBD configurations and resulting haplotypes we introduce a parameter $\theta$, which is the probability of outbreeding (i.e. non-IBD) for a mixed infection with two strains.  Specifically, for $K$ strains, the prior probability on configuration $\mathcal{S}$ is a function of the number of distinct strains in the configuration, $C_{\mathcal{S}}$, and the number of distinct configurations with the same number of distinct strains, $M_{\mathcal{C}}$:
 
-\textcolor{black}{We use a two-layer hidden markov model framework to define a prior on IBD-configuration and haplotypes $P(\mathbf{h}, \mathcal{S}|n)$. At the top layer, we have transitions between IBD-states $\mathcal{S}_{i} | \mathcal{S}_{i-1}$, which accounts for recombination events and relatedness between strains. From the top layer to the second layer ($P(\xi|\mathcal{S})$, where $\xi \in \mathcal{G}$), we propose a non-uniform prior, such that genotype inclines to merge haplotypes to enable inbreeding.}
-\donenum{Sup. Mat. 6, Description of MCMC for IBD inference}
-
-We use the following expression for the expected WSAF $q$, as:
 \begin{equation}
-q = \mathbf{w}\cdot\mathbf{h}.\label{eqn:qij_full_sum}
+    P(\mathcal{S}|K) = {K-1 \choose C_{\mathcal{S}}-1} \frac{\theta^{C_{\mathcal{S}}-1}(1-\theta)^{K-C_{\mathcal{S}}+1}}{M_{\mathcal{C}}}.
 \end{equation}
 
+\noindent That is, the number of distinct strains is drawn from a binomial distribution with parameters $K$ and $\theta$ and the IBD configuration is uniformly drawn from among those with the same number of distinct strains.  Consequently, the expected number of distinct haplotypes (i.e. non-IBD) in an infection with $K$ strains is $1+\theta (K-1)$. The choice of $\theta$ is user-defined, but is set to a default of $1/(K_{max}-1)$ to encourage the identification of IBD tracts.  Note that in implementation, the number of strains is typically fixed at some maximum value, $K_{max}$, but only those strains achieving some threshold proportion, typically 1\%, are actually reported.
 
+To model the transitions between IBD states we make the approximation that the IBD state at the $i+1$th site is the same as at the $i$th site, with probability $1-p_{rec}$ and, if there is a recombination event, the IBD state is drawn from the stationary distribution described above.  
 
-\noindent The data, which can be summarised by the reference and alternative allele read counts at each site, is modelled through a beta-binomial distribution given the expected WSAF.  We model the data at distinct segregating sites as independent.  Thus the likelihood function  in Eqn.~\eqref{eqn:post} is only dependent on the haplotypes  and their frequencies through their contribution to $q_{i}$.
+To model allelic states (or genotype), conditional on IBD state, we assume that allelic states for each IBD group are independent Bernoulli draws given the population allele frequency (PLAF).   For example, if $K=3$ and only strains 1 and 2 are IBD (state 0,0,1), the genotype at site $i$, $\mathbf{h_i}$, could be $\{0,0,0\}$; $\{0,0,1\}$; $\{1,1,0\}$ or $\{1,1,1\}$, with probabilities $(1-f)^2$, $(1-f)f$, $f(1-f)$ and $f^2$ respectively.   The joint prior on IBD and allelic states is referred to as $\psi(\mathcal{S},\mathbf{h})$.  Note that we ignore association (known as linkage disequilibrium or LD) between nearby alleles, though note that in implementation we run \texttt{DEploidIBD} twice; first as described here to estimate strain number and proportions, allowing for IBD, then subsequently with a reference panel, as for \texttt{DEploid}, but with the strain number and proportions fixed.  This latter step does model LD and consequently results in better estimates of strain haplotypes.
 
-%; i.e. $L(n, \mathbf{w}, \mathbf{h}, | \Xi, e, D) = \prod_{i=1}^l L(q_i | \Xi, e, D)$.
-
-To incorporate sequencing error, we modify the expected WSAF such that the allele frequency of `REF' reads as `ALT' is $(1 - q_i)e$, and the allele frequency of `ALT' reads as `REF' is $q_ie$. Thus, the adjusted expected WSAF becomes:
+Details of the emission model are the same as described in \citet{Zhu2017}.  Briefly, the reference and alternative allele read counts at each site are modelled as being drawn from a beta-binomial distribution given the expected WSAF, $q = \mathbf{w}^T \mathbf{h}$.  To incorporate sequencing error, we modify the expected WSAF such that allele are misread with probability $e$. Thus, the adjusted expected WSAF becomes
 
 \begin{equation}
 \pi_i = q_i + (1 - q_i)e - q_ie = q_i + (1 - 2q_i)e.\label{eqn:adj_q}
 \end{equation}
 
-\noindent We model over-dispersion in read counts relative to the Binomial using a Beta-binomial distribution. Please see {\bf Technical details} for likelihood calculations.
-
-\subsection{Technical details}
+\noindent As previously, we model over-dispersion in read counts relative to the Binomial using a Beta-binomial distribution. 
 
 
-To infer the relatedness between strains within in a mixed infection and their relative proportions we use a Markov chain Monte Carlo (MCMC) approach. We learn the relative abundance of each strain by exploiting signatures of within-sample allele frequency imbalance, using a Metropolis-Hastings algorithm, which samples proportions ($w$) given IBD-configurations ($\mathcal{S}$). We then use a Gibbs sampler to update $\mathcal{S}$ for a given $w$ by sampling the IBD state from the posterior, and sample the genotype from the selected IBD state to update haplotypes.
+\subsection{Parameter estimation using Markov chain Monte Carlo}
 
-\donenum{Sup. Mat. 2, describe the model in more detail}
+To infer the relatedness between strains within in a mixed infection and their relative proportions we use a Markov chain Monte Carlo (MCMC) approach. We learn the relative abundance of each strain by exploiting signatures of within-sample allele frequency imbalance, using a Metropolis-Hastings algorithm, which samples proportions, $\mathbf{w}$,  given IBD-configurations, $\mathcal{S}$. We then use a Gibbs sampler to update $\mathcal{S}$ and $\mathbf{h}$ for a given $\mathbf{w}$ by first sampling the IBD state from the posterior, and then sampling the allelic configuration (genotype) from the selected IBD state at each site to update haplotypes.  Note that the hidden Markov model structure for IBD states along the chromosome leads to efficient algorithms for calculating quantities of importance.  Notably, by summing over allelic configurations that are consistent with a given IBD configuration, we can - for a given set of strain proportions - calculate the likelihood integrated over all possible IBD configurations, which leads to efficient sampling.  
+
+
 \subsubsection{Metropolis-Hastings update for proportions}\label{sec:updateP}
-We update $\mathbf{w}|n$, through the underlying log titres, $\mathbf{x}|n$. Specifically, we choose $i$ uniformly from $n$ and propose new $x_i'$s from $x_i' = x_i + \delta x$, where $\delta x \sim N(0, \sigma^2/s)$, and $s$ is a scaling factor. The new proposed proportion is therefore $\frac{\exp(x_k')}{\sum_{k=1}^n \exp(x_k')}$. Since the proposal distribution is symmetrical, the Hastings ratio is 1. A new update is accepted with probability
 
- $$\min\left(1, \frac{P(\mathbf{w}'|n)}{P(\mathbf{w}|n)} \frac{L(\mathbf{w}', \mathbf{h}, {\mathcal S} | e, D)}{L(\mathbf{w}, \mathbf{h}, {\mathcal S} | e, D)}\right).$$
+We update strain proportions, $\mathbf{w}$, through modelling underlying log titres, $\mathbf{x}$, where $w_i \propto exp(x_i)$.  As previously, log titres are assumed to be drawn from a $N(-log(K), \sigma^2)$ distribution under the prior. To update, we choose $i$ uniformly from $K$ and propose new $x_i'$s from $x_i' = x_i + \delta x$, where $\delta x \sim N(0, \sigma^2/s)$, and $s$ is a scaling factor. The new proposed proportion is therefore $\frac{\exp(x_i')}{\sum_{k=1}^K \exp(x_k')}$. Since the proposal distribution is symmetrical, the Hastings ratio is 1. The proposed update is accepted with probability
 
-\subsubsection{Gibbs sampling for haplotype and IBD-configuration update}
-\donenum{Sup. Mat. 3, what is meant by “genotypes” vs. “alleles”}
-\textcolor{black}{In the new method, {\tt DEploidIBD} does not reinforce any haplotype structure. Haplotype structures are independent between sites. However, the IBD-states are connected. At every site, the posterior probability maximizes at IBD state. We use a forward process to compute the posterior probabilities for IBD-states, and then sample backwards to obtain IBD-states and underlying genotype states. For simplicity, we make $P(\mathbf{h} | \xi) = 1$, and strictly copy the underlying genotypes (from the IBD state) as the allelic state. The impact of sequencing error on the expected WSAF is adjusted using equation \eqref{eqn:adj_q}.}
+ $$\min\left(1, \frac{P(\mathbf{w}'|K)}{P(\mathbf{w}|K)} \frac{L(\mathbf{w}', \mathbf{h} | e, D)}{L(\mathbf{w}, \mathbf{h},  | e, D)}\right).$$
 
-\textcolor{black}{Note that we propose a non-uniform prior on genotype of a given IBD state, this process is crucial to propose the inbreeding structures between haplotypes. In practice,
-we propose the a binomial distribution for the number of unique haplotypes given the probability of a inbreeding parameter $\theta$. The inbreeding parameter is proposed from a beta distribution with shape parameters of the total absolute number of strains (by taking the sum of genotype at a given site) and maximal number of strains minus the absolute number of strains.}
+\noindent Note that, conditional on the current estimate of strain haplotypes, $\mathbf{h}$, the likelihood is not a function of the specific IBD configuration.
 
-\vspace{.1cm}
-\donenum{Major 7: What does this mean, and why did the new method perform more poorly than the original}
+
+\subsubsection{Gibbs sampling update for haplotype and IBD-configuration update}
+
+As described above, in {\tt DEploidIBD}, allelic states at different sites within a haplotype are independent. However, IBD states are connected through a Markov process. We therefore update the IBD configuration and strain haplotypes in a two stage process.  First, we use the Forward algorithm to first compute the integrated likelihood - that is the probability of observing the read-level data integrating over all possible IBD configurations and allelic states.  Defining $F_{i,\mathcal{S},\mathbf{h}}$ to be the integrated likelihood for the set of paths ending in IBD configuration $\mathcal{S}$ at site $i$ and with allelic configuration $\mathbf{h}$, it follows that
+
+\begin{equation}
+    F_{i,\mathcal{S},\mathbf{h}} = P(D_{i}|e,\mathbf{h}) \big[(1-p_{rec}) F_{i-1,\mathcal{S},\mathbf{h}} +  \psi(\mathcal{S},\mathbf{h}) p_{rec} \sum_{m,n}F_{i-1,m,n}\big],
+\end{equation}
+
+\noindent where $\psi(\mathcal{S},\mathbf{h})$ is the prior on the combination of IBD configuration $\mathcal{S}$ and allelic configuration $\mathbf{h}$ as defined in Section \ref{sect:prior}.  Note that the summation term is identical for all IBD / allelic configurations.
+
+By storing the output of the Forward algorithm we can then sample from the posterior distribution of the IBD- and allelic-configurations (given current proportions).  That is, we sample $\mathcal{S}_l,\mathbf{h}_l \propto F_{l,\mathcal{S}, \mathbf{h}}$, and then previous steps proportion to $F_{i,\mathcal{S}, \mathbf{h}}$ times the probability to transition to the sampled state at position $i+1$.
+
+Given the sampled IBD- and allelic - configurations at each site, we can then update proportions again as described above.
+
+\vspace{.2cm}
 
 \noindent{\bf Caveat: identifiability with balanced mixing}\\
-Using a reference panel free approach means that it can be difficult to deconvolve samples containing strains with equal proportions. For example, without a reference panel, we assume independence between loci, and it is difficult to distinguish between $\{\frac{1}{3},\frac{1}{3},\frac{1}{3}\}$ and $\{\frac{1}{3},\frac{2}{3}\}$, or
-$\{\frac{1}{4},\frac{1}{4}, \frac{1}{4}, \frac{1}{4}\}$ and $\{\frac{1}{4},\frac{1}{4}, \frac{1}{2}\}$, or $\{\frac{1}{5},\frac{1}{5}, \frac{1}{5}, \frac{1}{5}, \frac{1}{5}\}$ and $\{\frac{1}{5},\frac{1}{5}, \frac{3}{5}\}$, $\{\frac{1}{5},\frac{2}{5}, \frac{2}{5}\}$ and
-$\{\frac{1}{5},\frac{1}{5}, \frac{1}{5}, \frac{2}{5}\}$. Because of the inbreeding prior we use, the model will prefer to merge haplotypes when possible, which can lead to underestimate number of strains. We advise users to apply {\tt DEploid} with multiple runs with and without the `-ibd' flag and see if such problem occurs.
+Using a reference panel free approach means that it can be difficult or impossible to deconvolute samples containing strains with equal proportions. For example, it is impossible to distinguish between $\{\frac{1}{3},\frac{1}{3},\frac{1}{3}\}$ and $\{\frac{1}{3},\frac{2}{3}\}$, or
+$\{\frac{1}{4},\frac{1}{4}, \frac{1}{4}, \frac{1}{4}\}$ and $\{\frac{1}{4},\frac{1}{4}, \frac{1}{2}\}$. Because of the prior we use, the model will prefer to merge haplotypes when possible, which can lead to underestimation of the number of strains. We advise users to apply {\tt DEploid} with multiple runs with and without the `-ibd' flag and see if such problem occurs.
 
 
-%Pf3D7\_01\_v3	&	95754	&	0	&	0	&	1	&	0	\\
-%Pf3D7\_01\_v3	&	100330	&	0	&	1	&	0	&	0	\\
-
-%\begin{center}
-  %\begin{tabular}{cccccc}
-    %CHROM	&	POS	&	3D7	&	Dd2	&	HB3	&	7G8	\\
-%Pf3D7\_01\_v3	&	94487	&	0	&	0	&	0	&	1	\\
-%Pf3D7\_01\_v3	&	95518	&	0	&	1	&	1	&	0	\\
-%Pf3D7\_01\_v3	&	95632	&	0	&	0	&	1	&	0	\\
-%Pf3D7\_01\_v3	&	95641	&	0	&	0	&	1	&	0	\\
-%Pf3D7\_01\_v3	&	95680	&	0	&	0	&	1	&	0	\\
-%Pf3D7\_01\_v3	&	95685	&	0	&	0	&	1	&	0	\\
-%Pf3D7\_01\_v3	&	95686	&	0	&	0	&	1	&	0	\\
-%Pf3D7\_01\_v3	&	95754	&	0	&	0	&	1	&	0	\\
-%Pf3D7\_01\_v3	&	100330	&	0	&	1	&	0	&	0	\\
-%Pf3D7\_01\_v3	&	100608	&	0	&	1	&	0	&	1	\\
-%Pf3D7\_01\_v3	&	101269	&	0	&	1	&	1	&	1	\\
-  %\end{tabular}
-%\end{center}
 
 
 
 
 
 \subsection{Implementation details}
+
+Below we detail a number of implementation details.
+
 \begin{itemize}
-%We then compute the likelihood as $\frac{x^{\alpha-1}(1-x)^{\beta-1}} {\Beta(\alpha,\beta)}\!$, where
 
-%${\displaystyle \mathrm {B} (\alpha ,\beta )={\frac {\Gamma (\alpha )\Gamma (\beta )}{\Gamma (\alpha +\beta )}}}$
-
-\item {\bf Likelihood surface}
-In the new version {\tt DEploidIBD}, the likelihood for WSAF is computed accordingly to the changes in the previous step. In principle, it is still in for form of
+\item {\bf Approximating the likelihood surface}
+At any site, the likelihood for the WSAF, $q$, induced by the allelic configuration and strain proportions derives from the beta-binomial model as implemented in \textt{DEploid}.  That is, the likelihood of $q_i$ is
 \begin{equation}
-L(q_{i}| e, D) \propto \frac{\Gamma(a_i + \alpha) \Gamma(r_i + \beta)}{\Gamma(\alpha)\Gamma(\beta)}. \label{eqn:llk}
+L(q_{i}| e, D) \propto \frac{B(a_i + \pi c, r_i + (1-\pi) c)}{B(\pi c, (1-\pi) c)}, \label{eqn:llk}
 \end{equation}
 
-\textcolor{black}{For the first part of the {\tt DEploidIBD}, instead of computing the likelihood of a given WASF, we integrate the likelihood over the possible span of WSAF values.. Given the integrated likelihood surface, we compute the likelihood for WSAF = 0 and WSAF = 1. We use these two values as shape parameters of a beta distribution, $\alpha = llk_{0}$ and $\beta = llk_{1}$.}
+\noindent where $\pi_i$ is the adjusted WSAF $\pi = q(1-e)+(1-q)e$ and $c^{-1}$ determines the magnitude of over-dispersion relative to the binomial, with $c \to \infty$ recovering the binomial.  Here, we use $c=100$.  
 
-\textcolor{black}{For the second part of {\tt DEploidIBD} inferring haplotypes from a given reference panel, the likelihood in Equation~\ref{eqn:llk} is computed the same as \cite{Zhu2017}. Specifically, the read counts of `ALT' are identically and independently distributed (i.i.d.) Bernoulli random variables with probability of success $v_i$; i.e. $a_i \sim Binom(a_i + r_i, v_i)$, and $v_i \sim Beta(\alpha, \beta)$, where $E(v_i) = \alpha/(\alpha+\beta) = \pi_{i}$. This is achieved by setting $\alpha = c\cdot \pi_{i} $ and $\beta = c\cdot (1-\pi_{i})$, such that the variance of the WSAF is inversely proportional to $c$. The parameter $c$ (Equation~\eqref{eqn:llk}) reflects how much data are available. The mean coverage of the validation data set ranges from 106.20 to 147.04, with a mean of 124.487. In practice, we set the parameters $c=100$.}
+For computational efficiency, rather than recomputing for every value of $q$, we first approximation the likelihood function for each site through a Beta distribution, matching the first two moments of the posterior on $q$ implied by Equation \ref{eqn:llk} within a uniform prior on $q$.  The estimated parameters of the Beta distribution are then used to approximate the likelihood surface in all subsequent calculations.  
 
-%ibd state configuration, haplotype state configuration.
 
 \item {\bf MCMC parameters for deconvolution}
 
 \begin{itemize}
-\item {\bf Number of strains}. As described above, we aim to infer more strains than are actually present, starting the MCMC chain with a fixed $n$, which has a default of $5$. \textcolor{black}{In our experience, we use the flag {\tt -k} to specify the number of strains as 4.} At the point of reporting, we keep strains with a proportion above a fixed threshold, typically $0.01$.
+\item {\bf Number of strains}. As described above, we aim to infer more strains than are actually present, starting the MCMC chain with a fixed $K$ (default of 5). In our experience, we find poor performance for $K>4$, hence use use the flag {\tt -k 4} to specify the number of strains as 4. At the point of reporting, we keep strains with a proportion above a fixed threshold, typically $0.01$.
 
-\item {\bf Parameters}. In practice, we set the parameters $\eta = 0$, $\sigma^2 = 5$ which are adjusted accordingly when working with extremely unbalanced samples (see \citet{Zhu2017} supplementary material).  We set the read error rate as 0.01 and the rate of mis-copying as 0.01.
+\item {\bf Parameters}. We typically set the log-titre variance $\sigma^2 = 5$, which can be adjusted when working with extremely unbalanced samples (see \citet{Zhu2017} Supplementary Material).  We set the read error rate as $0.01$ and the rate of mis-copying as $0.01$.
 
-\item {\bf Recombination rate and scaling}. We assume a uniform recombination map, where the genetic distance between loci $i$ and $i+1$ is computed by $\psi_i = D_i / d_m$ where $D_i$ denotes the physical distance between loci $i$ and $i+1$ in nucleotides and $d_m$ denotes the average recombination rate in Morgans bp$^{-1}$. We use the recombination rate for {\it P. falciparum} of 13,500 base pairs per centiMorgan as reported by \citet{Miles2016}. \donenum{Minor Comment 6, on the scaling parameter G }The recombination rate is scaled by a factor $G$, which reflects the effective population size, rate of inbreeding, and relatedness of the reference panel. \textcolor{black}{In practice, we deconvolve over 1 million markers in field samples. We tune the parameter $G$ using {\it in vitro} lab mixtures, use a value of $G=20$ to ensure small values for recombination probabilities between any two markers, with a mean of 0.015. A large value of $G$ relaxes the reference panel constraint, becoming an LD free model when $G$ is infinity. The scaled genetic distance $G\psi$ is used to compute the transition probability of switching from copying reference haplotype $a$ to reference haplotype $b$. Given LD varies enormously between {\it P. falciparum} populations, we will investigate how to tune this parameter for future improvement. In the current release, our program allows users to apply the flag {\tt -G} and specify an input parameter $G$.} %For IBD tracts computation, we set $G = 0.1$ to enforce less recombination.
+\item {\bf Recombination rate and scaling}. We assume a uniform recombination map, where the genetic distance between loci $i$ and $i+1$ is computed by $\gamma_i = D_i / d_m$ where $D_i$ denotes the physical distance between loci $i$ and $i+1$ in nucleotides and $d_m$ denotes the average recombination rate in Morgans bp$^{-1}$. We use the recombination rate for {\it P. falciparum} of 13,500 base pairs per centiMorgan as reported by \citet{Miles2016}. The recombination rate is scaled by a factor $G$, which reflects the effective population size, rate of inbreeding, and relatedness of the reference panel. In practice, we deconvolute over 1 million markers in field samples. We tuned the parameter $G$ using {\it in vitro} lab mixtures, finding that a value of $G=20$ ensures small recombination probabilities between any two markers, with a mean of 0.015. A large value of $G$ relaxes the reference panel constraint, becoming an LD free model when $G$ is infinity. The scaled genetic distance $G \gamma$ is used to compute the transition probability of switching from copying reference haplotype $a$ to reference haplotype $b$. Given LD varies enormously between {\it P. falciparum} populations, we will investigate how to tune this parameter for future improvement. In the current release, our program allows users to apply the flag {\tt -G} to specify a specific value.  We note that IBD deconvolution from error-prone data can benefit from even smaller values of $G$, such as $0.1$.  
 
-%\item {\bf IBD state transitions} A significant improvement from \citet{Zhu2017}'s method is that $P(\mathcal{S}_{i}|n)$ takes into account of the IBD state at the previous position $i-1$ with recombination. A transition into a different IBD state will take into account of recombination probabilities.
-
-\item {\bf Update without linkage disequilibrium}. For initialising the chain, or if the markers present are very widely spaced, linkage disequilibrium can be ignored, which is equivalent to setting the genetic distance between adjacent loci to be infinitely high.  Under these circumstances, the haplotype updates become much simpler and depend only on the population-level allele frequency (PLAF), for example as estimated from the reference panel or provided independently.
-
-\item {\bf Reporting}. We aim to provide users with a single point estimate of the haplotypes and their proportions, although the full chain is also available for analysis.  To achieve this we report values at the last iteration - i.e. we report a single sample from the posterior.  However, to measure robustness, we typically repeat the deconvolution with multiple random starting points. We use a majority vote rule on the inferred number of strains; we then select the chain with the lowest average deviance (after removing the burn-in) as our estimate. The deviance measures the difference in log likelihood between the fitted and saturated models, the latter being inferred by setting the WSAF to that of the observed values. These parameters can be modified by users to achieve a preferred balance between computational speed and confidence.  By default, we set the MCMC sampling rate as 5, with the first 50\% of samples removed as burn in and 800 samples used for estimation.
+\item {\bf Reporting}. We aim to provide users with a single point estimate of the haplotypes, their proportions and IBD configurations, although the full chain is also available for analysis.  To achieve this we report values at the last iteration - i.e. we report a single sample from the posterior.  However, to measure robustness, we typically repeat the deconvolution with multiple random starting points. We use a majority vote rule on the inferred number of strains; we then select the chain with the lowest average deviance (after removing the burn-in) as our estimate. The deviance measures the difference in log likelihood between the fitted and saturated models, the latter being inferred by setting the WSAF to that of the observed values. These parameters can be modified by users to achieve a preferred balance between computational speed and confidence.  By default, we set the MCMC sampling rate as 5, with the first 50\% of samples removed as burn in and 800 samples used for estimation.
 
 \item {\bf Reference panel construction}. To infer clonal samples for the reference panel we use the Pf3k project data, running the algorithm without LD on all samples and identifying those with a dominant haplotype (proportion $>$ 0.99) as clonal.  These clonal samples are grouped by region of sampling to form location-specific reference panels.  In addition, we have included a number of reference strains, described in more detail below.
 
 \end{itemize}
 
-\item {\bf Extract pairwise IBD tracts and relatedness}
+\item {\bf Summarising pairwise IBD}
 \donenum{pairwise IBD tracts and relatedness}
-\textcolor{black}{At each site, we use the viterbi algorithm and  extract IBD states with the maximal forward posterior probabilities to obtain IBD state blocks. For each strain pair, we then identify pairwise IBD tracts from IBD state blocks which contain the target pairs. For instance, for 3 strains, we identify 0-1 tracts from blocks of IBD state 1-1-2 which only strains 0 and 1 are IBD and from IBD state 2-2-2 that all strains are IBD. IBD tract lengths are computed by taking positional differences at the two ends of IBD tracts.}
+At the end of a run, we obtain the maximum likelihood estimate of IBD configurations along the chromosome using the Viterbi algorithm.  Patterns of IBD are then obtained for all pairs of strains and summarised through the mean fraction IBD and the N50 IBD tract, obtained by identifying all blocks of IBD, sorting them in decreasing size and finding the size of the block such that 50\% of all sites that are in IBD lie in blocks of at least this size.  A larger N50 statistic indicates more recent common ancestry. 
 
-\textcolor{black}{Genomic data are usually heterogeneous: Both of the read coverage and depth vary along the sequence. As a result, it leads to variable likelihood and posterior probabilities along the sequence. In order to obtain a smooth posterior probabilities, we take into account of noise and IBD state transitions from both sides of a SNP and use a forward-backward approach to compute the posterior probability. In practice, we determine the proportion of each strain first, then use a forward-backward algorithm to compute the posterior probability with fixed strain proportions. Finally, we integrate posterior probabilities for each strain pair, and derive the pairwise relatedness by taking the average among all possible pairs.}
+We note that it is also possible to obtain estimates of pairwise IBD from the full posterior distribution of pairwise IBD (using standard hidden Markov model practices).  Typically these give very similar answers to the Viterbi solution, though are typically slightly larger due to the identification of low certainty regions.  The posterior mean IBD between pairs is also provided to users as output.
+
 \end{itemize}
 
 
 
 
 \subsection{Commands}
-Each isolate deconvolution is repeated 15 times with a random seeds of choice from 1 to 15. We take the seed with the smallest value such that the number of strain is the consensus one.
+Each isolate deconvolution is repeated 15 times with a random seeds of choice from 1 to 15. For each run we obtain an estimate of the number of strains and we take the modal value to be the estimate.  For reporting, we use the first run that estimated the consensus number of strains.  The text below gives an example of an input script for deconvolution.  Full details are available in the documentation at the Github page: \url{https://github.com/mcveanlab/DEploid/}.
 \linespread{1}
 \begin{lstlisting}
 ref=PD0577-C_ref.txt
@@ -340,17 +296,16 @@ interpretDEploid.r -ref ${ref} -alt ${alt} -plaf ${plaf} -o ${prefix} -dEprefix 
 
 
 \subsection{Error analysis}
-\donenum{Essential revision 2, error analysis}
-\textcolor{black}{For haplotype quality analysis, we compare the testing haplotype ({\tt DEploid} output) with the true haplotype. In the ideal world, we have done all the phasing correctly, the only source of error is {\bf mismatches} between the testing haplotype and the truth. In practice, the deconvolution process breaks the haplotype and copies different genome segments from a reference panel and introduces {\bf switch errors}. Our method deconvolves the haplotypes based on allele frequency imbalance, which assumes that the the sequencing read count is proportional to strain abundance. In the case when one strain has lower proportion to the other strains, there might be insufficient data to make accurate inference, and causes short segment of the haplotypes missing. We refer this as {\bf dropout error}. Dropout error can also be caused by the sequencing process, when parts of the genome are not well sequenced (low read count). In this error model, we do not further investigate the source of dropout errors.}
+For haplotype quality analysis, we compared the inferred haplotype ({\tt DEploid} output) with the true haplotype. In addition to mismatches between the testing haplotype and the truth, the deconvolution process also introduces switch errors, where the haplotypes are correct, but have undergone {\it in silico} recombination events. In addition, when one strain has low frequency, there might be insufficient data to make accurate inference, resulting in missing segments of the true haplotypes. We refer to this as dropout error. Dropout error can also be caused by the sequencing process, when parts of the genome are not well sequenced (low read count). 
 
-\textcolor{black}{In principle, our error analysis approach slices the haplotypes into small chuncks (in the limit of one basepair), and searches the best path of the testing haplotyes $h$ in the true haplotypes $H$, such that it minimises the sum of mismatches, switches and dropouts. To model the errors in a probabilistic fashion, we introduce a simplified Hidden Markov model: In stead of probability, we consider the cost. Events with the lowest cost has probability of 1. We use a two-strains example for demonstration. At every position $i$, we consider the hidden state as all 4 possible permutations of the testing strain to best match the truth:
+In principle, our error analysis approach slices the haplotypes into small chunks (in the limit of one basepair), and searches the best path of the testing haplotyes $h$ in the true haplotypes $H$, such that it minimises the sum of mismatches, switches and dropouts. To model the errors in a probabilistic fashion, we introduce a simplified Hidden Markov model: In stead of probability, we consider the cost. Events with the lowest cost has probability of 1. We use a two-strains example for demonstration. At every position $i$, we consider the hidden state as all 4 possible permutations of the testing strain to best match the truth:
 \begin{enumerate}
   \item $h_{1}$, $h_{2}$ match $H_{1}$ and $H_{2}$ respectively,
   \item $h_{1}$, $h_{2}$ match $H_{2}$ and $H_{1}$ respectively,
   \item $h_{1}$, $h_{2}$ both match $H_{1}$,
   \item $h_{1}$, $h_{2}$ both match $H_{2}$.
 \end{enumerate}
-The cost of switching state takes into account of the emission cost at current position $i$, which is the total mismatches between testing haplotypes and the truth. At the next position $i+1$, we increment the total cost by a relative cost of 2 for switching and 1 for dropout. A state switch will happen when any other hidden states has a lower cost. The model will then accordingly increment error counts as we proceed from one end to the other.}
+The cost of switching state takes into account of the emission cost at current position $i$, which is the total mismatches between testing haplotypes and the truth. At the next position $i+1$, we increment the total cost by a relative cost of 2 for switching and 1 for dropout. A state switch will happen when any other hidden states has a lower cost. The model will then accordingly increment error counts as we proceed from one end to the other.
 
 \textcolor{black}{For more general cases, we need to consider all possible permutations of testing haplotypes to pair with the truth. For this study, we extend the error model to 3 strains (example in Figure\ref{fig:error}). The code {\tt errorAnalysis.r} is available at \url{https://github.com/DEploid-dev/DEploid-Utilities/}.}
 
@@ -363,29 +318,29 @@ The cost of switching state takes into account of the emission cost at current p
 \end{figure}
 
 
+
+
 \newpage
 
 \section{Generating {\it in silico} mixtures for deconvolution benchmark}
-\subsection{{\it In silico} lab mixtures}
-\textcolor{black}{For {\it in silico} lab mixtures, we used lab strain GB4 sequence to provide a whole-genome read depth profile. We drew Bernoulli variables to simulate alternative allele counts, with probability of success as the adjusted within sample allele frequency at each position (Equation~\eqref{eqn:adj_q}). The expected WSAF is the dot product of the genotype of the lab strains: 3D7, Dd2, HB3, 7G8 and the proportions (Equation\eqref{eqn:qij_full_sum}). For example, if the genotype is 0, 0, 1, 1 at an arbitrary position, and the mixture proportion of 0.1, 0.2, 0.4 and 0.3 will lead to an expected WSAF of 0.7. We then further adjust the WSAF with an error term (0.01) to account for all technical error/noise: $0.7 \times(1-0.01) + (1-0.7) \times.01 = 0.696$. \donenum{Minor Comment 14, on binomial proportions}}
+\subsection{{\it In silico} mixtures of lab strains}
+For {\it in silico} lab mixtures, we used the lab strain GB4 to provide a whole-genome read depth profile. We drew Bernoulli variables to simulate alternative allele counts, with the probability of success as the adjusted within sample allele frequency at each position (Equation~\eqref{eqn:adj_q}). The expected WSAF is the dot product of the genotype of the lab strains: 3D7, Dd2, HB3, 7G8 and the proportions (Equation\eqref{eqn:qij_full_sum}). For example, if the genotype is 0, 0, 1, 1 at an arbitrary position, and the mixture proportion of 0.1, 0.2, 0.4 and 0.3 will lead to an expected WSAF of 0.7. We then further adjust the WSAF with an error term (0.01) to account for all technical error/noise: $0.7 \times(1-0.01) + (1-0.7) \times.01 = 0.696$.
 
 \vspace{.5cm}
-\noindent \textcolor{black}{To test the accuracy of \texttt{DEploidIBD} in a more realistic setting, we created {\it in silico} mixtures of 2, 3 and 4 strains given different transmission scenarios from mosquito bites. Let $k$ denote the number strains within each sample, and $m$ denote the number of independent mosquito bites. An observation of a $k$-mix can be treated as a result of a $m$-bite events, where $k \in \{2,3,4\}$ and $1~{\leq}~{m}~{\leq}~k$. For example, a mixed infection of two strains can happen via a single mosquito bite passing on two parasite progenies, also known as a co-infection. Alternatively, mixed of two can form through two independent mosquito bites, also known as a super-infection. A mixed of 3 strains can be slightly more complex: Beside a co-infection (3 related strains) and a super-infection (3 unrelated strains), we can also have a super-infection scenario made up from a co-infection plus a clonal-infection. The complete simulation procedure (code) is available at \url{https://github.com/DEploid-dev/DEploid-Data-Benchmark-in_silico_field}.}
+To test the accuracy of \texttt{DEploidIBD} in a more realistic setting, we created {\it in silico} mixtures of 2, 3 and 4 strains given different transmission scenarios from mosquito bites. Let $K$ denote the number strains within each sample, and $b$ denote the number of independent mosquito bites. In such a scenario, a mixed infection containing $K$ strains can be treated as a result of a $b$-bite events, where $K \in \{2,3,4\}$ and $1~{\leq}~{b}~{\leq}~K$. For example, a $K=2$ mixed infection can result from co-transmission, where two strains are passed in a single bite ($b=1$); or by superinfection, where each strain is delivered by a unique bite ($b=2$). A mixed infection containing 3 strains is more complex: besides co-infection (3 strains in a single bite, $b=1$) and superinfection (3 strains in 3 bites, $b=3$), we can also have a super-infection scenario made up from a co-infection plus a clonal-infection ($b=2$). The complete simulation procedure (code) is available at \url{https://github.com/DEploid-dev/DEploid-Data-Benchmark-in_silico_field}.
 
-\subsection{{\it In silico} field mixtures of 2 strains}
-\textcolor{black}{To simulate a 2-mixture, we randomly selected two strains from 189 clonal samples of African origin (proportions ranging from 10/90\% to 50/50\%) using Chromosome 14 data.  A further 20 randomly chosen samples were used as the reference panel. In order to compare the accuracy of the two methods at different levels of relatedness, we set 0\%, 25\%, 50\% and 75\% of the second haplotype the same as the first haplotype to mimic scenarios of unrelated, low, medium and high relatedness respectively. This operation sets a lower limit to the relatedness between two strains, as background relatedness may also exist. We used empirical read depths and drew read counts for the two alleles from binomial proportions (the same approach for generating {\it in silico} lab mixtures). We excluded sites for analysis at zero alternative allele counts in both targeted samples and reference panel, kept and analysed around 7,757 polymorphic sites (standard deviation 178) for each {\it in silico} samples.}
+\subsection{{\it In silico} mixtures of two field strains}
+To simulate a mixture of two strains, we randomly selected two strains from 189 clonal samples of African origin (proportions ranging from 10/90\% to 50/50\%) using Chromosome 14 data.  A further 20 randomly chosen samples were used as the reference panel. In order to compare the accuracy of the two methods at different levels of relatedness, we set 0\%, 25\%, 50\% and 75\% of the second haplotype the same as the first haplotype to mimic scenarios of unrelated, low, medium and high relatedness respectively. This operation sets a lower limit to the relatedness between two strains, as background relatedness may also exist. We used empirical read depths and drew read counts for the two alleles from binomial proportions (the same approach for generating {\it in silico} lab mixtures). We excluded sites for analysis at zero alternative allele counts in both targeted samples and reference panel, kept and analysed around 7,757 polymorphic sites (standard deviation 178) for each {\it in silico} samples.
 
+We repeated the \emph{in silico} experiment with mixtures of two strains from 204 clonal Asian samples, also with mixing proportions of ranging from 10/90\% to 50/50\%, using about 3,041 sites (s.d. 227) from Chromosome 14.
 
-\textcolor{black}{We repeated the \emph{in silico} experiment with mixtures of two strains from 204 clonal Asian samples, also with mixing proportions of ranging from 10/90\% to 50/50\%, using about 3,041 sites (s.d. 227) from Chromosome 14.}
+\subsection{{\it In silico} mixtures of three field strains}
+We further extended benchmarking to \emph{in silico} mixtures of three strains in African populations with mixing proportions of 10/10/80\%, 10/25/65\%, 15/25/60\%, 10/40/50\%, 15/30/55\%, 20/30/50\%, 33/33/34\%. Two generate $b=1$ infections with three strains, we randomly selected two strains, namely parent A and parent B, from 189 clonal samples of Africa origin, and set the first 33\% of the first haplotype and the last 66\% of the second haplotype the same as parent A; the rest of the first and second haplotypes and the third haplotype the same as parent B, to mimic the scenario of a 1/3 pairwise relatedness within sample.
 
-\subsection{{\it In silico} field mixtures of 3 strains}
+In addition to the basic co-infection and super-infection scenarios of 3 strains, we also consider more complex events when co-infection presents within a super-infection. This data simulation is similar to simulating 2 strains of 50\% relatedness, with one additional unrelated haplotype. Therefore, the overall pairwise relatedness is $1/2$ distributed over three possible pairs, which leads to $1/6$.
 
-\textcolor{black}{We further extended benchmarking to \emph{in silico} mixtures of three strains in African population with mixing proportions of 10/10/80\%, 10/25/65\%, 15/25/60\%, 10/40/50\%, 15/30/55\%, 20/30/50\%, 33/33/34\%. Similar to previous experiment, we benchmark our methods in cases if parasite strains are all from different mosquito bites or they are all from the same mosquito bite. For the latter, we randomly selected two strains, namely parent A and parent B, from 189 clonal samples of Africa origin, and set the first 33\% of the first haplotype and the last 66\% of the second haplotype the same as parent A; the rest of the first and second haplotypes and the third haplotype the same as parent B, to mimic the scenario of a 1/3 pairwise relatedness within sample.}
-
-\textcolor{black}{In addition to the basic co-infection and super-infection scenarios of 3 strains, we also consider more complex events when co-infection presents within a super-infection. This data simulation is similar to simulating 2 strains of 50\% relatedness, with one additional unrelated haplotype. Therefore, the overall pairwise relatedness is $1/2$ distributed over three possible pairs, which leads to $1/6$.}
-
-\subsection{{\it In silico} field mixtures of 4 strains}
-\textcolor{black}{In order to test the limit of our method, we have pushed our deconvolution experiments to mixture of 4 strains. From previous experiments, we have learned that strain compositions with even proportions are difficult to deconvolve. In this set of simulations, we experiment unbalanced mixture and different pair of balanced strains and test for proportions of 11/22/30/37\%, 25/25/25/25\%, 20/20/20/40\% and 30/30/30/10\%. For some cases, the data generation procedures can easily be modified from previous experiment: a $4$-bite event of $4$ strains is equivalent to a $3$-bite event of 3 strains with one extra random haplotype; a $3$-bite event of $4$ strains is equivalent to a $2$-bite event of 3 strains with one extra random haplotype. For $2$-bite event of 4 strains, there are two possibilities: 1. both bites pass on 2 strains, which is essentially repeating $1$-bite event of 2 strains twice; on the other hand, it is essentially a $1$-bite event of 3 strains with one extra random haplotype.}
+\subsection{{\it In silico} mixtures of four field strains}
+We tested {\it In silico} deconvolution experiments on mixtures of 4 strains. From previous experiments, we have learned that strain compositions with even proportions are difficult to deconvolute. In this set of simulations, we experimented with various unbalanced and balanced proportions including 11/22/30/37\%, 25/25/25/25\%, 20/20/20/40\% and 30/30/30/10\%. For some cases, the data generation procedures can easily be modified from previous experiment: a $b=4$ event of for four strains is equivalent to a $3$-bite event of 3 strains with one extra random haplotype; a $b=3$ event of four strains is equivalent to a $2$-bite event of 3 strains with one extra random haplotype. For $2$-bite event of 4 strains, there are two possibilities: (i) both bites pass on 2 strains, which is essentially repeating $b=1$ event of 2 strains twice or (ii) three strains in one bite and one in another, which is essentially a $1$-bite event of 3 strains with one extra random haplotype.
 
 
 %\begin{table}
@@ -400,7 +355,7 @@ The cost of switching state takes into account of the emission cost at current p
 
 %\section{Deconvolution example with sample PD0577-C}
 
-%The following example shows a specific {\textmd DEploid} command to deconvolve the mixed sample {\textmd PD0577-C}:
+%The following example shows a specific {\textmd DEploid} command to deconvolute the mixed sample {\textmd PD0577-C}:
 %\linespread{1}
 %\begin{lstlisting}
 %dEploid -ref PD0577-C_ref.txt \
@@ -417,7 +372,7 @@ The cost of switching state takes into account of the emission cost at current p
     %-exportPostProb
 %\end{lstlisting}
 %\linespread{1.5}
-%where ``{\tt -ref PD0577-C\_ref.txt}'' and ``{\tt -alt PD0577-C\_alt.txt}'' define the input text files \footnote{The Pf3k data was deconvolved using DEploid version v0.1-beta. Recent versions can take VCF files as input as well.} that record the reference and alternative read counts respectively; ``{\tt -plaf asia-1\_PLAF.txt}'' contains the population allele frequencies calculated from total read counts. Note that we use option ``{\tt -exclude asia-1\_exclude.txt}'' to skip deconvoluting monomophic sites; ``{\tt -panel asia-1\_panel.txt}'' specifies a text file including haplotypes of samples listed in Table~\ref{tab:panelSamples}; options ``{\tt -nSample}'', ``{\tt -rate}'' and ``{\tt -burn}'' specify the total number of MCMC samples to take, the sampling rate and the burning rate of the MCMC chain respectively. For detailed documentation, please see \url{http://deploid.readthedocs.io/en/latest/input.html}.
+%where ``{\tt -ref PD0577-C\_ref.txt}'' and ``{\tt -alt PD0577-C\_alt.txt}'' define the input text files \footnote{The Pf3k data was deconvoluted using DEploid version v0.1-beta. Recent versions can take VCF files as input as well.} that record the reference and alternative read counts respectively; ``{\tt -plaf asia-1\_PLAF.txt}'' contains the population allele frequencies calculated from total read counts. Note that we use option ``{\tt -exclude asia-1\_exclude.txt}'' to skip deconvoluting monomophic sites; ``{\tt -panel asia-1\_panel.txt}'' specifies a text file including haplotypes of samples listed in Table~\ref{tab:panelSamples}; options ``{\tt -nSample}'', ``{\tt -rate}'' and ``{\tt -burn}'' specify the total number of MCMC samples to take, the sampling rate and the burning rate of the MCMC chain respectively. For detailed documentation, please see \url{http://deploid.readthedocs.io/en/latest/input.html}.
 
 %\linespread{1}
 %\begin{lstlisting}
@@ -452,11 +407,11 @@ The cost of switching state takes into account of the emission cost at current p
 
 \section{Pf3k field sample analysis}
 \subsection{Sample choice}
-There are 2,640 samples from the Pf3k data set. Only 5 Nigeria samples are present in the Pf3k data which we regard as being insufficient sampling for a high-transmission country \citep{who2017profileNigeria}. Hence we have excluded Nigeria samples for any downstream analysis. We discard continent mismatched samples and samples containing mixed malaria species. We also exclude samples where sequencing depth is below 30 and less than 30\% of sites are callable. Finally, we exclude all lab strains (include reference strains, artificial mixtures, crosses samples) and duplicated samples for population level analysis, which leaves us with 2,344 field samples from 13 countries.
-
+We relied on 2,640 samples from the Pf3k project. We excluded Nigeria from downstream analysis as there were only 5 samples from this country.
+We discarded samples containing mixed malaria species and those where sequencing coverage depth was below 30X or in which less than 30\% of sites were callable. Finally, we exclude all lab strains (including reference strains, artificial mixtures, and crosses samples) and duplicated samples. In total, we retained 2,344 field samples from 13 countries.
 
 \subsection{Data filtering}
-We ran {\tt DEploid-IBD} on high quality biallelic SNPs (both coding and non-coding, tagged with PASS at the QUAL column in the VCF file) from Pf3k~\citep{pf3k}. Before the additional filtering described below, this set contained 1,057,830 SNPs.
+We ran {\tt DEploid-IBD} on high quality biallelic SNPs (both coding and non-coding, tagged with PASS at the QUAL column in the VCF file) from Pf3k~\citep{pf3k}. Before the additional filtering step described below, this set contained 1,057,830 SNPs.
 \linespread{1}
 \begin{lstlisting}
 bcftools view \
@@ -471,27 +426,27 @@ SNP_INDEL_Pf3D7_01_v3.combined.filtered.vcf.gz
 
 \subsubsection{High leverage points}
 
-We find markers with high frequencies in both reference and alternative allele count can mislead our model to fit extra strains. We used a threshold of $\geq$ 99.5\% coverage (default) to identify markers with extremely high allele counts. We further expand this list of potential ``bad markers'' by considering their nearest 10 neighbours on both sides along the genome, and identify the nearest markers as ``to be excluded'' if overlaps are found (see Figure~\ref{fig:fitering}). These poorly-genotyped variants are likely to be artefacts of mapping and genotype calling.
+We found that markers with high coverage for both alleles could mislead our model, inducing it to fit additional strains. We used a threshold of $\geq$ 99.5\% coverage (default) to identify markers with extremely high allele counts. We further expanded this list of potential problematic markers by considering their nearest 10 neighbours on both flanks, and excluding those that were tagged more than once (see Figure~\ref{fig:fitering}). These poorly-genotyped variants are likely to be errors of mapping and genotype calling.
 
 \begin{figure}[ht]
   \centering
     \includegraphics[width=0.7\textwidth]{{PG0415-CaltVsRefAndWSAFvsPLAF}.png}
-  \caption{Figure on the top plot total allele counts across all markers. We observe a small number of heterozygous sites with high coverage (marked as crosses above), which can potentially mislead our model to over-fit the data with additional strains.  We use a threshold of $\geq$ 99.5\% coverage to identify markers with extremely high allele counts. Red crosses indicate markers that are filtered out. Figure on the left plots the alternative allele count against the reference allele count. As {\it P. falciparum} genomes are haploid, in clonal samples, one would expect to see either alternative or reference allele at any sites. Heterozygous sites are indications of mixed infection. The marked black crosses can mislead our model to overestimate the number of strains as two. Figure in the middle is the histogram of the allele frequency within sample. Figure on the right show allele frequency within sample, compare against the population average.
-  }
-  \donenum[inline]{Sup. Mat. 4. needs caption}
+  \caption{(Top) Plot showing total allele counts across all markers. We observe a small number of heterozygous sites with high coverage (shown as crosses on the bottom-left plot), which can potentially mislead our model to over-fit the data with additional strains.  We used a threshold of $\geq$ 99.5\% coverage to identify markers with high allele counts. Red crosses indicate markers that are filtered out. (Bottom-left) Scatter plot showing alternative against reference allele count. Heterozygous sites are indicative of mixed infection. The marked black crosses refer to the outliers identified on the previous plot. (Bottom-middle) Histogram of allele frequency within sample. (Bottom-right) Allele frequency within sample, compare against the population average.}
   \label{fig:fitering}
 \end{figure}
 
 %\subsubsection{High nucleotide diversity regions}
 %\noindent
 \donenum{Sup. Mat. 5, Why are we calculating diversity}
-In order to track down the causes of high leverage points, we investigate the nucleotide diversity of the {\it P. falciparum} genome. We use clonal haplotypes to compute nucleotide diversity in a sliding window along the genome. At each SNP, we use $n_{0}$ and $n_{1}$ to denote counts for reference and alternate alleles, respectively. Let $n = (n_{0} + n_{1})$ be the number of haplotypes in the population with a non-missing call. We compute the mean number of pairwise differences for this SNP as follows: First, compute the total number of pairs as $n$ choose 2: $n_{pairs} = n * (n - 1) / 2$. Then compute the number of pairs that are the same: $n_{same} = (n_{0} * (n_{0} - 1) / 2) + (n_{1} * (n_{1} - 1) / 2)$. Compute the number of pairs that are different: $n_{d}$ = $n_{pairs} - n_{same}$. Therefore, the mean number of pairwise differences: $mpd = n_{d} / n_{pairs}$. To compute the nucleotide diversity $\pi$, we compute the sum of $mpd$ in a window of 20kbp bases centred on each SNP, and divide by the number of accessible bases. This gives the mean number of pairwise differences per base. Regions containing high leverage points tend to be at the ends of chromosomes or within regions of high nucleotide diversity, where read mapping is problematic (see Figure~\ref{fig:nd}). We identify potential outliers in all samples, and filter out common outliers in at least 50 samples -- 48,443 in total.
+To track down the causes of high leverage points, we assessed nucleotide diversity in the {\it P. falciparum} genome. We used clonal haplotypes to compute nucleotide diversity by running a sliding window along the genome. At each SNP, we use $n_{0}$ and $n_{1}$ to denote counts for reference and alternative alleles, respectively. Let $n = (n_{0} + n_{1})$ be the number of haplotypes in the population with a non-missing call. We computed the mean number of pairwise differences for this SNP as follows. First, we computed the total number of pairs as  $n_{pairs} = n * (n - 1) / 2$. Then, we computed the number of pairs that were the same, $n_{same} = (n_{0} * (n_{0} - 1) / 2) + (n_{1} * (n_{1} - 1) / 2)$, and the number of pairs that were different, $n_{d}$ = $n_{pairs} - n_{same}$. Finally, we obtained the mean number of pairwise differences as $mpd = n_{d} / n_{pairs}$. To estimate nucleotide diversity $\pi$, we computed the sum of $mpd$ in a window of 20kbp centred on each SNP, and divided by the number of accessible bases, which produces the mean number of pairwise differences per base. 
+
+Regions containing high leverage points tended to be at the ends of chromosomes or within regions of high nucleotide diversity, where read mapping was problematic (see Figure~\ref{fig:nd}). We identified potential outliers in all samples, and filtered out common outliers in at least 50 samples -- 48,443 in total.
 
 
 \begin{figure}[ht]
   \centering
     \includegraphics[width=0.7\textwidth]{{supFigures/nd_hist.pdf}}
-  \caption{Nucleotide diversity with window size of 20,000. Top two histogram show the heavy tail of ND beyond 0.0007. Bottom figure show ND along {\it P. falciparum} chromosome 1. Scattered Points mark chromosome positions of poorly genotyped SNPs which we exclude from the deconvolution process. These points are jitterred around 0.0007 of visualization.
+  \caption{Nucleotide diversity for a sliding window size of 20,000 base pairs. (Top) Histograms showing the heavy tail of ND beyond 0.0007. (Bottom) Figure showing ND along {\it P. falciparum} chromosome 1. Scattered Points mark chromosome positions of poorly genotyped SNPs which we exclude from the deconvolution process. These points are jitterred to ease visualization.
   }
   \label{fig:nd}
 \end{figure}
@@ -499,13 +454,13 @@ In order to track down the causes of high leverage points, we investigate the nu
 
 
 \subsection{Analysis preparation}
-In order to improve the accuracy and efficiency of the deconvolution process, we first split the  data into groups based on genetic similarity. We compute genetic distance between two samples as follows:
+To improve the accuracy and efficiency of the deconvolution process, we first split the  data into groups based on genetic similarity. We computed genetic distance between two samples as follows:
 \begin{equation}
 d(x, y) = \sum_{l}^{L}\textrm{WSAF}_{x,l} * (1-\textrm{WSAF}_{y,l}) + \textrm{WSAF}_{x,l} * (1-\textrm{WSAF}_{y,l})
 \end{equation}
 where $l$ represents an arbitrary locus, $L$ denotes the total number of loci, and $\textrm{WSAF}_{s,l}$ indicates the non-reference within-sample allele frequency for sample $s$ at locus $l$. $\textrm{WSAF}_{s,l}$ is then given by $\textrm{WSAF}_{s,l} = \frac{a_{s,l}}{r_{s,l}+a_{s,l}}$ where $a_{s,l}$ is the number of read counts supporting the alternative allele in sample $s$ at locus $l$, and $r_{s,l}$ is the number of read counts supporting the reference allele in sample $s$ at locus $l$.
 
-We find that samples from the same geographical region differentiate into clear groups. We use this initial grouping as the basis for defining the reference panels that assist deconvolution. The geographical groups arising from this analysis are listed below. In order to reduce computational time, we restrict to polymorphic sites in each population group:
+We found that samples from the same geographical region differentiated into clear groups. We used this initial grouping as the basis for defining the reference panels that assisted the deconvolution. The geographical groups arising from this analysis are listed below. In order to reduce computational time, we only used polymorphic sites at each population group:
 \begin{enumerate}
   \item Malawi, Congo, with 349,242 sites.
   \item Ghana (Navrongo), with 508,606 sites.
@@ -535,11 +490,10 @@ We find that samples from the same geographical region differentiate into clear 
 
 
 \subsection{Haplotype quality assessment}
+\label{section:hap-quality}
+In this work, we also assessed the quality of the haplotypes inferred by \texttt{DEploidIBD}. Our goal was to establish to what degree our inferred haplotypes were statistically indistinguishable, given a suite of population genetics statistics, from the subset of clonal haplotypes that had the same geographical origin. Our assumption was that haplotypes found in mixed infections would have similar characteristics than those present in clonal samples. In our assessment, we found that the distribution of statistics for groups of deconvoluted haplotypes had extreme outliers and presented a higher variance when compared with the clonal population originating on the same region. We noticed that the painting process implemented by DEploid struggles when faced with challenging mixtures. For instance, mixed infections in which the co-existing strains have the same relative proportion (e.g. $k=4$ with each strain having a proportion of 25\%), or samples in which proportions are very unbalanced (e.g. k=2 with the marginal strain at 2\%). This often results in an excess of alternative calls being assigned to one of the strains, which in turn provokes a deficit of diversity on the remaining haplotypes, that cannot be explained in terms of their genetic relationship to the reference genome used for mapping and assembly (3D7). We defined our quality metric as a $z$-score that approximates how much a deconvoluted haplotype deviates from the mean genetic diversity of the clonal population present in the same geographical area.
 
-We noticed that DEploid-IBD produced chimeric haplotypes when faced with difficult mixtures. For instance, mixed infections in which the co-existing strains have the same relative proportion (e.g. $k=4$ with each strain having a proportion of 25\%), or samples in which proportions are very unbalanced (e.g. k=2 with the marginal strain at 2\%). These artefactual haplotypes show a significant deficit or excess of genetic diversity that cannot be explained in terms of their genetic relationship to the reference genome used for mapping and assembly (3D7). To discard problematic haplotypes, we devised a simple but stringent filtering strategy based on $z$-scores. For each population, we computed the distribution of alternative calls observed within the subset of clonal samples ($k=1$) in a population. Using this distribution as reference, we computed a $z$-score for each haplotype in a population following
-
-$$z_i = \frac{a_i - \bar{a}_r}{\sigma_r},$$ where $a_i$ denotes the number of alternative calls in the haplotype $i$, and $\bar{a}_r$ and $\sigma_r$ are, respectively, the mean and standard deviation of observed alternative calls in the clonal set of samples from the population of origin. We only retain haplotypes with a $z$-score in the range $(-3,3)$, thus discarding any strain that is three or more standard deviations away, in terms of alternative calls, from the mean observed for clonal samples. By using the set of clonal samples as the reference distribution, we approximate the number of alternative calls expected in a genome belonging to that population, which serves as a proxy for genetic diversity but is easier to compute. Supp. Figure \ref{fig:ghana-filtering} shows an example of this filtering process for the most problematic population in the dataset (Ghana). Supp. Table \ref{table:haps-discarded-by-country} lists the number of haplotypes discarded by population while Supp. Table \ref{table:haps-discarded-by-COI} describes the number of haplotypes discarded by COI level.
-
+For each population, we computed the distribution of alternative calls observed within the subset of clonal samples ($k=1$). Using this distribution as reference, we computed a $z$-score for each haplotype in the whole population following $$z_i = \frac{a_i - \bar{a}_r}{\sigma_r},$$ where $a_i$ denotes the number of alternative calls in the haplotype $i$, and $\bar{a}_r$ and $\sigma_r$ are, respectively, the mean and standard deviation of observed alternative calls in the clonal set of samples from the population of origin. We only considere as suitable haplotypes with a $z$-score in the range $(-3,3)$, thus discarding any strain that is three or more standard deviations away, in terms of alternative calls, from the mean observed for clonal samples. By using the set of clonal samples as the reference distribution, we approximated the number of alternative calls expected in a genome belonging to that population, which serves as a proxy for genetic diversity but is easier to compute. Supp. Figure \ref{fig:ghana-filtering} shows an example of this filtering process for the most problematic population in the dataset (Ghana). Supp. Table \ref{table:haps-discarded-by-country} lists the number of haplotypes discarded by population while Supp. Table \ref{table:haps-discarded-by-COI} describes the number of haplotypes discarded by COI level. Statistical deconvolution of haplotypes in mixed infections remains a challenging problem and requires further research. Nonetheless, our quality metric can guide other researchers in the process of discarding haplotypes that are clearly artefactual
 
 \begin{figure}[ht]
   \centering
@@ -598,8 +552,7 @@ Vietnam & 23 & 113 & 0.17\\
 
 
 \subsection{Combining clonal sample pairs for background IBD computation}
-We combined randomly selected clonal sample pairs to create artificial mixed infections for  each country, as a way to generate a background IBD distribution. We assume these artifical mixed infections mimic infections generated from two independent mosquito bites. In this setting, strain proportions are determined by their median read depth.  Sample coverage is obtained by accumulating the reference and alternative allele counts of two clonal samples. Similar to {\tt DEploidIBD} deconvolution, high allele count SNPs generated during this process caused high leverage in the model. Additionally, the sample sequence depth and skewness are heterogeneous due to different sample preparation and sequencing protocols. We reduce the {\tt DEploidIBD} filtering threshold from 99.5\% to 80\%, and use low recombination probabilities to avoid false IBD break detections. We validated our method using lab crosses \citep{Miles2016}, and compared the IBD block detections using \citet{Li2003}'s painting with parental strains and {\tt DEploidIBD} algorithm (Figure~\ref{fig:bgibd}).
-
+We combined randomly selected clonal sample pairs to create artificial mixed infections, as a way to generate a background IBD distributions for each country. We assumed these artificial mixed infections mimic infections generated from two independent mosquito bites. In this setting, strain proportions are determined by their median read depth, whereas sample coverage is obtained by accumulating the reference and alternative allele counts of two clonal samples. Similar to {\tt DEploidIBD} deconvolution, SNPs with very high coverage resulting from this process caused high leverage in the model. Additionally, the sample sequence depth and skewness were heterogeneous due to different sample preparation and sequencing protocols. We reduced the {\tt DEploidIBD} filtering threshold from 99.5\% to 80\%, and used low recombination probabilities to avoid false IBD breakpoint inference. We validated our method using lab crosses \citep{Miles2016}, and compared the IBD block detection using \citet{Li2003}'s painting with parental strains and the {\tt DEploidIBD} algorithm (Figure~\ref{fig:bgibd}).
 
 \begin{figure}[ht]
   \centering{}
@@ -607,7 +560,7 @@ We combined randomly selected clonal sample pairs to create artificial mixed inf
   \subfloat[]{\includegraphics[width = .65\textwidth]{bgIBDvalidation/bgIBD.pdf}}
   \subfloat[]{\includegraphics[width = .35\textwidth]{bgIBDvalidation/bgN50.pdf}}
   %\subfloat[]{\includegraphics[width = .85\textwidth]{bgIBDvalidation/IBDtracklengthVsPercentage_data_clean.pdf}}
-  \caption{(A) Comparison of IBD block detection of {\tt DEploidIBD} using artificial mixtures of lab crosses PG0071-C and PG0058-C (last tract) with IBD block detection from ancestral state inference from \citet{Li2003}. (B) Scatter plot of IBD segment Nx values extracted by comparing clonal sample ancestry and using {\tt DEploidIBD} on artificial mixtures.}\label{fig:bgibd}
+  \caption{(A) Comparison of IBD block detection between {\tt DEploidIBD} (top) and ancestral state inference from \citet{Li2003} (bottom), using artificial mixtures of lab crosses PG0071-C and PG0058-C (last tract). (B) Scatter plot of IBD segment Nx values extracted by comparing clonal sample ancestry (using {\tt DEploidIBD}) on artificial mixtures.}\label{fig:bgibd}
 \end{figure}
 
 \newpage
