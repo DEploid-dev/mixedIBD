@@ -178,10 +178,12 @@ P(K, \mathbf{w}, \mathbf{h}, \mathcal{S}) = P(K) \times P(\mathbf{w}|K) \times P
 \noindent The priors on the number of strains, $K$, and their proportions, $\mathbf{w}$, are as in \citet{Zhu2017}, with associated hyperparameters being user-defined.  To model IBD configurations and resulting haplotypes we introduce a parameter $\theta$, which is the probability of outbreeding (i.e. non-IBD) for a mixed infection with two strains.  Specifically, for $K$ strains, the prior probability on configuration $\mathcal{S}$ is a function of the number of distinct strains in the configuration, $C_{\mathcal{S}}$, and the number of distinct configurations with the same number of distinct strains, $M_{\mathcal{C}}$:
 
 \begin{equation}
-    P(\mathcal{S}|K) = {K-1 \choose C_{\mathcal{S}}-1} \frac{\theta^{C_{\mathcal{S}}-1}(1-\theta)^{K-C_{\mathcal{S}}+1}}{M_{\mathcal{C}}}.
+    P(\mathcal{S}|K) = \genfrac{(}{)}{0pt}{}{K-1}{C_{\mathcal{S}}-1} \frac{\theta^{C_{\mathcal{S}}-1}(1-\theta)^{K-C_{\mathcal{S}}+1}}{M_{\mathcal{C}}}.
 \end{equation}
 
-\noindent That is, the number of distinct strains is drawn from a binomial distribution with parameters $K$ and $\theta$ and the IBD configuration is uniformly drawn from among those with the same number of distinct strains.  Consequently, the expected number of distinct haplotypes (i.e. non-IBD) in an infection with $K$ strains is $1+\theta (K-1)$. The choice of $\theta$ is user-defined, but is set to a default of $1/(K_{max}-1)$ to encourage the identification of IBD tracts.  Note that in implementation, the number of strains is typically fixed at some maximum value, $K_{max}$, but only those strains achieving some threshold proportion, typically 1\%, are actually reported.
+\noindent That is, the number of distinct strains is drawn from a binomial distribution with parameters $K$ and $\theta$ and the IBD configuration is uniformly drawn from among those with the same number of distinct strains.  Consequently, the expected number of distinct haplotypes (i.e. non-IBD) in an infection with $K$ strains is $1+\theta (K-1)$. The value of $\theta$ estimated within the Markov chain Monte Carlo (see details below).  
+
+%Note that in implementation, the number of strains is typically fixed at some maximum value, $K_{max}$, but only those strains achieving some threshold proportion, typically 1\%, are actually reported.
 
 To model the transitions between IBD states we make the approximation that the IBD state at the $i+1$th site is the same as at the $i$th site, with probability $1-p_{rec}$ and, if there is a recombination event, the IBD state is drawn from the stationary distribution described above.  
 
@@ -189,8 +191,8 @@ To model allelic states (or genotype), conditional on IBD state, we assume that 
 
 Details of the emission model are the same as described in \citet{Zhu2017}.  Briefly, the reference and alternative allele read counts at each site are modelled as being drawn from a beta-binomial distribution given the expected WSAF, $q = \mathbf{w}^T \mathbf{h}$.  To incorporate sequencing error, we modify the expected WSAF such that allele are misread with probability $e$. Thus, the adjusted expected WSAF becomes
 
-\begin{equation}
-\pi_i = q_i + (1 - q_i)e - q_ie = q_i + (1 - 2q_i)e.\label{eqn:adj_q}
+\begin{equation} \label{eqn:adj_q}
+\pi_i = q_i + (1 - q_i)e - q_ie = q_i + (1 - 2q_i)e.
 \end{equation}
 
 \noindent As previously, we model over-dispersion in read counts relative to the Binomial using a Beta-binomial distribution. 
@@ -220,9 +222,7 @@ As described above, in {\tt DEploidIBD}, allelic states at different sites withi
 
 \noindent where $\psi(\mathcal{S},\mathbf{h})$ is the prior on the combination of IBD configuration $\mathcal{S}$ and allelic configuration $\mathbf{h}$ as defined in Section \ref{sect:prior}.  Note that the summation term is identical for all IBD / allelic configurations.
 
-By storing the output of the Forward algorithm we can then sample from the posterior distribution of the IBD- and allelic-configurations (given current proportions).  That is, we sample $\mathcal{S}_l,\mathbf{h}_l \propto F_{l,\mathcal{S}, \mathbf{h}}$, and then previous steps proportion to $F_{i,\mathcal{S}, \mathbf{h}}$ times the probability to transition to the sampled state at position $i+1$.
-
-Given the sampled IBD- and allelic - configurations at each site, we can then update proportions again as described above.
+By storing the output of the Forward algorithm we can then sample from the posterior distribution of the IBD- and allelic-configurations (given current proportions).  That is, we sample $\mathcal{S}_l,\mathbf{h}_l \propto F_{l,\mathcal{S}, \mathbf{h}}$, and then previous steps proportion to $F_{i,\mathcal{S}, \mathbf{h}}$ times the probability to transition to the sampled state at position $i+1$.  
 
 \vspace{.2cm}
 
@@ -231,9 +231,13 @@ Using a reference panel free approach means that it can be difficult or impossib
 $\{\frac{1}{4},\frac{1}{4}, \frac{1}{4}, \frac{1}{4}\}$ and $\{\frac{1}{4},\frac{1}{4}, \frac{1}{2}\}$. Because of the prior we use, the model will prefer to merge haplotypes when possible, which can lead to underestimation of the number of strains. We advise users to apply {\tt DEploid} with multiple runs with and without the `-ibd' flag and see if such problem occurs.
 
 
+\subsection{Gibbs sampling update for IBD parameter}
 
-
-
+Given the sampled IBD configuration, the IBD parameter $\theta$ can be updated using Gibbs sampling.  We first identify the path of the $D$ distinct IBD configurations along the chromosome and, for each, identify the number of distinct IBD groups, $\mathcal{C}_d$.  For example, if the IBD state is 0,1,2,2 there are three distinct IBD groups (0,1,2; $\mathcal{C}_d = 3$), while if the IBD state is 0,0,1,1 there are two IBD groups (0,1; $\mathcal{C}_d = 2$).  Under the prior, the number of distinct strains (minus 1) is drawn from a binomial distribution with parameters $K-1$ and $\theta$.  With a uniform prior on $\theta$, a new value, $\theta'$ is therefore drawn from:
+\begin{equation*}
+    \theta' \sim Beta \big(\mathcal{C}_D - D + 1, D K-\mathcal{C}_D + 1\big), 
+\end{equation*}
+\noindent where $\mathcal{C}_D = \sum_{d=1}^D \mathcal{C}_d$.
 
 
 \subsection{Implementation details}
@@ -242,8 +246,9 @@ Below we detail a number of implementation details.
 
 \begin{itemize}
 
+
 \item {\bf Approximating the likelihood surface}
-At any site, the likelihood for the WSAF, $q$, induced by the allelic configuration and strain proportions derives from the beta-binomial model as implemented in \textt{DEploid}.  That is, the likelihood of $q_i$ is
+At any site, the likelihood for the WSAF, $q$, induced by the allelic configuration and strain proportions derives from the beta-binomial model as implemented in \texttt{DEploid}.  That is, the likelihood of $q_i$ is
 \begin{equation}
 L(q_{i}| e, D) \propto \frac{B(a_i + \pi c, r_i + (1-\pi) c)}{B(\pi c, (1-\pi) c)}, \label{eqn:llk}
 \end{equation}
@@ -269,7 +274,7 @@ For computational efficiency, rather than recomputing for every value of $q$, we
 \end{itemize}
 
 \item {\bf Summarising pairwise IBD}
-\donenum{pairwise IBD tracts and relatedness}
+
 At the end of a run, we obtain the maximum likelihood estimate of IBD configurations along the chromosome using the Viterbi algorithm.  Patterns of IBD are then obtained for all pairs of strains and summarised through the mean fraction IBD and the N50 IBD tract, obtained by identifying all blocks of IBD, sorting them in decreasing size and finding the size of the block such that 50\% of all sites that are in IBD lie in blocks of at least this size.  A larger N50 statistic indicates more recent common ancestry. 
 
 We note that it is also possible to obtain estimates of pairwise IBD from the full posterior distribution of pairwise IBD (using standard hidden Markov model practices).  Typically these give very similar answers to the Viterbi solution, though are typically slightly larger due to the identification of low certainty regions.  The posterior mean IBD between pairs is also provided to users as output.
@@ -296,23 +301,17 @@ interpretDEploid.r -ref ${ref} -alt ${alt} -plaf ${plaf} -o ${prefix} -dEprefix 
 
 
 \subsection{Error analysis}
+
 For haplotype quality analysis, we compared the inferred haplotype ({\tt DEploid} output) with the true haplotype. In addition to mismatches between the testing haplotype and the truth, the deconvolution process also introduces switch errors, where the haplotypes are correct, but have undergone {\it in silico} recombination events. In addition, when one strain has low frequency, there might be insufficient data to make accurate inference, resulting in missing segments of the true haplotypes. We refer to this as dropout error. Dropout error can also be caused by the sequencing process, when parts of the genome are not well sequenced (low read count). 
 
-In principle, our error analysis approach slices the haplotypes into small chunks (in the limit of one basepair), and searches the best path of the testing haplotyes $h$ in the true haplotypes $H$, such that it minimises the sum of mismatches, switches and dropouts. To model the errors in a probabilistic fashion, we introduce a simplified Hidden Markov model: In stead of probability, we consider the cost. Events with the lowest cost has probability of 1. We use a two-strains example for demonstration. At every position $i$, we consider the hidden state as all 4 possible permutations of the testing strain to best match the truth:
-\begin{enumerate}
-  \item $h_{1}$, $h_{2}$ match $H_{1}$ and $H_{2}$ respectively,
-  \item $h_{1}$, $h_{2}$ match $H_{2}$ and $H_{1}$ respectively,
-  \item $h_{1}$, $h_{2}$ both match $H_{1}$,
-  \item $h_{1}$, $h_{2}$ both match $H_{2}$.
-\end{enumerate}
-The cost of switching state takes into account of the emission cost at current position $i$, which is the total mismatches between testing haplotypes and the truth. At the next position $i+1$, we increment the total cost by a relative cost of 2 for switching and 1 for dropout. A state switch will happen when any other hidden states has a lower cost. The model will then accordingly increment error counts as we proceed from one end to the other.
+When comparing inferred haplotypes to true haplotypes we use a dynamic programming approach to find a description of the differences, optimising a cost function in which switch errors are twice as costly as mismatches and allele dropouts.  Code for performing the optimal description, {\tt errorAnalysis.r}, is available at the Github page:  \url{https://github.com/DEploid-dev/DEploid-Utilities/}.  An example analysis for three strains is shown in Figure~\ref{fig:error}.  
 
-\textcolor{black}{For more general cases, we need to consider all possible permutations of testing haplotypes to pair with the truth. For this study, we extend the error model to 3 strains (example in Figure\ref{fig:error}). The code {\tt errorAnalysis.r} is available at \url{https://github.com/DEploid-dev/DEploid-Utilities/}.}
+
 
 \begin{figure}[htp]
   \centering
     \includegraphics[width=0.7\textwidth]{DEploid_IBD_haps_compare.pdf}
-  \caption{Comparison of true and inferred haplotypes for Chromosome 14 (2,369 SNPs) in sample PG0396-C before tuning haplotypes with Reference Panel V (top) and after tuning (bottom). Red bars mark wrongly inferred positions. The yellow, cyan and white background label the haplotype segments from strains 7G8, HB3 and Dd2 respectively. The switch errors are obtained by counting the changes of a strain segment mapped to reference strains; the genotype errors are the discordance between the strain and the mapped reference segments.
+  \caption{Comparison of true and inferred haplotypes for Chromosome 14 (2,369 SNPs) in the lab strain mixture sample PG0396-C after running \texttt{DEploidIBD} to infer strain number and proportions (top) and after subsequent refinement of haplotypes by running \texttt{DEploid} with Reference Panel V (bottom).  The yellow, cyan and white backgrounds identify the haplotype segments from strains 7G8, HB3 and Dd2 respectively. Numbers in the titles indicate the inferred switch, mismatch and dropout errors identified by the dynamic programming approach, with the cost of switch errors being twice that of other errors.
   }
   \label{fig:error}
 \end{figure}
@@ -324,7 +323,7 @@ The cost of switching state takes into account of the emission cost at current p
 
 \section{Generating {\it in silico} mixtures for deconvolution benchmark}
 \subsection{{\it In silico} mixtures of lab strains}
-For {\it in silico} lab mixtures, we used the lab strain GB4 to provide a whole-genome read depth profile. We drew Bernoulli variables to simulate alternative allele counts, with the probability of success as the adjusted within sample allele frequency at each position (Equation~\eqref{eqn:adj_q}). The expected WSAF is the dot product of the genotype of the lab strains: 3D7, Dd2, HB3, 7G8 and the proportions (Equation\eqref{eqn:qij_full_sum}). For example, if the genotype is 0, 0, 1, 1 at an arbitrary position, and the mixture proportion of 0.1, 0.2, 0.4 and 0.3 will lead to an expected WSAF of 0.7. We then further adjust the WSAF with an error term (0.01) to account for all technical error/noise: $0.7 \times(1-0.01) + (1-0.7) \times.01 = 0.696$.
+For {\it in silico} lab mixtures, we used the lab strain GB4 to provide a whole-genome read depth profile. We drew Bernoulli variables to simulate alternative allele counts, with the probability of success as the adjusted within sample allele frequency at each position (Equation~\ref{eqn:adj_q}). The expected WSAF is the dot product of the genotype of the lab strains: 3D7, Dd2, HB3, 7G8 and the proportions. For example, if the genotype is 0, 0, 1, 1 at an arbitrary position, and the mixture proportion of 0.1, 0.2, 0.4 and 0.3 will lead to an expected WSAF of 0.7. We then further adjust the WSAF with an error term (0.01) to account for all technical error/noise: $0.7 \times(1-0.01) + (1-0.7) \times.01 = 0.696$.
 
 \vspace{.5cm}
 To test the accuracy of \texttt{DEploidIBD} in a more realistic setting, we created {\it in silico} mixtures of 2, 3 and 4 strains given different transmission scenarios from mosquito bites. Let $K$ denote the number strains within each sample, and $b$ denote the number of independent mosquito bites. In such a scenario, a mixed infection containing $K$ strains can be treated as a result of a $b$-bite events, where $K \in \{2,3,4\}$ and $1~{\leq}~{b}~{\leq}~K$. For example, a $K=2$ mixed infection can result from co-transmission, where two strains are passed in a single bite ($b=1$); or by superinfection, where each strain is delivered by a unique bite ($b=2$). A mixed infection containing 3 strains is more complex: besides co-infection (3 strains in a single bite, $b=1$) and superinfection (3 strains in 3 bites, $b=3$), we can also have a super-infection scenario made up from a co-infection plus a clonal-infection ($b=2$). The complete simulation procedure (code) is available at \url{https://github.com/DEploid-dev/DEploid-Data-Benchmark-in_silico_field}.
@@ -407,8 +406,7 @@ We tested {\it In silico} deconvolution experiments on mixtures of 4 strains. Fr
 
 \section{Pf3k field sample analysis}
 \subsection{Sample choice}
-We relied on 2,640 samples from the Pf3k project. We excluded Nigeria from downstream analysis as there were only 5 samples from this country.
-We discarded samples containing mixed malaria species and those where sequencing coverage depth was below 30X or in which less than 30\% of sites were callable. Finally, we exclude all lab strains (including reference strains, artificial mixtures, and crosses samples) and duplicated samples. In total, we retained 2,344 field samples from 13 countries.
+We used 2,640 samples from the Pf3k project (see \url{https://www.malariagen.net/projects/pf3k}). We excluded Nigerian samples from downstream analysis as there were only 5 samples from this country.  We discarded samples containing mixed malaria species and those where sequencing coverage depth was below 30X or in which less than 30\% of sites were callable. Finally, we exclude all lab strains (including reference strains, artificial mixtures, and crosses samples) and duplicated samples. In total, we retained 2,344 field samples from 13 countries.
 
 \subsection{Data filtering}
 We ran {\tt DEploid-IBD} on high quality biallelic SNPs (both coding and non-coding, tagged with PASS at the QUAL column in the VCF file) from Pf3k~\citep{pf3k}. Before the additional filtering step described below, this set contained 1,057,830 SNPs.
@@ -424,14 +422,14 @@ bcftools view \
 SNP_INDEL_Pf3D7_01_v3.combined.filtered.vcf.gz
 \end{lstlisting}
 
-\subsubsection{High leverage points}
+\subsubsection{High leverage data points}
 
 We found that markers with high coverage for both alleles could mislead our model, inducing it to fit additional strains. We used a threshold of $\geq$ 99.5\% coverage (default) to identify markers with extremely high allele counts. We further expanded this list of potential problematic markers by considering their nearest 10 neighbours on both flanks, and excluding those that were tagged more than once (see Figure~\ref{fig:fitering}). These poorly-genotyped variants are likely to be errors of mapping and genotype calling.
 
 \begin{figure}[ht]
   \centering
     \includegraphics[width=0.7\textwidth]{{PG0415-CaltVsRefAndWSAFvsPLAF}.png}
-  \caption{(Top) Plot showing total allele counts across all markers. We observe a small number of heterozygous sites with high coverage (shown as crosses on the bottom-left plot), which can potentially mislead our model to over-fit the data with additional strains.  We used a threshold of $\geq$ 99.5\% coverage to identify markers with high allele counts. Red crosses indicate markers that are filtered out. (Bottom-left) Scatter plot showing alternative against reference allele count. Heterozygous sites are indicative of mixed infection. The marked black crosses refer to the outliers identified on the previous plot. (Bottom-middle) Histogram of allele frequency within sample. (Bottom-right) Allele frequency within sample, compare against the population average.}
+  \caption{Identification of high leverage data points for filtering.  (Top) Plot showing total allele counts across all markers for field isolate PG0415. We observe a small number of heterozygous sites with high coverage (shown as crosses on the bottom-left plot), which can potentially mislead our model to over-fit the data with additional strains (above the dotted line).  We used a threshold of $\geq$ 99.5\% coverage to identify markers with high allele counts. Red crosses indicate markers that are filtered out. (Bottom-left) Scatter plot showing alternative against reference allele count. The marked black crosses refer to the outliers identified on the previous plot, which will cause the inference method to mistakenly identify the sample as being a mixed infection. (Bottom-middle) Histogram of allele frequency within sample. (Bottom-right) Allele frequency within sample (WSAF), compared against the population average (PLAF).}
   \label{fig:fitering}
 \end{figure}
 
@@ -584,7 +582,7 @@ The above yields $1/3$ for $n_{ij}=1$, approaching $1/2$ as $n_{ij}$ grows. This
 
 \begin{figure}[pt]
   \centering{}
-  \includegraphics[width = .85\textwidth]{supFigures/supp-Fig1.pdf}
+  \includegraphics[width = .75\textwidth]{supFigures/supp-Fig1.pdf}
   \caption{Exploring the relationship between number of outbred oocysts ($n_{ij}$) and IBD. (A) Joint IBD fraction and IBD segment length distributions for $k=2$ mixed infections simulated from two unrelated strains and a fixed number of outbred oocysts $n_{ij}$, using \texttt{pf-meiosis}. Mean values for each distribution are indicated by same-color dashed lines. Each distribution is created from 1000 simulated mixed infections. (B) Validation of theoretical result given in text (S1.8). Line plot compares trend in expected IBD fraction with the number of outbred oocysts, $n_{ij}$, for infections simulated in panel A, and analytical expression S1.8.} \label{fig:validoocyst}
 \end{figure}
 
