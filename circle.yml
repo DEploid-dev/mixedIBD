@@ -10,4 +10,4 @@ dependencies:
 test:
   override:
     - make main.pdf -n
-    - make mainSupplement.pdf -n
+    - make appendix.pdf -n
