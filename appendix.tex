@@ -15,6 +15,11 @@
 \usepackage{listings}
 \usepackage{color}
 
+
+%\usepackage{tocloft}
+
+%\setlength{\cftbeforesecskip}{22pt}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% referencing %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \usepackage{natbib}
 \usepackage{hyperref}
@@ -67,7 +72,7 @@
 \lstset{language=bash}
 
 
-\title{Supplementary Material}
+\title{Appendix}
 \author{Sha Joe Zhu, Jacob Almagro-Garcia, Jason Hendry and Gil McVean}
 \date{}
 
@@ -79,21 +84,26 @@
 \setcounter{table}{0}
 \setcounter{page}{1}
 \makeatletter
-\renewcommand{\thesection}{S\arabic{section}}
-\renewcommand{\theequation}{S\arabic{section}.\arabic{equation}}
-\renewcommand{\thefigure}{S\arabic{section}.\arabic{figure}}
-\renewcommand{\thetable}{S\arabic{section}.\arabic{table}}
-\renewcommand{\bibnumfmt}[1]{[S1#1]}
-\renewcommand{\citenumfont}[1]{S1#1}
+\renewcommand{\thesection}{Appendix~\arabic{section}}
+\renewcommand{\theequation}{A\arabic{section}.\arabic{equation}}
+\renewcommand{\thefigure}{Appendix~\arabic{section}-figure~\arabic{figure}}
+\renewcommand{\thetable}{Appendix\arabic{section}-table~\arabic{table}}
+\renewcommand{\bibnumfmt}[1]{[Appendix~\arabic{section}#1]}
+\renewcommand{\citenumfont}[1]{Appendix~\arabic{section}#1}
+%\renewcommand{\bibnumfmt}[1]{[S1#1]}
+%\renewcommand{\citenumfont}[1]{S1#1}
 %%%%%%%%%% Prefix a "S" to all equations, figures, tables and reset the counter %%%%%%%%%%
 
 %\floatsetup[figure]{style=plain,subcapbesideposition=top}
 %\newsubfloat{figure}
 
+\usepackage{tocstyle}
 
+\setcounter{tocdepth}{2}
+\setcounter{secnumdepth}{3}
 
 %%%%%%% Start on new page
-\renewcommand{\thepage}{S1-\arabic{page}}
+%\renewcommand{\thepage}{Appendix-\arabic{page}}
 \begin{document}
 \listoftodos
 \clearpage
@@ -181,11 +191,11 @@ P(K, \mathbf{w}, \mathbf{h}, \mathcal{S}) = P(K) \times P(\mathbf{w}|K) \times P
     P(\mathcal{S}|K) = \genfrac{(}{)}{0pt}{}{K-1}{C_{\mathcal{S}}-1} \frac{\theta^{C_{\mathcal{S}}-1}(1-\theta)^{K-C_{\mathcal{S}}+1}}{M_{\mathcal{C}}}.
 \end{equation}
 
-\noindent That is, the number of distinct strains is drawn from a binomial distribution with parameters $K$ and $\theta$ and the IBD configuration is uniformly drawn from among those with the same number of distinct strains.  Consequently, the expected number of distinct haplotypes (i.e. non-IBD) in an infection with $K$ strains is $1+\theta (K-1)$. The value of $\theta$ estimated within the Markov chain Monte Carlo (see details below).  
+\noindent That is, the number of distinct strains is drawn from a binomial distribution with parameters $K$ and $\theta$ and the IBD configuration is uniformly drawn from among those with the same number of distinct strains.  Consequently, the expected number of distinct haplotypes (i.e. non-IBD) in an infection with $K$ strains is $1+\theta (K-1)$. The value of $\theta$ estimated within the Markov chain Monte Carlo (see details below).
 
 %Note that in implementation, the number of strains is typically fixed at some maximum value, $K_{max}$, but only those strains achieving some threshold proportion, typically 1\%, are actually reported.
 
-To model the transitions between IBD states we make the approximation that the IBD state at the $i+1$th site is the same as at the $i$th site, with probability $1-p_{rec}$ and, if there is a recombination event, the IBD state is drawn from the stationary distribution described above.  
+To model the transitions between IBD states we make the approximation that the IBD state at the $i+1$th site is the same as at the $i$th site, with probability $1-p_{rec}$ and, if there is a recombination event, the IBD state is drawn from the stationary distribution described above.
 
 To model allelic states (or genotype), conditional on IBD state, we assume that allelic states for each IBD group are independent Bernoulli draws given the population allele frequency (PLAF).   For example, if $K=3$ and only strains 1 and 2 are IBD (state 0,0,1), the genotype at site $i$, $\mathbf{h_i}$, could be $\{0,0,0\}$; $\{0,0,1\}$; $\{1,1,0\}$ or $\{1,1,1\}$, with probabilities $(1-f)^2$, $(1-f)f$, $f(1-f)$ and $f^2$ respectively.   The joint prior on IBD and allelic states is referred to as $\psi(\mathcal{S},\mathbf{h})$.  Note that we ignore association (known as linkage disequilibrium or LD) between nearby alleles, though note that in implementation we run \texttt{DEploidIBD} twice; first as described here to estimate strain number and proportions, allowing for IBD, then subsequently with a reference panel, as for \texttt{DEploid}, but with the strain number and proportions fixed.  This latter step does model LD and consequently results in better estimates of strain haplotypes.
 
@@ -195,12 +205,12 @@ Details of the emission model are the same as described in \citet{Zhu2017}.  Bri
 \pi_i = q_i + (1 - q_i)e - q_ie = q_i + (1 - 2q_i)e.
 \end{equation}
 
-\noindent As previously, we model over-dispersion in read counts relative to the Binomial using a Beta-binomial distribution. 
+\noindent As previously, we model over-dispersion in read counts relative to the Binomial using a Beta-binomial distribution.
 
 
 \subsection{Parameter estimation using Markov chain Monte Carlo}
 
-To infer the relatedness between strains within in a mixed infection and their relative proportions we use a Markov chain Monte Carlo (MCMC) approach. We learn the relative abundance of each strain by exploiting signatures of within-sample allele frequency imbalance, using a Metropolis-Hastings algorithm, which samples proportions, $\mathbf{w}$,  given IBD-configurations, $\mathcal{S}$. We then use a Gibbs sampler to update $\mathcal{S}$ and $\mathbf{h}$ for a given $\mathbf{w}$ by first sampling the IBD state from the posterior, and then sampling the allelic configuration (genotype) from the selected IBD state at each site to update haplotypes.  Note that the hidden Markov model structure for IBD states along the chromosome leads to efficient algorithms for calculating quantities of importance.  Notably, by summing over allelic configurations that are consistent with a given IBD configuration, we can - for a given set of strain proportions - calculate the likelihood integrated over all possible IBD configurations, which leads to efficient sampling.  
+To infer the relatedness between strains within in a mixed infection and their relative proportions we use a Markov chain Monte Carlo (MCMC) approach. We learn the relative abundance of each strain by exploiting signatures of within-sample allele frequency imbalance, using a Metropolis-Hastings algorithm, which samples proportions, $\mathbf{w}$,  given IBD-configurations, $\mathcal{S}$. We then use a Gibbs sampler to update $\mathcal{S}$ and $\mathbf{h}$ for a given $\mathbf{w}$ by first sampling the IBD state from the posterior, and then sampling the allelic configuration (genotype) from the selected IBD state at each site to update haplotypes.  Note that the hidden Markov model structure for IBD states along the chromosome leads to efficient algorithms for calculating quantities of importance.  Notably, by summing over allelic configurations that are consistent with a given IBD configuration, we can - for a given set of strain proportions - calculate the likelihood integrated over all possible IBD configurations, which leads to efficient sampling.
 
 
 \subsubsection{Metropolis-Hastings update for proportions}\label{sec:updateP}
@@ -222,7 +232,7 @@ As described above, in {\tt DEploidIBD}, allelic states at different sites withi
 
 \noindent where $\psi(\mathcal{S},\mathbf{h})$ is the prior on the combination of IBD configuration $\mathcal{S}$ and allelic configuration $\mathbf{h}$ as defined in Section \ref{sect:prior}.  Note that the summation term is identical for all IBD / allelic configurations.
 
-By storing the output of the Forward algorithm we can then sample from the posterior distribution of the IBD- and allelic-configurations (given current proportions).  That is, we sample $\mathcal{S}_l,\mathbf{h}_l \propto F_{l,\mathcal{S}, \mathbf{h}}$, and then previous steps proportion to $F_{i,\mathcal{S}, \mathbf{h}}$ times the probability to transition to the sampled state at position $i+1$.  
+By storing the output of the Forward algorithm we can then sample from the posterior distribution of the IBD- and allelic-configurations (given current proportions).  That is, we sample $\mathcal{S}_l,\mathbf{h}_l \propto F_{l,\mathcal{S}, \mathbf{h}}$, and then previous steps proportion to $F_{i,\mathcal{S}, \mathbf{h}}$ times the probability to transition to the sampled state at position $i+1$.
 
 \vspace{.2cm}
 
@@ -235,7 +245,7 @@ $\{\frac{1}{4},\frac{1}{4}, \frac{1}{4}, \frac{1}{4}\}$ and $\{\frac{1}{4},\frac
 
 Given the sampled IBD configuration, the IBD parameter $\theta$ can be updated using Gibbs sampling.  We first identify the path of the $D$ distinct IBD configurations along the chromosome and, for each, identify the number of distinct IBD groups, $\mathcal{C}_d$.  For example, if the IBD state is 0,1,2,2 there are three distinct IBD groups (0,1,2; $\mathcal{C}_d = 3$), while if the IBD state is 0,0,1,1 there are two IBD groups (0,1; $\mathcal{C}_d = 2$).  Under the prior, the number of distinct strains (minus 1) is drawn from a binomial distribution with parameters $K-1$ and $\theta$.  With a uniform prior on $\theta$, a new value, $\theta'$ is therefore drawn from:
 \begin{equation*}
-    \theta' \sim Beta \big(\mathcal{C}_D - D + 1, D K-\mathcal{C}_D + 1\big), 
+    \theta' \sim Beta \big(\mathcal{C}_D - D + 1, D K-\mathcal{C}_D + 1\big),
 \end{equation*}
 \noindent where $\mathcal{C}_D = \sum_{d=1}^D \mathcal{C}_d$.
 
@@ -253,9 +263,9 @@ At any site, the likelihood for the WSAF, $q$, induced by the allelic configurat
 L(q_{i}| e, D) \propto \frac{B(a_i + \pi c, r_i + (1-\pi) c)}{B(\pi c, (1-\pi) c)}, \label{eqn:llk}
 \end{equation}
 
-\noindent where $\pi_i$ is the adjusted WSAF $\pi = q(1-e)+(1-q)e$ and $c^{-1}$ determines the magnitude of over-dispersion relative to the binomial, with $c \to \infty$ recovering the binomial.  Here, we use $c=100$.  
+\noindent where $\pi_i$ is the adjusted WSAF $\pi = q(1-e)+(1-q)e$ and $c^{-1}$ determines the magnitude of over-dispersion relative to the binomial, with $c \to \infty$ recovering the binomial.  Here, we use $c=100$.
 
-For computational efficiency, rather than recomputing for every value of $q$, we first approximation the likelihood function for each site through a Beta distribution, matching the first two moments of the posterior on $q$ implied by Equation \ref{eqn:llk} within a uniform prior on $q$.  The estimated parameters of the Beta distribution are then used to approximate the likelihood surface in all subsequent calculations.  
+For computational efficiency, rather than recomputing for every value of $q$, we first approximation the likelihood function for each site through a Beta distribution, matching the first two moments of the posterior on $q$ implied by Equation \ref{eqn:llk} within a uniform prior on $q$.  The estimated parameters of the Beta distribution are then used to approximate the likelihood surface in all subsequent calculations.
 
 
 \item {\bf MCMC parameters for deconvolution}
@@ -265,7 +275,7 @@ For computational efficiency, rather than recomputing for every value of $q$, we
 
 \item {\bf Parameters}. We typically set the log-titre variance $\sigma^2 = 5$, which can be adjusted when working with extremely unbalanced samples (see \citet{Zhu2017} Supplementary Material).  We set the read error rate as $0.01$ and the rate of mis-copying as $0.01$.
 
-\item {\bf Recombination rate and scaling}. We assume a uniform recombination map, where the genetic distance between loci $i$ and $i+1$ is computed by $\gamma_i = D_i / d_m$ where $D_i$ denotes the physical distance between loci $i$ and $i+1$ in nucleotides and $d_m$ denotes the average recombination rate in Morgans bp$^{-1}$. We use the recombination rate for {\it P. falciparum} of 13,500 base pairs per centiMorgan as reported by \citet{Miles2016}. The recombination rate is scaled by a factor $G$, which reflects the effective population size, rate of inbreeding, and relatedness of the reference panel. In practice, we deconvolute over 1 million markers in field samples. We tuned the parameter $G$ using {\it in vitro} lab mixtures, finding that a value of $G=20$ ensures small recombination probabilities between any two markers, with a mean of 0.015. A large value of $G$ relaxes the reference panel constraint, becoming an LD free model when $G$ is infinity. The scaled genetic distance $G \gamma$ is used to compute the transition probability of switching from copying reference haplotype $a$ to reference haplotype $b$. Given LD varies enormously between {\it P. falciparum} populations, we will investigate how to tune this parameter for future improvement. In the current release, our program allows users to apply the flag {\tt -G} to specify a specific value.  We note that IBD deconvolution from error-prone data can benefit from even smaller values of $G$, such as $0.1$.  
+\item {\bf Recombination rate and scaling}. We assume a uniform recombination map, where the genetic distance between loci $i$ and $i+1$ is computed by $\gamma_i = D_i / d_m$ where $D_i$ denotes the physical distance between loci $i$ and $i+1$ in nucleotides and $d_m$ denotes the average recombination rate in Morgans bp$^{-1}$. We use the recombination rate for {\it P. falciparum} of 13,500 base pairs per centiMorgan as reported by \citet{Miles2016}. The recombination rate is scaled by a factor $G$, which reflects the effective population size, rate of inbreeding, and relatedness of the reference panel. In practice, we deconvolute over 1 million markers in field samples. We tuned the parameter $G$ using {\it in vitro} lab mixtures, finding that a value of $G=20$ ensures small recombination probabilities between any two markers, with a mean of 0.015. A large value of $G$ relaxes the reference panel constraint, becoming an LD free model when $G$ is infinity. The scaled genetic distance $G \gamma$ is used to compute the transition probability of switching from copying reference haplotype $a$ to reference haplotype $b$. Given LD varies enormously between {\it P. falciparum} populations, we will investigate how to tune this parameter for future improvement. In the current release, our program allows users to apply the flag {\tt -G} to specify a specific value.  We note that IBD deconvolution from error-prone data can benefit from even smaller values of $G$, such as $0.1$.
 
 \item {\bf Reporting}. We aim to provide users with a single point estimate of the haplotypes, their proportions and IBD configurations, although the full chain is also available for analysis.  To achieve this we report values at the last iteration - i.e. we report a single sample from the posterior.  However, to measure robustness, we typically repeat the deconvolution with multiple random starting points. We use a majority vote rule on the inferred number of strains; we then select the chain with the lowest average deviance (after removing the burn-in) as our estimate. The deviance measures the difference in log likelihood between the fitted and saturated models, the latter being inferred by setting the WSAF to that of the observed values. These parameters can be modified by users to achieve a preferred balance between computational speed and confidence.  By default, we set the MCMC sampling rate as 5, with the first 50\% of samples removed as burn in and 800 samples used for estimation.
 
@@ -275,7 +285,7 @@ For computational efficiency, rather than recomputing for every value of $q$, we
 
 \item {\bf Summarising pairwise IBD}
 
-At the end of a run, we obtain the maximum likelihood estimate of IBD configurations along the chromosome using the Viterbi algorithm.  Patterns of IBD are then obtained for all pairs of strains and summarised through the mean fraction IBD and the N50 IBD tract, obtained by identifying all blocks of IBD, sorting them in decreasing size and finding the size of the block such that 50\% of all sites that are in IBD lie in blocks of at least this size.  A larger N50 statistic indicates more recent common ancestry. 
+At the end of a run, we obtain the maximum likelihood estimate of IBD configurations along the chromosome using the Viterbi algorithm.  Patterns of IBD are then obtained for all pairs of strains and summarised through the mean fraction IBD and the N50 IBD tract, obtained by identifying all blocks of IBD, sorting them in decreasing size and finding the size of the block such that 50\% of all sites that are in IBD lie in blocks of at least this size.  A larger N50 statistic indicates more recent common ancestry.
 
 We note that it is also possible to obtain estimates of pairwise IBD from the full posterior distribution of pairwise IBD (using standard hidden Markov model practices).  Typically these give very similar answers to the Viterbi solution, though are typically slightly larger due to the identification of low certainty regions.  The posterior mean IBD between pairs is also provided to users as output.
 
@@ -302,9 +312,9 @@ interpretDEploid.r -ref ${ref} -alt ${alt} -plaf ${plaf} -o ${prefix} -dEprefix 
 
 \subsection{Error analysis}
 
-For haplotype quality analysis, we compared the inferred haplotype ({\tt DEploid} output) with the true haplotype. In addition to mismatches between the testing haplotype and the truth, the deconvolution process also introduces switch errors, where the haplotypes are correct, but have undergone {\it in silico} recombination events. In addition, when one strain has low frequency, there might be insufficient data to make accurate inference, resulting in missing segments of the true haplotypes. We refer to this as dropout error. Dropout error can also be caused by the sequencing process, when parts of the genome are not well sequenced (low read count). 
+For haplotype quality analysis, we compared the inferred haplotype ({\tt DEploid} output) with the true haplotype. In addition to mismatches between the testing haplotype and the truth, the deconvolution process also introduces switch errors, where the haplotypes are correct, but have undergone {\it in silico} recombination events. In addition, when one strain has low frequency, there might be insufficient data to make accurate inference, resulting in missing segments of the true haplotypes. We refer to this as dropout error. Dropout error can also be caused by the sequencing process, when parts of the genome are not well sequenced (low read count).
 
-When comparing inferred haplotypes to true haplotypes we use a dynamic programming approach to find a description of the differences, optimising a cost function in which switch errors are twice as costly as mismatches and allele dropouts.  Code for performing the optimal description, {\tt errorAnalysis.r}, is available at the Github page:  \url{https://github.com/DEploid-dev/DEploid-Utilities/}.  An example analysis for three strains is shown in Figure~\ref{fig:error}.  
+When comparing inferred haplotypes to true haplotypes we use a dynamic programming approach to find a description of the differences, optimising a cost function in which switch errors are twice as costly as mismatches and allele dropouts.  Code for performing the optimal description, {\tt errorAnalysis.r}, is available at the Github page:  \url{https://github.com/DEploid-dev/DEploid-Utilities/}.  An example analysis for three strains is shown in Figure~\ref{fig:error}.
 
 
 
@@ -436,7 +446,7 @@ We found that markers with high coverage for both alleles could mislead our mode
 %\subsubsection{High nucleotide diversity regions}
 %\noindent
 \donenum{Sup. Mat. 5, Why are we calculating diversity}
-To track down the causes of high leverage points, we assessed nucleotide diversity in the {\it P. falciparum} genome. We used clonal haplotypes to compute nucleotide diversity by running a sliding window along the genome. At each SNP, we use $n_{0}$ and $n_{1}$ to denote counts for reference and alternative alleles, respectively. Let $n = (n_{0} + n_{1})$ be the number of haplotypes in the population with a non-missing call. We computed the mean number of pairwise differences for this SNP as follows. First, we computed the total number of pairs as  $n_{pairs} = n * (n - 1) / 2$. Then, we computed the number of pairs that were the same, $n_{same} = (n_{0} * (n_{0} - 1) / 2) + (n_{1} * (n_{1} - 1) / 2)$, and the number of pairs that were different, $n_{d}$ = $n_{pairs} - n_{same}$. Finally, we obtained the mean number of pairwise differences as $mpd = n_{d} / n_{pairs}$. To estimate nucleotide diversity $\pi$, we computed the sum of $mpd$ in a window of 20kbp centred on each SNP, and divided by the number of accessible bases, which produces the mean number of pairwise differences per base. 
+To track down the causes of high leverage points, we assessed nucleotide diversity in the {\it P. falciparum} genome. We used clonal haplotypes to compute nucleotide diversity by running a sliding window along the genome. At each SNP, we use $n_{0}$ and $n_{1}$ to denote counts for reference and alternative alleles, respectively. Let $n = (n_{0} + n_{1})$ be the number of haplotypes in the population with a non-missing call. We computed the mean number of pairwise differences for this SNP as follows. First, we computed the total number of pairs as  $n_{pairs} = n * (n - 1) / 2$. Then, we computed the number of pairs that were the same, $n_{same} = (n_{0} * (n_{0} - 1) / 2) + (n_{1} * (n_{1} - 1) / 2)$, and the number of pairs that were different, $n_{d}$ = $n_{pairs} - n_{same}$. Finally, we obtained the mean number of pairwise differences as $mpd = n_{d} / n_{pairs}$. To estimate nucleotide diversity $\pi$, we computed the sum of $mpd$ in a window of 20kbp centred on each SNP, and divided by the number of accessible bases, which produces the mean number of pairwise differences per base.
 
 Regions containing high leverage points tended to be at the ends of chromosomes or within regions of high nucleotide diversity, where read mapping was problematic (see Figure~\ref{fig:nd}). We identified potential outliers in all samples, and filtered out common outliers in at least 50 samples -- 48,443 in total.
 
@@ -554,10 +564,8 @@ We combined randomly selected clonal sample pairs to create artificial mixed inf
 
 \begin{figure}[ht]
   \centering{}
-  %\includegraphics[width = .85\textwidth]{bgIBDvalidation/bgIBD.pdf}
   \subfloat[]{\includegraphics[width = .65\textwidth]{bgIBDvalidation/bgIBD.pdf}}
   \subfloat[]{\includegraphics[width = .35\textwidth]{bgIBDvalidation/bgN50.pdf}}
-  %\subfloat[]{\includegraphics[width = .85\textwidth]{bgIBDvalidation/IBDtracklengthVsPercentage_data_clean.pdf}}
   \caption{(A) Comparison of IBD block detection between {\tt DEploidIBD} (top) and ancestral state inference from \citet{Li2003} (bottom), using artificial mixtures of lab crosses PG0071-C and PG0058-C (last tract). (B) Scatter plot of IBD segment Nx values extracted by comparing clonal sample ancestry (using {\tt DEploidIBD}) on artificial mixtures.}\label{fig:bgibd}
 \end{figure}
 
@@ -626,7 +634,7 @@ As above.
 \bibliography{mixedIBD.bib}
 
 \newpage
-\renewcommand{\thepage}{S2--\arabic{page}}
+%\renewcommand{\thepage}{S2--\arabic{page}}
 \setcounter{page}{1}
 
 \includepdf[pages=-]{180803_Pf3k_project_info.pdf}

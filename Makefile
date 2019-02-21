@@ -3,16 +3,20 @@ all: clean main.pdf
 
 mainfiguresPng = $(shell grep png main.tex | sed -e "s/^.*{/figures\//g" -e "s/\}//g" )
 mainfiguresPdf = $(shell grep "\.pdf" main.tex | sed -e "s/^.*{/figures\//g" -e "s/\}//g" )
-#supfigures = $(shell grep png mainSupplement.tex | sed -e "s/^.*{/figures\/otherFigures\//g" -e "s/\}//g" )
-#supfigurespdf = $(shell grep pdf mainSupplement.tex | sed -e "s/^.*{/figures\/otherFigures\//g" -e "s/\}//g" )
-suptex = $(shell grep "\.tex" mainSupplement.tex | sed -e "s/^.*{//g" -e "s/\}//g" )
+#supfigures = $(shell grep png appendix.tex | sed -e "s/^.*{/figures\/otherFigures\//g" -e "s/\}//g" )
+#supfigurespdf = $(shell grep pdf appendix.tex | sed -e "s/^.*{/figures\/otherFigures\//g" -e "s/\}//g" )
+bgIBDvalidationpdf = $(shell grep pdf appendix.tex | grep bgIBDvalidation | sed -e "s/^.*{//g" -e "s/\}//g" )
+suptex = $(shell grep "\.tex" appendix.tex | sed -e "s/^.*{//g" -e "s/\}//g" )
 
 coverLetter.pdf: coverLetter.tex
 	pdflatex coverLetter.tex
 
-main.pdf: main.tex ${mainfiguresPng} ${mainfiguresPdf} main.bbl pdfFigures
+main.pdf: main.tex ${mainfiguresPng} ${mainfiguresPdf} main.bbl
 	pdflatex main.tex
 	pdflatex main.tex
+
+forElife.tar.gz:
+	tar -czvf forElife.tar.gz main.tex ${mainfiguresPng} ${mainfiguresPdf} ${bgIBDvalidationpdf} main.bbl *cls appendix.tex ${supfigures} ${supfigurespdf} ${suptex} supplementReset.tex appendix.bbl vancouver-elife.bst common.tex Makefile mixedIBD.bib figures/DEploid_IBD_haps_compare.pdf figures/otherFigures/PG0415-CaltVsRefAndWSAFvsPLAF.png supFigures/nd_hist.pdf figures/qualityGhana.pdf supFigures/supp-Fig1.pdf supFigures/supp-Fig2.pdf 180803_Pf3k_project_info.pdf
 
 main_todo.pdf: main.pdf
 	sed -e "s/\\\usepackage\[disable\]{todonotes}/\\\usepackage\[colorinlistoftodos\]{todonotes}/" \
@@ -28,23 +32,23 @@ main.aux: main.tex
 main.bbl: main.aux
 	bibtex main.aux
 
-mainSupplement.pdf: mainSupplement.tex ${supfigures} ${supfigurespdf} ${suptex} supplementReset.tex mainSupplement.bbl
-	pdflatex mainSupplement.tex
-	pdflatex mainSupplement.tex
+appendix.pdf: appendix.tex ${supfigures} ${supfigurespdf} ${suptex} supplementReset.tex appendix.bbl
+	pdflatex appendix.tex
+	pdflatex appendix.tex
 
-mainSupplement_todo.pdf: mainSupplement.pdf
+appendix_todo.pdf: appendix.pdf
 	sed -e "s/\\\usepackage\[disable\]{todonotes}/\\\usepackage\[colorinlistoftodos\]{todonotes}/" \
-	 -e "s/\\\textcolor{black}/\\\textcolor{red}/" mainSupplement.tex > mainSupplement_todo.tex
-	pdflatex mainSupplement_todo.tex
-	bibtex mainSupplement_todo.aux
-	pdflatex mainSupplement_todo.tex
-	pdflatex mainSupplement_todo.tex
+	 -e "s/\\\textcolor{black}/\\\textcolor{red}/" appendix.tex > appendix_todo.tex
+	pdflatex appendix_todo.tex
+	bibtex appendix_todo.aux
+	pdflatex appendix_todo.tex
+	pdflatex appendix_todo.tex
 
-mainSupplement.bbl: mainSupplement.aux
-	bibtex mainSupplement.aux
+appendix.bbl: appendix.aux
+	bibtex appendix.aux
 
-mainSupplement.aux: mainSupplement.tex
-	pdflatex mainSupplement.tex
+appendix.aux: appendix.tex
+	pdflatex appendix.tex
 
 
 otherFigures.pdf: otherFigures.tex ${supfigures} ${supfigurespdf} ${suptex} supplementReset.tex
