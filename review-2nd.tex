@@ -1,0 +1,54 @@
+\documentclass[11pt,twoside,a4paper]{article}
+\renewcommand{\thefootnote}{\fnsymbol{footnote}}
+\usepackage{pdfpages}
+\usepackage{anyfontsize}
+\usepackage{amsmath}
+\usepackage{hyperref}
+\usepackage{setspace}
+\linespread{1.5}
+\usepackage{authblk}
+
+\begin{document}
+
+\title{Review notes - The origins and relatedness structure of mixed infections vary with local prevalence of {\it P. falciparum} malaria}
+\newcommand\shorttitle{Review}
+\date{}
+\maketitle{}
+\section{Notes}
+
+\begin{itemize}
+
+    \item 1) It is still not clear how the authors differentiate the probabilities of identity-by-state from identity-by-descent, or how they account for this difference in their methodologies. 
+
+    \item 2) A few items remain unclear: 
+
+    \item a. l. 502: prec is introduced here, but it is not clear how it is calculated. 
+
+    \item b. l. 724: How are the regions of identity between genomes formed, i.e. how are breakpoints set between segments? 
+
+    \item c. The handling of the number of strains (K) is not explained well. l. 486 says "The priors on the number of strains, K, and their proportions, w, are as in Zhu et al. (2018), with associated hyperparameters being user-defined", but that paper doesn't describe priors or associated hyperparameters for K. Rather, it says the number of strains is fixed at a high value and minor strains dropped in the end. This approach also seems to be reflected in l. 607 ff of the current paper. Since calculation of other parameters is conditional on K, I find this to be quite confusing. 
+
+    \item 3) The authors have done a great deal of additional simulation to more fully explore the effectiveness of their algorithm. My only suggestion here is to have a few lines summarizing their conclusions about the situations in which the program works well; ideally, this information should appear in the abstract as well, since it is one of the more important take-aways from the paper. 
+
+    \item 4) More context and discussion are now provided about the pruning of haplotypes, which is good. There does seem to be curious gap, however. The error rate for reconstructed haplotypes is determined for simulated complex infections, and low-quality haplotypes are identified and removed from real complex infections, but I do not see any connection described between these two activities. Were low quality haplotypes filtered out from the simulated data? Were there any low-quality simulated haplotypes? The simulated dataset is the obvious context for assessing the effectiveness of the filtering procedure, so it's puzzling that this is not described. 
+
+    \item 5) Figure 2 attempts to convey a large amount of information, and does this very nicely. A few things still took me some time to decipher and wonder if there is any other way to make this easier for a reader. One was the horizontal histograms of K - the bins go from top to bottom and are indicated by value/alpha of the orange and blue but since there is a lot of gray and absent bins is took a while to figure this out despite the key at the top. I don't have a great suggestion as numerals would likely be too cluttering, but maybe at least mentioning explicitly in the figure legend that K=1 is at the top and K=4 at the bottom? Also, do the "coverage below 20" mean samples with median sequencing depth <20x? Maybe define explicitly in the legend? 
+
+    \item 6) Figure 3 re: per site genetic error, because many sites in a given sample will have homozygous calls and always be assigned correctly, it could be useful to convey what the (e.g. mean) null expectation would be as a benchmark, i.e. if assignment occurred at random. I'm not sure how easy this is to do or would be worth it, but would make the error result more interpretable (and likely might vary for different scenarios). 
+
+    \item 7) There are a few of minor typographical and other grammatical errors noted in the figure legends - the authors have produced a large number of new results and figures which are very nice but maybe just take a quick read through the legends again. E.g. Fig 2 legend for b) compares DEploid to DEploid but one should be with IBD; Fig 2 supplement 1 "three" is spelled wrong in last line; Fig 6 "undetermined" is spelled wrong in one place. 
+
+    \item 8) Additional typos to be corrected: 
+
+\item l. 41: SNPs are not an alternative to sequencing -- they are a type of variant that can be genotyped through sequencing. 
+\item l. 83: "may render critical" - something seems to be mssing here. 
+\item l. 117: "distinct alternative" - allele frequency alternatives can in some cases be degenerate rather than distinct (e.g. for 4 strains at frequencies 10\%, 20\%, 30\%, and 40\%). (Yes, this is a small nit to pick.) 
+\item Fig. 1 legend refers to green segments, but I see no green segments. 
+\item l. 396: An "a" is missing. 
+\item l. 528: An extra "in". 
+\item l. 601: "Approximation" should be "approximate". 
+\item l. 609: An extra "use". (Also, having the default be 5 but recommending the routine use of 4 is a little odd.) 
+\item l. 666: Not clear what "with a random seeds of choice from 1 to 15" means. 
+\item l. 711: An extra "a". 
+\end{itemize}
+\end{document}
