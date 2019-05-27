@@ -72,30 +72,15 @@
 \lstset{language=bash}
 
 
+\usepackage[label font=bf,labelformat=simple, position = top, justification=RaggedRight,singlelinecheck=false]{subfig}
+
+
+
 \title{Appendix}
 \author{Sha Joe Zhu, Jacob Almagro-Garcia, Jason Hendry and Gil McVean}
 \date{}
 
-\usepackage[label font=bf,labelformat=simple, position = top, justification=RaggedRight,singlelinecheck=false]{subfig}
-\renewcommand{\thesubfigure}{\Alph{subfigure}}
 
-\setcounter{equation}{0}
-\setcounter{figure}{0}
-\setcounter{table}{0}
-\setcounter{page}{1}
-\makeatletter
-\renewcommand{\thesection}{Appendix~\arabic{section}}
-\renewcommand{\theequation}{A\arabic{section}.\arabic{equation}}
-\renewcommand{\thefigure}{Appendix~\arabic{section}-figure~\arabic{figure}}
-\renewcommand{\thetable}{Appendix\arabic{section}-table~\arabic{table}}
-\renewcommand{\bibnumfmt}[1]{[Appendix~\arabic{section}#1]}
-\renewcommand{\citenumfont}[1]{Appendix~\arabic{section}#1}
-%\renewcommand{\bibnumfmt}[1]{[S1#1]}
-%\renewcommand{\citenumfont}[1]{S1#1}
-%%%%%%%%%% Prefix a "S" to all equations, figures, tables and reset the counter %%%%%%%%%%
-
-%\floatsetup[figure]{style=plain,subcapbesideposition=top}
-%\newsubfloat{figure}
 
 \usepackage{tocstyle}
 
@@ -629,9 +614,7 @@ n_{ij}{4\choose 2} + 16{n_{ij}\choose 2} + 16n_{ij}n_{ii}} \nonumber\\
 \end{align}
 As above.
 
-\FloatBarrier
-\bibliographystyle{chicagoa}
-\bibliography{mixedIBD.bib}
+\input{appendix_content.tex}
 
 \newpage
 %\renewcommand{\thepage}{S2--\arabic{page}}

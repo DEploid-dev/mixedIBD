@@ -16,7 +16,7 @@ main.pdf: main.tex ${mainfiguresPng} ${mainfiguresPdf} main.bbl
 	pdflatex main.tex
 
 forElife.tar.gz:
-	tar -czvf forElife.tar.gz main.tex ${mainfiguresPng} ${mainfiguresPdf} ${bgIBDvalidationpdf} main.bbl *cls appendix.tex ${supfigures} ${supfigurespdf} ${suptex} supplementReset.tex appendix.bbl vancouver-elife.bst common.tex Makefile mixedIBD.bib figures/DEploid_IBD_haps_compare.pdf figures/otherFigures/PG0415-CaltVsRefAndWSAFvsPLAF.png supFigures/nd_hist.pdf figures/qualityGhana.pdf supFigures/supp-Fig1.pdf supFigures/supp-Fig2.pdf 180803_Pf3k_project_info.pdf
+	tar -czvf forElife.tar.gz main.tex ${mainfiguresPng} ${mainfiguresPdf} ${bgIBDvalidationpdf} main.bbl *cls appendix.tex ${supfigures} ${supfigurespdf} ${suptex} supplementReset.tex vancouver-elife.bst common.tex Makefile mixedIBD.bib figures/DEploid_IBD_haps_compare.pdf figures/otherFigures/PG0415-CaltVsRefAndWSAFvsPLAF.png supFigures/nd_hist.pdf figures/qualityGhana.pdf supFigures/supp-Fig1.pdf supFigures/supp-Fig2.pdf 180803_Pf3k_project_info.pdf
 
 main_todo.pdf: main.pdf
 	sed -e "s/\\\usepackage\[disable\]{todonotes}/\\\usepackage\[colorinlistoftodos\]{todonotes}/" \
@@ -32,15 +32,13 @@ main.aux: main.tex
 main.bbl: main.aux
 	bibtex main.aux
 
-appendix.pdf: appendix.tex ${supfigures} ${supfigurespdf} ${suptex} supplementReset.tex appendix.bbl
+appendix.pdf: appendix.tex ${supfigures} ${supfigurespdf} ${suptex} supplementReset.tex
 	pdflatex appendix.tex
 	pdflatex appendix.tex
 
 appendix_todo.pdf: appendix.pdf
 	sed -e "s/\\\usepackage\[disable\]{todonotes}/\\\usepackage\[colorinlistoftodos\]{todonotes}/" \
 	 -e "s/\\\textcolor{black}/\\\textcolor{red}/" appendix.tex > appendix_todo.tex
-	pdflatex appendix_todo.tex
-	bibtex appendix_todo.aux
 	pdflatex appendix_todo.tex
 	pdflatex appendix_todo.tex
 
