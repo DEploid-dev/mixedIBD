@@ -212,7 +212,7 @@ In contrast to our previous work, \texttt{DEploidIBD} infers strain structure in
 \begin{figure}[ht]
   \begin{center}
     \includegraphics[width=\textwidth]{Fig1.pdf}
-    \caption{Deconvolution of a complex field sample PD0577-C from Thailand.  (A) Scatter-plot showing the number of reads supporting the reference (REF: x-axis) and alternative (ALT: y-axis) alleles. The multiple clusters indicate the presence of multiple strains, but cannot distinguish the exact number or proportions.  (B) The profile of within-sample allele frequency along chromosomes 11 and 12 (red points) suggests a changing profile of IBD with three distinct strains, estimated to be with proportions of $22\%$, $52\%$ and $26\%$ respectively (other chromosomes omitted for clarity, see Figure~\ref{fig:fig1}-Supplement~\ref{figsupp:ring}); blue points indicate expected allele frequencies within the isolate. However, the strains are inferred to be siblings of each other: green segments indicate where all three strains are IBD (Note: green segments are not shown in this example, but will appear in Figure~\ref{fig:strainIBD}); yellow, orange and dark orange segments indicate the regions where one pair of strains are IBD but the others are not.  In no region are all three strains inferred to be distinct. (C) Statistics of  IBD tract length, in particular illustrating the N50 segment length. A graphical description of the modules and workflows for \texttt{DEploidIBD} is given in Figure~\ref{fig:fig1}-Supplement~\ref{figsupp:workflow}.}\label{fig:fig1}
+    \caption{Deconvolution of a complex field sample PD0577-C from Thailand.  (A) Scatter-plot showing the number of reads supporting the reference (REF: x-axis) and alternative (ALT: y-axis) alleles. The multiple clusters indicate the presence of multiple strains, but cannot distinguish the exact number or proportions.  (B) The profile of within-sample allele frequency along chromosomes 11 and 12 (red points) suggests a changing profile of IBD with three distinct strains, estimated to be with proportions of $22\%$, $52\%$ and $26\%$ respectively (other chromosomes omitted for clarity, see Figure~\ref{fig:fig1}-Supplement~\ref{figsupp:ring}); blue points indicate expected allele frequencies within the isolate. However, the strains are inferred to be siblings of each other: green segments indicate where all three strains are IBD (Note: green segments do not appear in this example, but  occur in Figure~\ref{fig:strainIBD}); yellow, orange and dark orange segments indicate the regions where one pair of strains are IBD but the others are not.  In no region are all three strains inferred to be distinct. (C) Statistics of  IBD tract length, in particular illustrating the N50 segment length. A graphical description of the modules and workflows for \texttt{DEploidIBD} is given in Figure~\ref{fig:fig1}-Supplement~\ref{figsupp:workflow}.}\label{fig:fig1}
   \end{center}
 
    \figsupp{Whole genome deconvolution of field sample PD0577-C. The outer ring shows the expected within-sample allele frequency (WSAF) (blue) and observed WSAF (red) across the genome. Red and blue points indicate observed and expected allele frequencies within the isolate. The inner ring indicates the IBD states among the three strains: green segments indicate where all three strains are IBD; yellow, orange and dark orange segments indicate the regions where one pair of strains are IBD but the others are not.  In no region are all three strains inferred to be distinct, suggesting that the three strains are siblings.}{\includegraphics[width=.7\textwidth]{{myring.ring}.pdf}}
@@ -285,8 +285,7 @@ Finally, we used the \emph{in silico} approach to explore the quality of haploty
 \begin{figure}[htp]
   \begin{center}
     \includegraphics[width=\textwidth]{Fig3.pdf}
-    \caption{Cumulative distribution of the average per site genotype error (left) and switch error (right) across simulated mixtures.
-    (A) Error rates of Asian {\it in silico} samples of three levels of IBD (25\%, 50\% and 75\%) for a $K=2$ mixture with proportions of $20/80\%$. Because {\tt DEploidIBD} estimates proportions more accurately, it enables better haplotype inference.
+    \caption{Cumulative distribution of the average per site genotype error (left) and switch error (right) across simulated mixtures (measured at sites that are heterozygous in the sample or sample-specific reference panel).    (A) Error rates of Asian {\it in silico} samples of three levels of IBD (25\%, 50\% and 75\%) for a $K=2$ mixture with proportions of $20/80\%$. Because {\tt DEploidIBD} estimates proportions more accurately, it enables better haplotype inference.
     (B) Error rates of African {\it in silico} samples of three levels of IBD (25\%, 50\% and 75\%) for a $K=2$ mixture with proportions of $20/80\%$. Inference in Asia benefits from better reference panels (due to lower overall diversity) and therefore gives lower error rates than in Africa.
     (C) {\tt DEploidIBD} error rates for African {\it in silico} samples of three mosquito biting scenarios for a $K=3$ mixture with proportions of $10/10/80\%$. The additional strain increases the difficulty of haplotype inference, particularly in the case of three independent bites.
     } \label{fig:error-analysis}
@@ -493,7 +492,8 @@ P(K, \mathbf{w}, \mathbf{h}, \mathcal{S}| e, D) \propto L(K, \mathbf{w}, \mathbf
 P(K, \mathbf{w}, \mathbf{h}, \mathcal{S}) = P(K) \times P(\mathbf{w}|K) \times P(\mathcal{S}|K) \times P(\mathbf{h}|\mathcal{S}).
 \end{equation}
 
-\noindent The priors on the number of strains, $K$, and their proportions, $\mathbf{w}$, are as in \citet{Zhu2017}, with associated hyperparameters being user-defined.  To model IBD configurations and resulting haplotypes we introduce a parameter $\theta$, which is the probability of outbreeding (i.e. non-IBD) for a mixed infection with two strains.  Specifically, for $K$ strains, the prior probability on configuration $\mathcal{S}$ is a function of the number of distinct strains in the configuration, $C_{\mathcal{S}}$, and the number of distinct configurations with the same number of distinct strains, $M_{\mathcal{C}}$:
+
+\nodent The number of strains, $K$, and their proportions $\mathbf{w}$, are as in \citet{Zhu2017}: $K$ is fixed at a user-defined value (here, $K=4$) and strains below a fixed proportion threshold (here, $0.01$) are removed.  To model IBD configurations and resulting haplotypes we introduce a parameter $\theta$, which is the probability of outbreeding (i.e. non-IBD) for a mixed infection with two strains.  Specifically, for $K$ strains, the prior probability on configuration $\mathcal{S}$ is a function of the number of distinct strains in the configuration, $C_{\mathcal{S}}$, and the number of distinct configurations with the same number of distinct strains, $M_{\mathcal{C}}$:
 
 \begin{equation}
     P(\mathcal{S}|K) = \genfrac{(}{)}{0pt}{}{K-1}{C_{\mathcal{S}}-1} \frac{\theta^{C_{\mathcal{S}}-1}(1-\theta)^{K-C_{\mathcal{S}}+1}}{M_{\mathcal{C}}}.
@@ -703,6 +703,7 @@ For {\it in silico} lab mixtures, we used the lab strain GB4 to provide a whole-
 \vspace{.5cm}
 To test the accuracy of \texttt{DEploidIBD} in a more realistic setting, we created {\it in silico} mixtures of 2, 3 and 4 strains given different transmission scenarios from mosquito bites. Let $K$ denote the number strains within each sample, and $b$ denote the number of independent mosquito bites. In such a scenario, a mixed infection containing $K$ strains can be treated as a result of $b$-bite events, where $K \in \{2,3,4\}$ and $1~{\leq}~{b}~{\leq}~K$. For example, a $K=2$ mixed infection can result from co-transmission, where two strains are passed in a single bite ($b=1$); or by superinfection, where each strain is delivered by a unique bite ($b=2$). A mixed infection containing 3 strains is more complex: besides co-infection (3 strains in a single bite, $b=1$) and superinfection (3 strains in 3 bites, $b=3$), we can also have a super-infection scenario made up from a co-infection plus a clonal-infection ($b=2$). The complete simulation procedure (code) is available at \url{https://github.com/DEploid-dev/DEploid-Data-Benchmark-in_silico_field}.
 
+
 \subsection{{\it In silico} mixtures of two field strains}
 To simulate a mixture of two strains, we randomly selected two strains from 189 clonal samples of African origin (proportions ranging from 10/90\% to 50/50\%) using Chromosome 14 data.  A further 20 randomly chosen samples were used as the reference panel. In order to compare the accuracy of the two methods at different levels of relatedness, we set 0\%, 25\%, 50\% and 75\% of the second haplotype the same as the first haplotype to mimic scenarios of unrelated, low, medium and high relatedness respectively. This operation sets a lower limit to the relatedness between two strains, as background relatedness may also exist. We used empirical read depths and drew read counts for the two alleles from binomial proportions (the same approach for generating {\it in silico} lab mixtures). We excluded sites for analysis at zero alternative allele counts in both targeted samples and reference panel, kept and analysed around 7,757 polymorphic sites (standard deviation 178) for each {\it in silico} samples.
 
@@ -715,7 +716,27 @@ In addition to the basic co-infection and super-infection scenarios of 3 strains
 
 \subsection{{\it In silico} mixtures of four field strains}
 We tested {\it In silico} deconvolution experiments on mixtures of 4 strains. From previous experiments, we have learned that strain compositions with even proportions are difficult to deconvolute. In this set of simulations, we experimented with various unbalanced and balanced proportions including 11/22/30/37\%, 25/25/25/25\%, 20/20/20/40\% and 30/30/30/10\%. For some cases, the data generation procedures can easily be modified from previous experiment: a $b=4$ event of for four strains is equivalent to a $3$-bite event of 3 strains with one extra random haplotype; a $b=3$ event of four strains is equivalent to a $2$-bite event of 3 strains with one extra random haplotype. For $2$-bite event of 4 strains, there are two possibilities: (i) both bites pass on 2 strains, which is essentially repeating $b=1$ event of 2 strains twice or (ii) three strains in one bite and one in another, which is essentially a $1$-bite event of 3 strains with one extra random haplotype.
+
+\subsection{Haplotype quality for {\it in silico} mixtures}
+We assessed the quality of all the haplotypes deconvolved with \texttt{DEploid} and \texttt{DEploidIBD} for the \textit{in silico} simulated mixtures (Figure \ref{fig:hap-quality-sim-classic}, Figure \ref{fig:hap-quality-sim-ibd}). Our results are consistent with the performance we observed in field samples. Complex mixtures with
+balanced proportions or marginal strains (i.e. with a very low proportion) tend to produce chimeric haplotypes. Nonetheless, further research is needed to explore  factors that result in deconvolution failure. \textt{DEpoidIBD} performs slightly worse than the previous version of the software; we ascribe this to the fact that the simulations lack any complex IBD structure. See \ref{section:hap-quality} for more details about the procedure.
+
 \end{appendixbox}
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=\textwidth]{quality-classic.pdf}
+  \caption{Distribution of quality scores haplotypes deconvolved from \textit{in silico} mixtures using \texttt{DEploid}. Each row represents a different population (Africa and Asia). The left panels represent the overall distribution of z-scores whereas the right panels stratify results according to the entropy of mixture proportions (y-axis) and number of strains (color).}
+  \label{fig:hap-quality-sim-classic}
+\end{figure}
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=\textwidth]{quality-ibd.pdf}
+  \caption{Distribution of quality scores haplotypes deconvolved from \textit{in silico} mixtures using \texttt{DEploidIBD}. Each row represents a different population (Africa and Asia). The left panels represent the overall distribution of z-scores whereas the right panels stratify results according to the entropy of mixture proportions (y-axis) and number of strains (color).}
+  \label{fig:hap-quality-sim-ibd}
+\end{figure}
+
 
 \begin{appendixbox}
 \section{Pf3k field sample analysis}
