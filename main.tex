@@ -493,7 +493,7 @@ P(K, \mathbf{w}, \mathbf{h}, \mathcal{S}) = P(K) \times P(\mathbf{w}|K) \times P
 \end{equation}
 
 
-\nodent The number of strains, $K$, and their proportions $\mathbf{w}$, are as in \citet{Zhu2017}: $K$ is fixed at a user-defined value (here, $K=4$) and strains below a fixed proportion threshold (here, $0.01$) are removed.  To model IBD configurations and resulting haplotypes we introduce a parameter $\theta$, which is the probability of outbreeding (i.e. non-IBD) for a mixed infection with two strains.  Specifically, for $K$ strains, the prior probability on configuration $\mathcal{S}$ is a function of the number of distinct strains in the configuration, $C_{\mathcal{S}}$, and the number of distinct configurations with the same number of distinct strains, $M_{\mathcal{C}}$:
+\noindent The number of strains, $K$, and their proportions $\mathbf{w}$, are as in \citet{Zhu2017}: $K$ is fixed at a user-defined value (here, $K=4$) and strains below a fixed proportion threshold (here, $0.01$) are removed.  To model IBD configurations and resulting haplotypes we introduce a parameter $\theta$, which is the probability of outbreeding (i.e. non-IBD) for a mixed infection with two strains.  Specifically, for $K$ strains, the prior probability on configuration $\mathcal{S}$ is a function of the number of distinct strains in the configuration, $C_{\mathcal{S}}$, and the number of distinct configurations with the same number of distinct strains, $M_{\mathcal{C}}$:
 
 \begin{equation}
     P(\mathcal{S}|K) = \genfrac{(}{)}{0pt}{}{K-1}{C_{\mathcal{S}}-1} \frac{\theta^{C_{\mathcal{S}}-1}(1-\theta)^{K-C_{\mathcal{S}}+1}}{M_{\mathcal{C}}}.
@@ -719,7 +719,7 @@ We tested {\it In silico} deconvolution experiments on mixtures of 4 strains. Fr
 
 \subsection{Haplotype quality for {\it in silico} mixtures}
 We assessed the quality of all the haplotypes deconvolved with \texttt{DEploid} and \texttt{DEploidIBD} for the \textit{in silico} simulated mixtures (Figure \ref{fig:hap-quality-sim-classic}, Figure \ref{fig:hap-quality-sim-ibd}). Our results are consistent with the performance we observed in field samples. Complex mixtures with
-balanced proportions or marginal strains (i.e. with a very low proportion) tend to produce chimeric haplotypes. Nonetheless, further research is needed to explore  factors that result in deconvolution failure. \textt{DEpoidIBD} performs slightly worse than the previous version of the software; we ascribe this to the fact that the simulations lack any complex IBD structure. See \ref{section:hap-quality} for more details about the procedure.
+balanced proportions or marginal strains (i.e. with a very low proportion) tend to produce chimeric haplotypes. Nonetheless, further research is needed to explore  factors that result in deconvolution failure. \texttt{DEpoidIBD} performs slightly worse than the previous version of the software; we ascribe this to the fact that the simulations lack any complex IBD structure. See \ref{section:hap-quality} for more details about the procedure.
 
 \end{appendixbox}
 
